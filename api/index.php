@@ -11,7 +11,24 @@ switch (end($url)) {
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         break;
     case 'legjobbanfogyo':
-
+        /*SELECT 
+    products.name, 
+    SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg',
+    WEEK(orders.collected_at)
+FROM 
+    orderedproducts
+INNER JOIN 
+    orders ON orderedproducts.order_id = orders.id
+INNER JOIN
+	products ON orderedproducts.product_id = products.id
+WHERE 
+    YEAR(orders.collected_at) = 2022
+GROUP BY 
+    orderedproducts.product_id, WEEK(orders.collected_at)
+ORDER BY 
+    vasarolt_mennyiseg DESC
+LIMIT 4;
+*/
     default:
         echo json_encode(['valasz' => 'Hibás url'], JSON_UNESCAPED_UNICODE);
         break;
