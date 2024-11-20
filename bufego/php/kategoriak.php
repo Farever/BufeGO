@@ -1,7 +1,5 @@
 <?php
 
-include './db.php';
-
 function kategoriakLekerese($bufeId)
 {
     $query = "SELECT * FROM `categories` WHERE `place_id` = {$bufeId};";
