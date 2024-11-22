@@ -1,7 +1,7 @@
 <?php
-    function lekeres($query, $database)
+    function lekeres($query)
     {
-        $db=new mysqli("localhost", "root", "", $database);
+        $db=new mysqli("localhost", "root", "", "bufego");
         if($db->connect_errno == 0)
         {
             $response = $db->query($query);
@@ -28,9 +28,9 @@
         }
     }
 
-    function valtoztatas($query, $database)
+    function valtoztatas($query)
     {
-        $db=new mysqli("localhost", "root", "", $database);
+        $db=new mysqli("localhost", "root", "", "bufego");
         if($db->connect_errno == 0)
         {
             $response = $db->query($query);

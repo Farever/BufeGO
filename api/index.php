@@ -5,10 +5,18 @@ include "./adatbazisFuggveny.php";
 $url = explode("/", $_SERVER["REQUEST_URI"]);
 switch (end($url)) {
     case 'stat_yearly_income':
-        $body = file_get_contents("php://input");
-        $body = json_decode($body, true);
-        $response = lekeres("SELECT places.name, YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', AVG(orders.price) as 'average_spending' FROM `orders` INNER JOIN places ON orders.place_id = places.id GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at) HAVING name='".$body['bufe_name']."';", "bufego");
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        if($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            $body = file_get_contents("php://input");
+            $body = json_decode($body, true);
+            $response = lekeres("SELECT places.name, YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', AVG(orders.price) as 'average_spending' FROM `orders` INNER JOIN places ON orders.place_id = places.id GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at) HAVING name='".$body['bufe_name']."';");
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        }
+        else
+        {
+            echo json_encode(["valasz" => "Hibás metódus"], JSON_UNESCAPED_UNICODE);
+            header("bad request", 400, true);
+        }
         break;
     case 'legjobbanfogyo':
         /*SELECT 
@@ -29,6 +37,29 @@ ORDER BY
     vasarolt_mennyiseg DESC
 LIMIT 4;
 */
+    case 'getrating':
+        
+        if($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            if(!empty($body["place_id"]))
+            {
+                $body = file_get_contents("php://input");
+                $body = json_decode($body, true);
+                $response = lekeres("SELECT YEAR(ratings.date) as 'ev', MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM `ratings` WHERE ratings.place_id = ".$body["place_id"]." GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY `ratings`.`date`");
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            }
+            else
+            {
+                echo json_encode(["valasz" => "Hiányos bemenet"], JSON_UNESCAPED_UNICODE);
+                header("bad request", 400, true);
+            }
+        }
+        else
+        {
+            echo json_encode(["valasz" => "Hibás metódus"], JSON_UNESCAPED_UNICODE);
+            header("bad request", 400, true);
+        }
+        break; 
     default:
         echo json_encode(['valasz' => 'Hibás url'], JSON_UNESCAPED_UNICODE);
         break;
