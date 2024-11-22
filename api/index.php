@@ -4,13 +4,21 @@ include "./adatbazisFuggveny.php";
 
 $url = explode("/", $_SERVER["REQUEST_URI"]);
 switch (end($url)) {
-    case 'stat_yearly_income':
+    case 'stat_monthly_income':
         if($_SERVER["REQUEST_METHOD"] == "GET")
         {
             $body = file_get_contents("php://input");
             $body = json_decode($body, true);
-            $response = lekeres("SELECT places.name, YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', AVG(orders.price) as 'average_spending' FROM `orders` INNER JOIN places ON orders.place_id = places.id GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at) HAVING name='".$body['bufe_name']."';");
-            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            if(!empty(body['bufe_name']))
+            {
+                $response = lekeres("SELECT places.name, YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', AVG(orders.price) as 'average_spending' FROM `orders` INNER JOIN places ON orders.place_id = places.id GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at) HAVING name='".$body['bufe_name']."';");
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            }
+            else
+            {
+                echo json_encode(["valasz" => "Hiányos bemenet"], JSON_UNESCAPED_UNICODE);
+                header("bad request", 400, true);
+            }
         }
         else
         {
@@ -41,10 +49,10 @@ LIMIT 4;
         
         if($_SERVER["REQUEST_METHOD"] == "GET")
         {
+            $body = file_get_contents("php://input");
+            $body = json_decode($body, true);
             if(!empty($body["place_id"]))
             {
-                $body = file_get_contents("php://input");
-                $body = json_decode($body, true);
                 $response = lekeres("SELECT YEAR(ratings.date) as 'ev', MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM `ratings` WHERE ratings.place_id = ".$body["place_id"]." GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY `ratings`.`date`");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
@@ -53,13 +61,40 @@ LIMIT 4;
                 echo json_encode(["valasz" => "Hiányos bemenet"], JSON_UNESCAPED_UNICODE);
                 header("bad request", 400, true);
             }
+            
         }
         else
         {
             echo json_encode(["valasz" => "Hibás metódus"], JSON_UNESCAPED_UNICODE);
             header("bad request", 400, true);
         }
-        break; 
+        break;
+    case "peak_time":
+        //SELECT HOUR(orderd_at), SUM(id) as 'rendeles_szam' FROM `orders` WHERE orders.place_id=1 GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC;
+        if($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            $body = file_get_contents("php://input");
+            $body = json_decode($body, true);
+            if(!empty($body["place_id"]))
+            {
+                $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM `orders` WHERE orders.place_id=".$body["place_id"]." GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC");
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            }
+            else
+            {
+                echo json_encode(["valasz" => "Hiányos bemenet"], JSON_UNESCAPED_UNICODE);
+                header("bad request", 400, true);
+            }
+            
+        }
+        else
+        {
+            echo json_encode(["valasz" => "Hibás metódus"], JSON_UNESCAPED_UNICODE);
+            header("bad request", 400, true);
+        }
+        break;
+
+    case ""
     default:
         echo json_encode(['valasz' => 'Hibás url'], JSON_UNESCAPED_UNICODE);
         break;
