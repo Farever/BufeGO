@@ -9,9 +9,10 @@ switch (end($url)) {
         {
             $body = file_get_contents("php://input");
             $body = json_decode($body, true);
-            if(!empty($body['bufe_name']))
+            if(!empty($body['place_id']))
             {
-                $response = lekeres("SELECT places.name, YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', AVG(orders.price) as 'average_spending' FROM `orders` INNER JOIN places ON orders.place_id = places.id GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at) HAVING name='".$body['bufe_name']."';");
+                //SELECT YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', SUM(orders.price) as 'average_spending' FROM `orders` WHERE orders.place_id = ".$body['place_id']." GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at);
+                $response = lekeres("SELECT YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', SUM(orders.price) as 'average_spending' FROM `orders` WHERE orders.place_id = ".$body['place_id']." GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at)");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
             else
