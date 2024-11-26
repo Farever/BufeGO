@@ -22,7 +22,7 @@ function felhasznaloAdatokModositas($userId,$email, $name, $address_id, $phone, 
 function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin){
     $query = "INSERT INTO `users`(`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`) VALUES (NULL,'{$email}','{$passcode}','{$name}','{$address_id}','{$phone}','{$school_id}', CURRENT_TIMESTAMP,NULL,'{$pushNotificationKey}','{$isAdmmin}');";
 
-    $felhasznalo = beszuras($query, 'bufego');
+    $felhasznalo = valtoztatas($query, 'bufego');
 
     return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
 }
@@ -38,7 +38,7 @@ function jelszoValtoztatas($userId, $passcode){
 function cimFeltoltes($zip, $city, $address){
     $query = "INSERT INTO `addresses`(`id`, `zip_code`, `city`, `address`) VALUES (NULL,'{$zip}','{$city}','{$address}');";
 
-    $cim = beszuras($query, 'bufego');
+    $cim = valtoztatas($query, 'bufego');
 
     return json_encode(['valasz' => $cim], JSON_UNESCAPED_UNICODE);
 }
@@ -46,7 +46,7 @@ function cimFeltoltes($zip, $city, $address){
 function iskolaFeltoltes($name){
     $query = "INSERT INTO `schools`(`id`, `name`) VALUES (NULL,'{$name}');";
 
-    $iskola = beszuras($query, 'bufego');
+    $iskola = valtoztatas($query, 'bufego');
 
     return json_encode(['valasz' => $iskola], JSON_UNESCAPED_UNICODE);
 }
