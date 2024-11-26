@@ -4,7 +4,7 @@ header('Access-Control-Allow-Origin: http://localhost:3000');
 $url = explode('/', $_SERVER["PHP_SELF"]);
 $endpoint = explode('?', end($url))[0];
 
-include './db.php';
+include './adatbazisFuggveny.php';
 include './felhasznalok.php';
 
 switch ($endpoint) {
