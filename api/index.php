@@ -29,25 +29,27 @@ switch ($endpoint) {
             header("bad request", 400, true);
         }
         break;
-    /*case 'legjobbanfogyo':
-        SELECT 
-            products.name, 
-            SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg',
-            WEEK(orders.collected_at)
-        FROM 
-            orderedproducts
-        INNER JOIN 
-            orders ON orderedproducts.order_id = orders.id
-        INNER JOIN
-            products ON orderedproducts.product_id = products.id
-        WHERE 
-            YEAR(orders.collected_at) = 2022
-        GROUP BY 
-            orderedproducts.product_id, WEEK(orders.collected_at)
-        ORDER BY 
-            vasarolt_mennyiseg DESC
-        LIMIT 4;
-        */
+    case 'legjobbanfogyo':
+        if ($_SERVER["REQUEST_METHOD"] == "GET") 
+        {
+            $body = file_get_contents("php://input");
+            $body = json_decode($body, true);
+            if (!empty($body["year"]) && !empty($body["week"])) 
+            {
+                $response = lekeres("SELECT products.name, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', WEEK(orders.collected_at) FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = ".$body["year"]." AND WEEK(orders.collected_at) = ".$body["week"]." GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg DESC LIMIT 4", "bufego");
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            } 
+            else {
+                echo json_encode(["valasz" => "Hiányos bemenet"], JSON_UNESCAPED_UNICODE);
+                header("bad request", 400, true);
+            }
+        } 
+        else 
+        {
+            echo json_encode(["valasz" => "Hibás metódus"], JSON_UNESCAPED_UNICODE);
+            header("bad request", 400, true);
+        }
+        break;
     case "currentrating":
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $body = file_get_contents("php://input");
