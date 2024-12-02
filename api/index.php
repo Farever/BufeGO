@@ -3,15 +3,17 @@
 
 header('Access-Control-Allow-Origin: http://localhost:3000');
 
-$url = explode('/', $_SERVER["PHP_SELF"]);
-$endpoint = explode('?', end($url))[0];
+$url = explode('/', $_SERVER['REQUEST_URI']);
+$endpoint = end($url);
+
+$bodyData = json_decode(file_get_contents('php://input'), true);
 
 include "./adatbazisFuggveny.php";
 include './kategoriak.php';
 include './bufeadatok.php';
 
 
-switch ($endpoint) {
+switch (mb_strtolower(explode('?', $endpoint)[0])) {
     case 'stat_monthly_income':
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $body = file_get_contents("php://input");
@@ -183,6 +185,24 @@ switch ($endpoint) {
             echo json_encode(['valasz' => 'Hibás metődus!'], JSON_UNESCAPED_UNICODE);
         }
         break;
+
+    case 'kinalatlekeres':
+        if($_SERVER["REQUEST_METHOD"] == "GET"){
+            if(!empty($_GET['bufeId'])){
+                $sql = "SELECT * FROM `products` WHERE `place_id` = ?;";
+                $kinalat = lekeres($sql, 'i', [$_GET['bufeId']]);
+
+                echo json_encode($kinalat);
+            } else {
+                header('bad request', true, 400);
+                echo json_encode(['valasz' => 'Hiányzó adatok!'], JSON_UNESCAPED_UNICODE);
+            }
+        } else {
+            header('bad request', true, 400);
+            echo json_encode(['valasz' => 'Hibás metődus!'], JSON_UNESCAPED_UNICODE);
+        }
+        break;
+    
 
     default:
         echo json_encode(['valasz' => 'Hibás url'], JSON_UNESCAPED_UNICODE);
