@@ -38,7 +38,11 @@
             {
                 if($db->affected_rows > 0)
                 {
-                    return "Sikeres módosítás";
+                    if(!empty($db->insert_id)){
+                        return $db->insert_id;
+                    } else{
+                        return "Sikeres módosítás";
+                    }
                 }
                 else if($db->affected_rows == 0)
                 {
