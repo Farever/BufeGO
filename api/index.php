@@ -114,7 +114,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
         }
         break;
 
-    case 'kategoriamodosit':
+    case 'kategoriamodositas':
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!empty($_POST['katId'] &&  !empty($_POST['katName']))) {
                 echo json_encode(kategoriaModosit($_POST['katId'], $_POST['katName']), JSON_UNESCAPED_UNICODE);
@@ -128,7 +128,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
         }
         break;
 
-    case 'kategoriafeltolt':
+    case 'kategoriafeltoltes':
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!empty($_POST['katId']) && !empty($_POST['bufeId']) && !empty($_POST['katName'])) {
                 echo json_encode(kategoriaFeltolt($_POST['katId'], $_POST['bufeId'], $_POST['katName']), JSON_UNESCAPED_UNICODE);
@@ -142,7 +142,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
         }
         break;
 
-    case 'kategoriaTorol':
+    case 'kategoriatorles':
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!empty($_POST['katId'])) {
                 echo json_encode(kategoriaTorol($_POST['katId']), JSON_UNESCAPED_UNICODE);
