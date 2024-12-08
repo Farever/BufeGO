@@ -120,10 +120,22 @@ switch (end($url)) {
         break;
     case "user_remdelesek":
         $data = json_decode(file_get_contents("php://input"), true);
-        var_dump($data);
         if(isset($data["user_id"]))
         {
             $response = lekeres("SELECT `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time` FROM `orders` WHERE orders.user_id = {$data['user_id']}", "bufego");
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);  
+        }
+        else
+        {
+            echo json_encode(["valasz" => "Hiányos adat"]);
+            header("BAD REQUEST", true, 400);
+        }
+        break;
+    case "kosarba":
+        $data =json_decode(file_get_contents("php://input"), true);
+        if(!empty($data["user_id"]) && !empty(["place_id"]) && !empty($data["quantity"]) && !empty($data["product_id"]))
+        {
+            $response = adatValtozas("INSERT INTO `cart`( `user_id`, `place_id`, `quantity`, `product_id`) VALUES ('{$data["user_id"]}','{$data["place_id"]}','{$data["quatnity"]}','{$data["product_id"]}')", "bufego");
             echo json_encode($response, JSON_UNESCAPED_UNICODE);  
         }
         else
