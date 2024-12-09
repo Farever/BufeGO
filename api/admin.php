@@ -108,7 +108,7 @@ switch (end($url)) {
         $data = json_decode(file_get_contents("php://input"), true);
         if(isset($data["user_id"]) && isset($data["place_id"]) && isset($data["status"]) && isset($data["price"]) && isset($data["payment_method"]) && isset($data["orderd_at"]) && isset($data["expected_pickup_time"]))
         {
-            $response = lekeres("INSERT INTO `orders`(`user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time`) VALUES ({$data['user_id']},{$data['place_id']},{$data['status']},{$data['price']},{$data['payment_method']},{$data['orderd_at']},{$data['expected_pickup_time']})", "bufego");
+            $response = valtoztatas("INSERT INTO `orders`(`user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time`) VALUES ({$data['user_id']},{$data['place_id']},{$data['status']},{$data['price']},{$data['payment_method']},{$data['orderd_at']},{$data['expected_pickup_time']})", "bufego");
             echo json_encode(["valasz" => $response], JSON_UNESCAPED_UNICODE);
         }
         else
@@ -135,7 +135,7 @@ switch (end($url)) {
         $data =json_decode(file_get_contents("php://input"), true);
         if(!empty($data["user_id"]) && !empty(["place_id"]) && !empty($data["quantity"]) && !empty($data["product_id"]))
         {
-            $response = adatValtozas("INSERT INTO `cart`( `user_id`, `place_id`, `quantity`, `product_id`) VALUES ('{$data["user_id"]}','{$data["place_id"]}','{$data["quatnity"]}','{$data["product_id"]}')", "bufego");
+            $response = valtoztatas("INSERT INTO `cart`( `user_id`, `place_id`, `quantity`, `product_id`) VALUES ('{$data["user_id"]}','{$data["place_id"]}','{$data["quatnity"]}','{$data["product_id"]}')", "bufego");
             echo json_encode($response, JSON_UNESCAPED_UNICODE);  
         }
         else
