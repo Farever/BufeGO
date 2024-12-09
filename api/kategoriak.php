@@ -15,28 +15,28 @@ function kategoriakLekerese($bufeId)
 
 function kategoriaModosit($katId, $katName)
 {
-    $query = "UPDATE `categories` SET `categroy_name` = '{$katName}' WHERE `categories`.`id` = {$katId};";
+    $query = "UPDATE `categories` SET `categroy_name` = ? WHERE `categories`.`id` = ?;";
 
-    $kategoriak = valtoztatas($query, 'bufego');
+    $kategoriak = valtoztatas($query, 'si', [$katName, $katId]);
 
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }
 
 function kategoriaFeltolt($katId, $bufeId, $katName)
 {
-    $query = "INSERT INTO `categories`(`id`, `place_id`, `categroy_name`) VALUES ('{$katId}','{$bufeId}','{$katName}');";
+    $query = "INSERT INTO `categories`(`id`, `place_id`, `categroy_name`) VALUES (?,?,?);";
 
-    $kategoriak = valtoztatas($query, 'bufego');
+    $kategoriak = valtoztatas($query, 'iis', [$katId, $bufeId, $katName]);
 
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }
 
 function kategoriaTorol($katId)
 {
-    $check = lekeres("SELECT * FROM categories WHERE id = {$katId};", "bufego");
+    $check = lekeres("SELECT * FROM categories WHERE id = ?;", "i", [$katId]);
     if (is_array($check)) {
-        $query = "DELETE FROM `categories` WHERE `id` = $katId;";
-        $kategoriak = valtoztatas($query, 'bufego');
+        $query = "UPDATE `categories` SET `deleted`='1' WHERE `id` = ? ";
+        $kategoriak = valtoztatas($query, 'i', [$katId]);
         return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
     } else {
         return json_encode(['valasz' => "Nincs ilyen kategória!"], JSON_UNESCAPED_UNICODE);
