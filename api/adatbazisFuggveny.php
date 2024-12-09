@@ -59,8 +59,4 @@
     
         return "Sikeres művelet!";
     }
-
-    function preparedValtoztatas(){
-        
-    }
 ?>
