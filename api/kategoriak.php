@@ -22,11 +22,11 @@ function kategoriaModosit($katId, $katName)
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }
 
-function kategoriaFeltolt($katId, $bufeId, $katName)
+function kategoriaFeltolt($bufeId, $katName)
 {
-    $query = "INSERT INTO `categories`(`id`, `place_id`, `categroy_name`) VALUES (?,?,?);";
+    $query = "INSERT INTO `categories`(`place_id`, `categroy_name`) VALUES (?,?);";
 
-    $kategoriak = valtoztatas($query, 'iis', [$katId, $bufeId, $katName]);
+    $kategoriak = valtoztatas($query, 'iis', [$bufeId, $katName]);
 
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }

@@ -32,11 +32,9 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
     case 'legjobbanfogyo':
         if ($_SERVER["REQUEST_METHOD"] == "GET") 
         {
-            $body = file_get_contents("php://input");
-            $body = json_decode($body, true);
-            if (!empty($body["year"]) && !empty($body["week"])) 
+            if (!empty($_GET["year"]) && !empty($_GET["week"]) && !empty($_GET["place_id"])) 
             {
-                $response = lekeres("SELECT products.name, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', WEEK(orders.collected_at) FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = ".$body["year"]." AND WEEK(orders.collected_at) = ".$body["week"]." GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg DESC LIMIT 4", "bufego");
+                $response = lekeres("SELECT products.name, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', orders.collected_at FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = ". $_GET["year"] ." AND WEEK(orders.collected_at) = ". $_GET["week"] ." AND orders.place_id = {$_GET['place_id']} GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg;", "bufego");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             } 
             else {
@@ -130,8 +128,8 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
 
     case 'kategoriafeltoltes':
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (!empty($_POST['katId']) && !empty($_POST['bufeId']) && !empty($_POST['katName'])) {
-                echo json_encode(kategoriaFeltolt($_POST['katId'], $_POST['bufeId'], $_POST['katName']), JSON_UNESCAPED_UNICODE);
+            if (!empty($_POST['bufeId']) && !empty($_POST['katName'])) {
+                echo json_encode(kategoriaFeltolt($_POST['bufeId'], $_POST['katName']), JSON_UNESCAPED_UNICODE);
             } else {
                 header('bad request', true, 400);
                 echo json_encode(['valasz' => 'Hiányzó adatok!'], JSON_UNESCAPED_UNICODE);
