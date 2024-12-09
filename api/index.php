@@ -288,7 +288,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data["admin_id"]))
             {
-                $response = lekeres("SELECT * FROM places WHERE places.admin_user_id =" . $data["admin_id"], "bufego");
+                $response = lekeres("SELECT * FROM places WHERE places.admin_user_id =" . $data["admin_id"]);
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
             else
@@ -301,7 +301,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data["place_id"]))
             {
-                $response = lekeres("SELECT * FROM `places` WHERE places.id = {$data['place_id']}", "bufego");
+                $response = lekeres("SELECT * FROM `places` WHERE places.id = {$data['place_id']}");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
             else
@@ -314,7 +314,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data["place_id"]))
             {
-                $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $data["place_id"], "bufego");
+                $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $data["place_id"]);
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);  
             }
             else
@@ -328,7 +328,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             
             if(isset($data["place"]) && isset($data["category"]) && isset($data['img']) && isset($data['name']) && isset($data['description']) && isset($data['allergens']) && isset($data['is_avaliable']) && isset($data['price']))
             {
-                $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$data['place']},{$data['category']},'{$data['img']}','{$data['name']}','{$data['description']}','{$data['allergens']}',{$data['is_avaliable']},{$data['price']})", "bufego");
+                $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$data['place']},{$data['category']},'{$data['img']}','{$data['name']}','{$data['description']}','{$data['allergens']}',{$data['is_avaliable']},{$data['price']})");
                 echo json_encode(["valasz" => $response], JSON_UNESCAPED_UNICODE);  
             }
             else
@@ -342,7 +342,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data['place_id']))
             {
-                $response = lekeres("SELECT `category_id`, `image`, `name`, `description`, `allergens`, `is_avaliable`, `price` FROM `products` WHERE place_id = {$data['place_id']}", "bufego");
+                $response = lekeres("SELECT `category_id`, `image`, `name`, `description`, `allergens`, `is_avaliable`, `price` FROM `products` WHERE place_id = {$data['place_id']}");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);  
             }
             else
@@ -357,7 +357,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
                 $data = json_decode(file_get_contents("php://input"), true);
                 if(isset($data['id'])&&isset($data['category_id']) && isset($data['image']) && isset($data['name']) && isset($data['description']) && isset($data['allergens']) && isset($data['is_avaliable']) && isset($data['price']))
                 {
-                    $response = valtoztatas("UPDATE `products` SET `category_id`={$data['category_id']},`image`={$data['image']},`name`={$data['name']},`description`={$data['description']},`allergens`={$data['allergens']},`is_avaliable`={$data['is_avaliable']},`price`= {$data['price']} WHERE id = {$data['id']}", "bufego");
+                    $response = valtoztatas("UPDATE `products` SET `category_id`={$data['category_id']},`image`={$data['image']},`name`={$data['name']},`description`={$data['description']},`allergens`={$data['allergens']},`is_avaliable`={$data['is_avaliable']},`price`= {$data['price']} WHERE id = {$data['id']}");
     
                     echo json_encode($response, JSON_UNESCAPED_UNICODE);
                 }
@@ -374,7 +374,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
                 $data = json_decode(file_get_contents("php://input"), true);
                 if(isset($data["id"]))
                 {
-                    $response = valtoztatas("DELETE FROM `products` WHERE id = {$data['id']}", "bufego");
+                    $response = valtoztatas("DELETE FROM `products` WHERE id = {$data['id']}");
                     echo json_encode(["valasz" => $response], JSON_UNESCAPED_UNICODE);
                 }
                 else
@@ -388,7 +388,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data["user_id"]) && isset($data["place_id"]) && isset($data["status"]) && isset($data["price"]) && isset($data["payment_method"]) && isset($data["orderd_at"]) && isset($data["expected_pickup_time"]))
             {
-                $response = valtoztatas("INSERT INTO `orders`(`user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time`) VALUES ({$data['user_id']},{$data['place_id']},{$data['status']},{$data['price']},{$data['payment_method']},{$data['orderd_at']},{$data['expected_pickup_time']})", "bufego");
+                $response = valtoztatas("INSERT INTO `orders`(`user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time`) VALUES ({$data['user_id']},{$data['place_id']},{$data['status']},{$data['price']},{$data['payment_method']},{$data['orderd_at']},{$data['expected_pickup_time']})");
                 echo json_encode(["valasz" => $response], JSON_UNESCAPED_UNICODE);
             }
             else
@@ -402,7 +402,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data = json_decode(file_get_contents("php://input"), true);
             if(isset($data["user_id"]))
             {
-                $response = lekeres("SELECT `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time` FROM `orders` WHERE orders.user_id = {$data['user_id']}", "bufego");
+                $response = lekeres("SELECT `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `expected_pickup_time` FROM `orders` WHERE orders.user_id = {$data['user_id']}");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);  
             }
             else
@@ -415,7 +415,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
             $data =json_decode(file_get_contents("php://input"), true);
             if(!empty($data["user_id"]) && !empty(["place_id"]) && !empty($data["quantity"]) && !empty($data["product_id"]))
             {
-                $response = valtoztatas("INSERT INTO `cart`( `user_id`, `place_id`, `quantity`, `product_id`) VALUES ('{$data["user_id"]}','{$data["place_id"]}','{$data["quatnity"]}','{$data["product_id"]}')", "bufego");
+                $response = valtoztatas("INSERT INTO `cart`( `user_id`, `place_id`, `quantity`, `product_id`) VALUES ('{$data["user_id"]}','{$data["place_id"]}','{$data["quatnity"]}','{$data["product_id"]}')");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);  
             }
             else
