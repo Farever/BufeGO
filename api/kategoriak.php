@@ -22,9 +22,9 @@ function kategoriaModosit($katId, $katName)
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }
 
-function kategoriaFeltolt($katId, $bufeId, $katName)
+function kategoriaFeltolt($bufeId, $katName)
 {
-    $query = "INSERT INTO `categories`(`id`, `place_id`, `categroy_name`) VALUES ('{$katId}','{$bufeId}','{$katName}');";
+    $query = "INSERT INTO `categories`( `place_id`, `categroy_name`) VALUES ('{$bufeId}','{$katName}');";
 
     $kategoriak = valtoztatas($query, 'bufego');
 
