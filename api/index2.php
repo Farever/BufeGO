@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Origin: http://localhost:5173');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
@@ -36,6 +36,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
         'jelszovaltoztat' => handleJelszoValtoztat($method, $bodyData),
         'iskolafeltoltes' => handleIskolaFeltoltes($method, $bodyData),
+        'iskolak' => handleIskolak($method),
         'cimfeltoltes' => handleCimFeltoltes($method, $bodyData),
         'kinalatlekeres' => handleKinalatLekeres($method, $getData),
         'admin_fo' => handleAdminFo($method, $bodyData),
@@ -319,6 +320,14 @@ function handleIskolaFeltoltes(string $method, ?array $bodyData): ?array
     }
 
     return ['valasz' => iskolaFeltoltes($bodyData["school_name"])];
+}
+
+function handleIskolak($method){
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    return ['valasz' => lekeres("SELECT `name` FROM `schools`")];
 }
 
 /**

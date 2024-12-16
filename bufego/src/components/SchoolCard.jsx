@@ -1,11 +1,10 @@
 import React from 'react';
 import '../styles/SchoolCard.css';
 
-const SchoolCard = ({ school }) => {
+const SchoolCard = ({ schoolName }) => {
   return (
     <div className="school-card">
-      <h3>{school.name}</h3>
-      <p>{school.address}</p>
+      <h3>{schoolName}</h3>
     </div>
   );
 };
