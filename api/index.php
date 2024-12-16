@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Origin: http://localhost:5173');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = end($url);
