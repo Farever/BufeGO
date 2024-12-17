@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import '../styles/LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose }) => {
@@ -15,46 +16,47 @@ const LoginModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Itt lehet majd kezelni a bejelentkezési logikát
     console.log('Bejelentkezés:', email, password);
-    onClose(); // Bezárja a modalt sikeres bejelentkezés után
+    onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Value"
-            value={email}
-            onChange={handleEmailChange}
-          />
+    <Modal show={isOpen} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Bejelentkezés</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Value"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </Form.Group>
 
-          <label htmlFor="password">Jelszó</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Value"
-            value={password}
-            onChange={handlePasswordChange}
-          />
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>Jelszó</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Value"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </Form.Group>
 
-          <button type="submit" className="sign-in-button">
-            Sign In
-          </button>
+          <Button type="submit" className="sign-in-button">
+            Bejelentkezés
+          </Button>
 
           <div className="modal-links">
             <a href="#">Elfelejtetted a jelszavad?</a>
-            <a href="#">Nincs még fiókod?</a>
           </div>
-        </form>
-      </div>
-    </div>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 

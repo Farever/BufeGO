@@ -309,7 +309,7 @@ switch (mb_strtolower(explode('?', $endpoint)[0])) {
 
         break;
     case "bufe_rendelesek":
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
             if (isset($bodyData["place_id"])) {
                 $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $bodyData["place_id"]);
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);

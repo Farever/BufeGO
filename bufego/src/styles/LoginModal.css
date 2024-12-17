@@ -35,14 +35,14 @@
   }
   
   .sign-in-button {
-    background-color: #f5b761;
-    color: white;
+    background-color: #f5b761 !important;
+    color: white !important;
     padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    border: none !important;
+    border-radius: 5px !important;
     cursor: pointer;
     width: 100%;
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   .modal-links {

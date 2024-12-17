@@ -41,7 +41,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kinalatlekeres' => handleKinalatLekeres($method, $getData),
         'admin_fo' => handleAdminFo($method, $bodyData),
         'bufe' => handleBufe($method, $bodyData),
-        'bufe_rendelesek' => handleBufeRendelesek($method, $bodyData),
+        'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'termek_felv' => handleTermekFelv($method, $bodyData),
         'termekek' => handleTermekek($method, $bodyData),
         'termek_valt' => handleTermekValt($method, $bodyData),
@@ -402,17 +402,17 @@ function handleBufe(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a büfé rendelések lekérdezését.
  */
-function handleBufeRendelesek(string $method, ?array $bodyData): ?array
+function handleBufeRendelesek(string $method, ?array $getData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["place_id"])) {
+    if (!isset($getData["place_id"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $bodyData["place_id"]);
+    $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"]);
     return ['valasz' => $response];
 }
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import '../styles/RegisterModal.css';
 
 const RegisterModal = ({ isOpen, onClose }) => {
@@ -21,53 +22,56 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
-      alert("A jelszavak nem egyeznek!");
+      alert('A jelszavak nem egyeznek!');
       return;
     }
-    // Itt lehet majd kezelni a regisztrációs logikát
     console.log('Regisztráció:', email, password);
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Value"
-            value={email}
-            onChange={handleEmailChange}
-          />
+    <Modal show={isOpen} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Regisztráció</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Value"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </Form.Group>
 
-          <label htmlFor="password">Jelszó</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Value"
-            value={password}
-            onChange={handlePasswordChange}
-          />
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>Jelszó</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Value"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </Form.Group>
 
-          <label htmlFor="confirm-password">Jelszó megerősítése</label>
-          <input
-            type="password"
-            id="confirm-password"
-            placeholder="Value"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
+          <Form.Group className="mb-3" controlId="confirm-password">
+            <Form.Label>Jelszó megerősítése</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Value"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+            />
+          </Form.Group>
 
-          <button type="submit" className="register-button">
+          <Button type="submit" className="register-button">
             Regisztráció
-          </button>
-        </form>
-      </div>
-    </div>
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 
