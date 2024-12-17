@@ -403,7 +403,18 @@ function handleBufeRendelesek(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $bodyData["place_id"]);
+    $orderadatok = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $bodyData["place_id"]);
+    $products = [];
+    $useradatok = [];
+
+    foreach($orderadatok as $value)
+    {
+        $products.array_push(lekeres("SELECT products.id, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$value['id']} "));
+        $useradatok.array_push(lekeres("SELECT users.id, users.name, users.email, users.push_notification_key FROM users INNER JOIN orders ON orders.user_id = users.id WHERE orders.id ={$value['id']}"));
+    }
+
+    $response = ["rendelesek" => $orderadatok, "productAdatok" => $products, "users" => $useradatok];
+
     return ['valasz' => $response];
 }
 
