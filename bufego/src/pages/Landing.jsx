@@ -3,10 +3,11 @@ import AuthButton from '../components/AuthButton';
 import SchoolCard from '../components/SchoolCard';
 import LoginModal from '../components/loginModal';
 import RegisterModal from '../components/RegisterModal';
+import { Container, Row, Col } from 'react-bootstrap';
 import '../styles/landing.css';
 import axios from 'axios';
 
-const Home = () => {
+const Landing = () => {
     const [schoolsData, setSchoolsData] = useState([]);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -34,52 +35,63 @@ const Home = () => {
                 setSchoolsData(data);
             })
             .catch(error => {
-              console.error("Error fetching data:", error);
+                console.error("Error fetching data:", error);
             });
     }, []);
 
 
     return (
-        <div className="app">
-            <header className="header">
-                <div className="logo">BüféGO</div>
-                <div className="auth-buttons">
+        <Container> {/* Használjuk a Container komponenst */}
+            <Row className="header align-items-center">
+                <Col xs={12} md={6} className="logo">
+                    BüféGO
+                </Col>
+                <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
                     <AuthButton type="login" onClick={handleLoginClick} />
                     <AuthButton type="register" onClick={handleRegisterClick} />
-                </div>
-            </header>
+                </Col>
+            </Row>
 
-            <section className="hero">
-                <div className="hero-content">
+            <Row className="hero">
+                <Col xs={12} md={6} className="hero-content">
                     <h1>Nagy a sor a büfénél?</h1>
                     <p>Nézd meg a te sulidban ott vagyunk-e már</p>
-                </div>
-                <div className="hero-image">
-                    <img src="../src/assets/images/coffe-cup.png" alt="Coffee cup" />
-                </div>
-            </section>
+                </Col>
+                <Col xs={12} md={6} className="hero-image text-center">
+                    <img src="../src/assets/images/coffe-cup.png" alt="Coffee cup" className="img-fluid" />
+                </Col>
+            </Row>
 
-            <section className="schools">
-                <h2>Iskolák, ahol ott vagyunk</h2>
-                <div className="schools-grid">
-                     {schoolsData?.map((school, index) => (
-                            <SchoolCard key={index} schoolName={school.name} />
-                        ))}
-                </div>
-            </section>
+            <Row className="schools mx-auto">
+                <Col xs={12}>
+                    <h2>Iskolák, ahol ott vagyunk</h2>
+                </Col>
+                <Row>
+                    {schoolsData?.map((school, index) => {
+                        return (
+                            <Col lg={4} md={6} className="schools-grid mx-auto">
+                                <SchoolCard key={index} schoolName={school.name} />
+                            </Col>
+                        )
+                    })}
+                </Row>
 
-            <section className="call-to-action">
-                <h2>Esetleg büféd van?</h2>
-                <div className="cta-box">
-                    <p>Szolgálj ki még több embert és csatlakozz hozzánk partnerként</p>
-                    <a href="#" className="cta-button">Jelentkezz most</a>
-                </div>
-            </section>
+            </Row>
+
+            <Row className="call-to-action">
+                <Col xs={12} md={8}>
+                    <h2>Esetleg büféd van?</h2>
+                    <div className="cta-box">
+                        <p>Szolgálj ki még több embert és csatlakozz hozzánk partnerként</p>
+                        <a href="#" className="cta-button">Jelentkezz most</a>
+                    </div>
+                </Col>
+            </Row>
 
             <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
             <RegisterModal isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
-        </div>
+        </Container>
     );
 };
 
-export default Home;
+export default Landing;

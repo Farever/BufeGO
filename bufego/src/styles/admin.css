@@ -1,0 +1,121 @@
+.orders-grid, .products-grid, .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .top-products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  
+  .product-card, .review-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 0.25rem;
+  }
+  
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .product-name {
+      color: #e69138;
+  }
+  
+  .product-info, .review-comment {
+    margin-bottom: 0.5rem;
+  }
+  
+  .filled {
+    color: orange;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  .chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+  
+  .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .category-item {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .order-card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      background-color: #f5b761;
+    }
+    
+    .order-header, .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .order-status, .order-customer{
+      font-weight: bold;
+    }
+    
+    .order-details ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+  
+    .order-actions button{
+      background-color: white;
+      color: #e69138;
+      font-weight: bold;
+    }
+  
+    .order-actions .btn-secondary{
+      background-color: #e69138;
+      color: white;
+      border: none;
+    }
+    .order-actions .btn-secondary:hover{
+      background-color: #cc7a00;
+    }
+  
+    .order-actions .btn-success{
+      border: none;
+    }
+  
+    .order-actions .btn-danger{
+      border: none;
+    }
+  
+    .order-actions .btn-success:hover{
+      background-color: #009900;
+    }
+  
+    .order-actions .btn-danger:hover{
+      background-color: #cc0000;
+    }

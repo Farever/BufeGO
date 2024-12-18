@@ -45,3 +45,7 @@
     width: 100%;
     font-weight: bold !important;
   }
+
+  .form-control {
+    width: 100% !important;
+  }
