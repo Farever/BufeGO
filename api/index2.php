@@ -412,7 +412,7 @@ function handleBufeRendelesek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"]);
+    $response = lekeres("SELECT * FROM orders WHERE orders.place_id = {$getData['place_id']} ORDER BY orders.status;");
     return ['valasz' => $response];
 }
 
