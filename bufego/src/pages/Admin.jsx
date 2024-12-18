@@ -37,9 +37,9 @@ const Admin = () => {
     useEffect(() => {
         fetchOrders(); // Az első lekérdezés a komponens mountolásakor
 
-       /*const intervalId  = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
+       const intervalId  = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
 
-        return () => clearInterval(intervalId);*/ // Az intervallum törlése a komponens unmountolásakor
+        return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
     }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
 
