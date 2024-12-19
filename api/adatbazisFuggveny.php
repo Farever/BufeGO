@@ -56,6 +56,10 @@
         if($db->affected_rows == 0){
             return "Sikertelen művelet!";
         }
+
+        if(!empty($db->insert_id)){
+            return $db->insert_id;
+        }
     
         return "Sikeres művelet!";
     }

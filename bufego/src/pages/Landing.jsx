@@ -29,7 +29,7 @@ const Landing = () => {
     };
 
     useEffect(() => {
-        axios.get(`https://localhost/13c-nagyl/api/index2.php/iskolak`)
+        axios.get(`http://localhost:8000/iskolak`)
             .then(res => {
                 const data = res.data.valasz;
                 setSchoolsData(data);
@@ -70,7 +70,7 @@ const Landing = () => {
                     {schoolsData?.map((school, index) => {
                         return (
                             <Col lg={4} md={6} className="schools-grid mx-auto">
-                                <SchoolCard key={index} schoolName={school.name} />
+                                <SchoolCard key={'schoolsCard' + index} schoolName={school.name} />
                             </Col>
                         )
                     })}
@@ -78,7 +78,7 @@ const Landing = () => {
 
             </Row>
 
-            <Row className="call-to-action">
+            <Row className="call-to-action mx-auto">
                 <Col xs={12} md={8}>
                     <h2>Esetleg büféd van?</h2>
                     <div className="cta-box">
