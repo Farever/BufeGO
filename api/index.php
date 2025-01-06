@@ -49,6 +49,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'admin_fo' => handleAdminFo($method, $bodyData),
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
+        'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
         'termek_felv' => handleTermekFelv($method, $bodyData),
         'termekek' => handleTermekek($method, $bodyData),
         'termek_valt' => handleTermekValt($method, $bodyData),
@@ -444,11 +445,28 @@ function handleBufeRendelesek(string $method, ?array $getData): ?array
     $orderadatok = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"]);
     for($i = 0; $i < count($orderadatok); $i++)
     {
-        $orderadatok["products"] = lekeres("SELECT products.id, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
-        $orderadatok["user"] = lekeres("SELECT users.id, users.name, users.email, users.push_notification_key FROM users INNER JOIN orders ON orders.user_id = users.id WHERE orders.id ={$orderadatok[$i]['id']}");
+        $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
+        $orderadatok[$i]["user"] = lekeres("SELECT users.id, users.name, users.email, users.push_notification_key FROM users INNER JOIN orders ON orders.user_id = users.id WHERE orders.id ={$orderadatok[$i]['id']}");
     }
     $response = ["rendelesek" => $orderadatok];
     return ['valasz' => $response];
+}
+
+function handleRendelesStatusz(string $method, ?array $bodyData) : ?array
+{
+    if($method !== "POST")
+    {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(!isset($bodyData['rendeles_id']) || !isset($bodyData['status']))
+    {
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $eredmeny = valtoztatas("UPDATE `orders` SET `status`= {$bodyData['status']} WHERE id = {$bodyData['rendeles_id']}");
+
+    return ['valasz' => $eredmeny];
 }
 
 /**
