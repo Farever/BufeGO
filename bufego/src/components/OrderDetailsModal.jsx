@@ -6,6 +6,8 @@ import '../styles/OrderDetailsModal.css';
 const OrderDetailsModal = ({ isOpen, onClose, order }) => {
   if (!isOpen || !order) return null;
 
+  order = order[0];
+
   const buttons = () => {
     switch (parseInt(order.status)) {
       case 1:
@@ -49,28 +51,17 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
           <strong>Rendelés azonosító:</strong> {order.id}
         </p>
         <p>
-          <strong>Email:</strong> {order.email}
+          <strong>Email:</strong> {order.customer}
         </p>
         <p>
           <strong>Státusz:</strong> {order.status}
         </p>
         <p>
-          <strong>Rendelés leadásának ideje:</strong> {order.orderd_at}
+          <strong>Rendelés leadásának ideje:</strong> {order.date}
         </p>
-        {/* Ha a termék adatokat is meg szeretnéd jeleníteni, akkor ezt a részt aktiváld:
-        <h3>Termékek:</h3>
-        <ul>
-          {order.items.map((item) => (
-            <li key={item.name}>
-              {item.name} ({item.quantity} db) - {item.quantity * item.price} Ft
-            </li>
-          ))}
-        </ul>
-        <p>
-          <strong>Összesen:</strong> {order.items.reduce((sum, item) => sum + item.quantity * item.price, 0)} Ft
-        </p>
-        */}
-        <div>{buttons()}</div>
+        <div>
+          {buttons()}
+        </div>
       </Modal.Body>
     </Modal>
   );
