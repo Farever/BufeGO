@@ -3,9 +3,11 @@ import { Modal } from 'react-bootstrap';
 import ActionButton from './ActionButton';
 import '../styles/OrderDetailsModal.css';
 import axios from 'axios';
+import { useState } from 'react';
 
 const OrderDetailsModal = ({ isOpen, onClose, order }) => {
   if (!isOpen || !order) return null;
+  const[button, setButton] = useState(<></>);
 
   order = order[0];
   console.log(order);
@@ -13,7 +15,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
   const buttons = () => {
     switch (parseInt(order.status)) {
       case 1:
-        return (
+        setButton (
           <>
             <ActionButton type={'accept'} onClick={() => handleAccept(order.id)} />
             <br /><br />
@@ -21,7 +23,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
           </>
         );
       case 2:
-        return (
+        setButton (
           <>
             <ActionButton type={'done'} onClick={() => handleDone(order.id)} />
           </>
@@ -36,6 +38,8 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     axios.post('http://localhost:8000/bufe_rendelesstatusz', {
       rendeles_id : orderId, status : 2
     })
+    order.status = 2;
+    buttons();
   };
 
   const handleReject = (orderId) => {
@@ -43,6 +47,8 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     axios.post('http://localhost:8000/bufe_rendelesstatusz', {
       rendeles_id : orderId, status : 0
     })
+    order.status = 0;
+    buttons();
   };
 
   const handleDone = (orderId) => {
@@ -50,6 +56,8 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     axios.post('http://localhost:8000/bufe_rendelesstatusz', {
       rendeles_id : orderId, status : 3
     })
+    order.status = 3;
+    buttons();
   };
 
   return (
@@ -83,6 +91,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
         </p>
         <div>
           {buttons()}
+          {button}
         </div>
       </Modal.Body>
     </Modal>
