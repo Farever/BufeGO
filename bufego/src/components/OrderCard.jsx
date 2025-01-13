@@ -5,9 +5,9 @@ const OrderCard = ({ order, onAccept, onReject, onDetails }) => {
   return (
     <div className="order-card">
       <div className="order-row">
-        <span className="order-customer">{order.customer}</span>
+        <span className="order-customer">{order.user[0].name}</span>
         <span className="order-status">{order.status}</span>
-        <span className="order-date">Átvétel: {order.date}</span>
+        <span className="order-date">Átvétel: {order.expected_pickup_time}</span>
       </div>
       <div className="order-row">
         <div className="order-actions">

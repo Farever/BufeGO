@@ -1,10 +1,10 @@
 {
     "orders": [
       { "id": 1, "customer": "Gipsz Jakab", "status": 2, "items": [{"name": "Kakaós csiga", "quantity": 2}, {"name": "Ásványvíz", "quantity": 1}], "date": "10:55", "details": "Részletek", "isReady": false  },
-      { "id": 2, "customer": "Gipsz Jakab", "status": 3, "items": [{"name": "Pizzás csiga", "quantity": 1}, {"name": "Kávé", "quantity": 1}], "date": "10:35", "details": "Részletek", "isReady": false },
-      { "id": 3, "customer": "Gipsz Jakab", "status": 1, "items": [{"name": "Kakaós csiga", "quantity": 3}, {"name": "Tea", "quantity": 1}], "date": "10:35", "details": "Részletek", "isReady": false },
+      { "id": 2, "customer": "Gipsz Jakab", "status": 2, "items": [{"name": "Pizzás csiga", "quantity": 1}, {"name": "Kávé", "quantity": 1}], "date": "10:45", "details": "Részletek", "isReady": false },
+      { "id": 3, "customer": "Gipsz Jakab", "status": 2, "items": [{"name": "Kakaós csiga", "quantity": 3}, {"name": "Tea", "quantity": 1}], "date": "10:44", "details": "Részletek", "isReady": false },
       { "id": 4, "customer": "Gipsz Jakab", "status": 1, "items": [{"name": "Pizzás csiga", "quantity": 1}, {"name": "Ásványvíz", "quantity": 2}], "date": "10:35", "details": "Részletek", "isReady": false },
-      { "id": 5, "customer": "Gipsz Jakab", "status": 1, "items": [{"name": "Kakaós csiga", "quantity": 2}, {"name": "Tea", "quantity": 1}], "date": "10:35", "details": "Részletek", "isReady": false }
+      { "id": 5, "customer": "Gipsz Jakab", "status": 1, "items": [{"name": "Kakaós csiga", "quantity": 2}, {"name": "Tea", "quantity": 1}], "date": "10:20", "details": "Részletek", "isReady": false }
     ],
     "statistics": {
       "ordersCount": {

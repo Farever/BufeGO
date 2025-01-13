@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import OrderCard from '../components/OrderCard';
 import Loading from '../components/Loading';
-import data from '../data.json';
+import axios from 'axios';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 import '../styles/admin.css';
+import { data } from 'react-router-dom';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,26 +16,39 @@ const Orders = () => {
 
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
 
+  var ms = 0;
+    setInterval(function () {
+      ms+=5;
+    }, 5);
+
   const handleCloseDetailsModal = () => {
+    fetchOrders();
     setIsDetailsModalOpen(false);
     setSelectedOrder(null);
   };
 
   const fetchOrders = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      // Simulált API hívás a lokális JSON adatbázisból
-      const response = { data: data.orders };
-      setOrders(response.data);
-    } catch (error) {
-      setError('Hiba történt az adatok betöltése közben.');
+      const response = await axios.get('http://localhost:8000/bufe_rendelesek', {
+        params: { place_id: "1" },
+      });
+      await setOrders(response.data.valasz.rendelesek);
+      console.log(orders)
+      if(response.status == 200){
+        console.log(ms + "ms - kész")
+      }
+    } catch (err) {
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchOrders(); // Az első lekérdezés a komponens mountolásakor
+    fetchOrders();
+    console.log(orders);
 
     const intervalId = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
 
@@ -63,16 +77,31 @@ const Orders = () => {
   return (
     <div>
       <OrderDetailsModal
-          isOpen={isDetailsModalOpen}
-          onClose={handleCloseDetailsModal}
-          order={selectedOrder}
-        />
+        isOpen={isDetailsModalOpen}
+        onClose={handleCloseDetailsModal}
+        order={selectedOrder}
+      />
       <h2>Beérkező rendelések</h2>
-      <h2>Rendelések</h2>
       {isLoading && <Loading />}
       {error && <div className="error-message">{error}</div>}
       <div className="orders-grid">
-        {orders.map((order) => (
+        {
+          orders.filter((order) => order.status == 1).map((order) => (
+          <OrderCard
+            key={order.id}
+            order={order}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onDetails={handleDetails}
+          />
+        ))}
+      </div>
+      <h2>Aktív rendelések</h2>
+      {isLoading && <Loading />}
+      {error && <div className="error-message">{error}</div>}
+      <div className="orders-grid">
+        {
+        orders.filter(order => order.status == 2).map((order) => (
           <OrderCard
             key={order.id}
             order={order}

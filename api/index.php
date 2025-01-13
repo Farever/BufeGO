@@ -442,10 +442,10 @@ function handleBufeRendelesek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $orderadatok = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"]);
+    $orderadatok = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"] . " ORDER BY `expected_pickup_time`");
     for($i = 0; $i < count($orderadatok); $i++)
     {
-        $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
+        $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.price, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable, orderedproducts.quantity FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
         $orderadatok[$i]["user"] = lekeres("SELECT users.id, users.name, users.email, users.push_notification_key FROM users INNER JOIN orders ON orders.user_id = users.id WHERE orders.id ={$orderadatok[$i]['id']}");
     }
     $response = ["rendelesek" => $orderadatok];
