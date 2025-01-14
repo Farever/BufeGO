@@ -35,7 +35,7 @@ const Orders = () => {
         params: { place_id: "1" },
       });
       await setOrders(response.data.valasz.rendelesek);
-      console.log(orders)
+      console.log(response.data.valasz.rendelesek)
       if(response.status == 200){
         console.log(ms + "ms - kész")
       }

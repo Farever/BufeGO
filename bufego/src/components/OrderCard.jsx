@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import OrderBadge from './OrderBadge';
 
 const OrderCard = ({ order, onAccept, onReject, onDetails }) => {
   return (
     <div className="order-card">
       <div className="order-row">
         <span className="order-customer">{order.user[0].name}</span>
-        <span className="order-status">{order.status}</span>
+        <span className="order-status"><OrderBadge status={parseInt(order.status)} /></span>
         <span className="order-date">Átvétel: {order.expected_pickup_time}</span>
       </div>
       <div className="order-row">

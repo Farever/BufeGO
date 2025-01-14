@@ -1,64 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import ActionButton from './ActionButton';
 import '../styles/OrderDetailsModal.css';
 import axios from 'axios';
-import { useState } from 'react';
 
-const OrderDetailsModal = ({ isOpen, onClose, order }) => {
-  if (!isOpen || !order) return null;
-  const[button, setButton] = useState(<></>);
+const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
+  const [order, setOrder] = useState(initialOrder);
+  const [actionButtons, setActionButtons] = useState(null);
 
-  order = order[0];
-  console.log(order);
+  useEffect(() => {
+    if (isOpen && initialOrder) {
+      setOrder(initialOrder[0]);
+    }
+  }, [isOpen, initialOrder]);
 
-  const buttons = () => {
-    switch (parseInt(order.status)) {
+  useEffect(() => {
+    if (order) {
+      generateActionButtons(order.status);
+    }
+  }, [order]);
+
+  const generateActionButtons = (status) => {
+    switch (parseInt(status)) {
       case 1:
-        setButton (
+        setActionButtons(
           <>
             <ActionButton type={'accept'} onClick={() => handleAccept(order.id)} />
             <br /><br />
             <ActionButton type={'reject'} onClick={() => handleReject(order.id)} />
           </>
         );
+        break;
       case 2:
-        setButton (
+        setActionButtons(
           <>
             <ActionButton type={'done'} onClick={() => handleDone(order.id)} />
           </>
         );
+        break;
       default:
-        return '';
+        setActionButtons(null);
+    }
+  };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await axios.post('http://localhost:8000/bufe_rendelesstatusz', {
+        rendeles_id: orderId,
+        status: newStatus,
+      });
+      setOrder((prevOrder) => ({ ...prevOrder, status: newStatus }));
+    } catch (error) {
+      console.error('Hiba a rendelés státuszának frissítésekor:', error);
     }
   };
 
   const handleAccept = (orderId) => {
     console.log('Elfogadva:', orderId);
-    axios.post('http://localhost:8000/bufe_rendelesstatusz', {
-      rendeles_id : orderId, status : 2
-    })
-    order.status = 2;
-    buttons();
+    handleStatusChange(orderId, 2);
   };
 
   const handleReject = (orderId) => {
     console.log('Elutasítva:', orderId);
-    axios.post('http://localhost:8000/bufe_rendelesstatusz', {
-      rendeles_id : orderId, status : 0
-    })
-    order.status = 0;
-    buttons();
+    handleStatusChange(orderId, 0);
   };
 
   const handleDone = (orderId) => {
     console.log('Kész:', orderId);
-    axios.post('http://localhost:8000/bufe_rendelesstatusz', {
-      rendeles_id : orderId, status : 3
-    })
-    order.status = 3;
-    buttons();
+    handleStatusChange(orderId, 3);
   };
+
+  if (!isOpen || !order) return null;
 
   return (
     <Modal show={isOpen} onHide={onClose} centered>
@@ -87,12 +99,10 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
           ))}
         </ul>
         <p>
-          <strong>Összesen:</strong> {order.products.reduce((sum, item) => sum + item.quantity * item.price, 0)} Ft
+          <strong>Összesen:</strong>{' '}
+          {order.products.reduce((sum, item) => sum + item.quantity * item.price, 0)} Ft
         </p>
-        <div>
-          {buttons()}
-          {button}
-        </div>
+        <div>{actionButtons}</div>
       </Modal.Body>
     </Modal>
   );
