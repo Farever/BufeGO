@@ -14,8 +14,10 @@ const BuffetCard = ({ buffet }) => {
     <Card className="buffet-card">
       <Card.Img variant="top" src={buffet.image} />
       <Card.Body>
-        <Card.Title>{buffet.name}</Card.Title>
+        <Card.Title>{buffet.name} - {buffet.school}</Card.Title>
         <Card.Text>{buffet.description}</Card.Text>
+        <Card.Text>{buffet.zip_code}, {buffet.city}, {buffet.address}</Card.Text>
+        <Card.Text>{buffet.phone}</Card.Text>
         <Button variant="primary" onClick={handleClick} className='button'>
           Megtekintés
         </Button>

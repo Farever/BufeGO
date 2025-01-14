@@ -408,7 +408,7 @@ function handleAdminFo(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT * FROM places WHERE places.admin_user_id =" . $getData["admin_id"]);
+    $response = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
     return ['valasz' => $response];
 }
 
