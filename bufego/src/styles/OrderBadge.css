@@ -1,0 +1,30 @@
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+
+.new-order{
+  background-color: #ffc107;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.in-progress{
+  background-color: #06e5f5;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.ready{
+  background-color: #00ff37;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.collected{
+  background-color: #008cff;
+  color: #212529 !important;
+  font-weight: bold;
+}
