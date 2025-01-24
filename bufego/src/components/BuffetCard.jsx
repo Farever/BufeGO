@@ -3,11 +3,17 @@ import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../styles/BuffetCard.css';
 
-const BuffetCard = ({ buffet }) => {
+const BuffetCard = ({ buffet,isOnAdminPage = false }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    console.log(buffet.id)
+    console.log(isOnAdminPage)
+    if(isOnAdminPage){
+      console.log("Admin" + buffet.id)
+    } else{
+      console.log("User" + buffet.id)
+    }
+    
   };
 
   return (

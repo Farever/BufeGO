@@ -42,7 +42,7 @@ const Admin = () => {
       <Row>
         {buffets.map((buffet) => (
           <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
-            <BuffetCard buffet={buffet} />
+            <BuffetCard buffet={buffet} isOnAdminPage={true}/>
           </Col>
         ))}
       </Row>
