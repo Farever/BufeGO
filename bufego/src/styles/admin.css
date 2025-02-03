@@ -198,3 +198,7 @@ body{
 .order-actions .btn-danger:hover {
     background-color: #f0f0f0;
 }
+
+.buffet-card {
+  margin-bottom: 1rem;
+}

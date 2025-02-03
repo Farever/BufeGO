@@ -46,7 +46,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'iskolak' => handleIskolak($method),
         'cimfeltoltes' => handleCimFeltoltes($method, $bodyData),
         'kinalatlekeres' => handleKinalatLekeres($method, $getData),
-        'admin_fo' => handleAdminFo($method, $bodyData),
+        'admin_fo' => handleAdminFo($method, $getData),
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
@@ -398,17 +398,17 @@ function handleKinalatLekeres(string $method, array $getData): ?array
 /**
  * Kezeli az admin főoldal lekérdezését.
  */
-function handleAdminFo(string $method, ?array $bodyData): ?array
+function handleAdminFo(string $method, ?array $getData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["admin_id"])) {
+    if (!isset($getData["admin_id"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT * FROM places WHERE places.admin_user_id =" . $bodyData["admin_id"]);
+    $response = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
     return ['valasz' => $response];
 }
 
