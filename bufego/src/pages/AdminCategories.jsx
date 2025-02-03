@@ -20,7 +20,6 @@ const Categories = () => {
           {
             console.log(response);
             let data = await response.data.valasz;
-            console.log(data);
             setCategories(data);
           }
       } catch (error) {
@@ -32,7 +31,6 @@ const Categories = () => {
 
     fetchData();
   }, []);
-  categories.map((c) => console.log(c));
   return (
     <div>
       <h2>Kategóriák</h2>
