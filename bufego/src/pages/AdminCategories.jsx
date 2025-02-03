@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import data from '../data.json';
+import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import CategoryCard from '../components/CategoryCard';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -12,9 +14,15 @@ const Categories = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Simulált API hívás a lokális JSON adatbázisból
-        const response = { data: data.categories };
-        setCategories(response.data);
+          const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
+
+          if(response.status == 200)
+          {
+            console.log(response);
+            let data = await response.data.valasz;
+            console.log(data);
+            setCategories(data);
+          }
       } catch (error) {
         setError('Hiba történt az adatok betöltése közben.');
       } finally {
@@ -24,26 +32,20 @@ const Categories = () => {
 
     fetchData();
   }, []);
-
+  categories.map((c) => console.log(c));
   return (
     <div>
       <h2>Kategóriák</h2>
       {isLoading && <Loading />}
       {error && <div className="error-message">{error}</div>}
       <div className="categories-grid">
-        {categories.map((category) => (
-          <div key={category.id} className="category-item">
-            <span className="category-name">{category.name}</span>
-            <div className="category-actions">
-              <Button variant="primary" size="sm">
-                Módosítás
-              </Button>
-              <Button variant="danger" size="sm">
-                <i className="fas fa-trash-alt"></i>
-              </Button>
-            </div>
-          </div>
-        ))}
+        {categories.map((c) => 
+          <CategoryCard
+            key={c.id}
+            id={c.id}
+            nev={c.categroy_name}
+          />
+        )}
       </div>
     </div>
   );
