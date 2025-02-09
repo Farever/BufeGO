@@ -20,7 +20,7 @@ function MonthlyIncomeChart() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/13c-vegh/api/index2.php/stat_monthly_income', {
+      const response = await axios.get('http://localhost/13c-vegh/api/index.php/stat_monthly_income', {
         params: { place_id: "1", year:year},
       });
 

@@ -17,14 +17,13 @@ function MonthlyIncomeChart() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/13c-vegh/api/index2.php/currentrating', {
+      const response = await axios.get('http://localhost/13c-vegh/api/index.php/currentrating', {
         params: { place_id: "1"},
       });
 
       const formattedRatings = response.data.valasz.map(item => ({
         current_rating: Number(item.current_rating),       // Convert 'honap' to a number
       }));
-      console.log(formattedRatings)
 
       setRating(formattedRatings[0].current_rating);  // Update state with the formatted data
     } catch (err) {

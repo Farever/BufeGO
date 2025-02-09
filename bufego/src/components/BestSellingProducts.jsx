@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductCard from './ProductCard';
+import "../styles/Stats.css"
 import { Card, Col } from 'react-bootstrap';
 
 function BestSellingProducts()
@@ -18,16 +18,16 @@ function BestSellingProducts()
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost/13c-vegh/api/index2.php/legjobbanfogyo', {
+          const response = await axios.get('http://localhost/13c-vegh/api/index.php/legjobbanfogyo', {
             params: { "place_id": 1,
                 "year": d.getFullYear(),
-                "month": d.getMonth()
+                "month": 2
             },
           });
           console.log(response.data.valasz)
           if(response.data.valasz == "Nincsenek találatok!")
           {
-            return
+            return(<>Nincsenek találatok</>)
           }
     
           setProducts(response.data.valasz);  // Update state with the formatted data
@@ -51,7 +51,14 @@ function BestSellingProducts()
         <>
             {products.map((product, index) => (
             <div key={index} className='col-sm-12 col-md-6 col-lg-4'>
-                <ProductCard product={product}></ProductCard>
+                <div className="product-card">
+                  <img src={product.image} alt={product.name} className="product-image" />
+                  <div className="product-details">
+                    <h5 className="">{product.name}</h5>
+                    <p className="product-info">Ár: {product.price} Ft</p>
+                    <p className="product-info">Kategória: {product.category}</p>
+                  </div>
+                </div>
             </div>
           ))}
         </>
