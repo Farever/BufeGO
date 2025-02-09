@@ -1,0 +1,17 @@
+.chart{
+    background-color: #e69138 !important;
+    color: black !important;
+    border: #e69138 !important;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.rating{
+    background-color: #e69138 !important;
+    color: black !important;
+    border: #e69138 !important;
+    width: 25%;
+    margin: auto;
+    margin-bottom: 20px;
+}
