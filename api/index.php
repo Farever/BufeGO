@@ -78,11 +78,11 @@ function handleStatMonthlyIncome(string $method, array $getData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData['place_id'])) {
+    if (empty($getData['place_id']) || empty($getData["year"])) {
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT YEAR(orders.collected_at) as 'ev', MONTH(orders.collected_at) as 'honap', SUM(orders.price) as 'average_spending' FROM orders WHERE orders.place_id = " . $getData['place_id'] . " GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at)");
+    $response = lekeres("SELECT MONTH(orders.collected_at) as 'honap', SUM(orders.price) as 'average_income' FROM orders WHERE orders.place_id = " . $getData['place_id'] . " AND YEAR(orders.collected_at) = " . $getData["year"] . " GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at)");
     return ['valasz' => $response];
 }
 
@@ -99,7 +99,7 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT products.name, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', orders.collected_at FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = " . $getData["year"] . " AND WEEK(orders.collected_at) = " . $getData["week"] . " AND orders.place_id = " . $getData['place_id'] . " GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg;", "bufego");
+    $response = lekeres("SELECT products.*, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', orders.collected_at FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = " . $getData["year"] . " AND MONTH(orders.collected_at) = " . $getData["month"] . " AND orders.place_id = " . $getData['place_id'] . " GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg;", "bufego");
     return ['valasz' => $response];
 }
 
@@ -129,11 +129,11 @@ function handleGetMonthlyRating(string $method, array $getData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData["place_id"])) {
+    if (empty($getData["place_id"]) || empty($getData["year"])) {
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT YEAR(ratings.date) as 'ev', MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY ratings.date");
+    $response = lekeres("SELECT MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " AND YEAR(ratings.date) = " . $getData["year"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY ratings.date");
     return ['valasz' => $response];
 }
 
