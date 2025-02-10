@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useLocation, Outlet } from 'react-router-dom'; // Importáljuk a useLocation hook-ot
+import axios from 'axios';
 
 const AdminNavbar = () => {
     const location = useLocation();
 
     // Itt adhatod meg, mely útvonalakon jelenjen meg a Navbar
     const showNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
+
+    const [buffets, setBuffets] = useState([]);
+  
+    useEffect(() => {
+        const fetchBuffets = async () => {
+          try {
+            const response = await axios.get('http://localhost:8000/admin_fo', {
+              params: { admin_id: "4" },
+            });
+            await setBuffets(response.data.valasz);
+          } catch (err) {
+            console.log(err.message);
+          }
+        };
+    
+        fetchBuffets();
+      }, []);
+
 
     if (showNavbar) {
         return (
@@ -37,13 +56,17 @@ const AdminNavbar = () => {
                             </Nav>
                         </Navbar.Collapse>
                         <div className="user-info">
-                            <span className="location-icon">
-                                <i className="fas fa-map-marker-alt"></i>
-                            </span>
-                            <span className="location-text">Ipari büfé</span>
-                            <span className="dropdown-icon">
-                                <i className="fas fa-caret-down"></i>
-                            </span>
+                            <div className="input-group mb-3">
+                                <span className="input-group-text" id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></span>
+                                <select className="form-select d-inline">
+                                    {
+                                        buffets.map((buffet) => (
+                                            <option value={buffet.id} key={"bufe+" + buffet.id}>{buffet.name}</option>
+                                          ))
+                                    }
+                                </select>
+                            </div>
+
                             <span className="user-icon">
                                 <i className="fas fa-user"></i>
                             </span>
