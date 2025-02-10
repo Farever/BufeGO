@@ -17,7 +17,7 @@ function MonthlyIncomeChart() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/13c-vegh/api/index.php/currentrating', {
+      const response = await axios.get('http://localhost:8000/currentrating', {
         params: { place_id: "1"},
       });
 

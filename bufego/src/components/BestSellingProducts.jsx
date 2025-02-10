@@ -18,7 +18,7 @@ function BestSellingProducts()
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost/13c-vegh/api/index.php/legjobbanfogyo', {
+          const response = await axios.get('http://localhost:8000/legjobbanfogyo', {
             params: { 
                 place_id: 1,
                 year: d.getFullYear(),

@@ -22,7 +22,7 @@ function MonthlyRatingChart() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/13c-vegh/api/index.php/getmonthlyrating', {
+      const response = await axios.get('http://localhost:8000/getmonthlyrating', {
         params: { place_id: "1", year:year},
       });
 
