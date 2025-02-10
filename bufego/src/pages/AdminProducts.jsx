@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import data from '../data.json';
+import ActionButton from '../components/ActionButton';
+import ProductUploadForm from '../components/ProductUploadForm';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -35,6 +37,7 @@ const Products = () => {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      <ProductUploadForm></ProductUploadForm>
     </div>
   );
 };

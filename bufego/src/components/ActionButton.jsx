@@ -12,6 +12,8 @@ const ActionButton = ({ type, onClick }) => {
         return 'details-button';
       case 'done':
         return 'done-button';
+      case 'add':
+        return 'accept-button';
       default:
         return '';
     }
@@ -27,6 +29,8 @@ const ActionButton = ({ type, onClick }) => {
         return 'Részletek';
       case 'done':
         return 'Elkészült';
+      case 'add':
+        return 'Új hozzáadása';
       default:
         return 'Gomb';
     }
