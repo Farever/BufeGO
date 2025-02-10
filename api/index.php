@@ -95,7 +95,7 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData["year"]) || empty($getData["week"]) || empty($getData["place_id"])) {
+    if (empty($getData["year"]) || empty($getData["month"]) || empty($getData["place_id"])) {
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
