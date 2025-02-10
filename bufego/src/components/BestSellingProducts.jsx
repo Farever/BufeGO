@@ -19,19 +19,20 @@ function BestSellingProducts()
         setError(null);
         try {
           const response = await axios.get('http://localhost/13c-vegh/api/index.php/legjobbanfogyo', {
-            params: { "place_id": 1,
-                "year": d.getFullYear(),
-                "month": 2
+            params: { 
+                place_id: 1,
+                year: d.getFullYear(),
+                month: 1
             },
           });
-          console.log(response.data.valasz)
           if(response.data.valasz == "Nincsenek találatok!")
           {
-            return(<>Nincsenek találatok</>)
+            return(<h1>Nincsenek találatok</h1>)
           }
     
           setProducts(response.data.valasz);  // Update state with the formatted data
         } catch (err) {
+          console.log(err);
           setError(err.message);
         } finally {
           setIsLoading(false);

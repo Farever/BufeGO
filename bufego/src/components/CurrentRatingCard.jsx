@@ -48,7 +48,7 @@ function MonthlyIncomeChart() {
       <Card className=' rating text-center'>
         <Card.Body>
           <h1>Jelenlegi értékelés</h1>
-          <Rating name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
+          <Rating className='rating' name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
       </Card.Body>
     </Card>
     </div>
