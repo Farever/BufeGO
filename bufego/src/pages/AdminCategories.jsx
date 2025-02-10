@@ -4,11 +4,14 @@ import data from '../data.json';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import CategoryCard from '../components/CategoryCard';
+import CategoryModal from '../components/CategoryModal';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [modalShown, setModalShown] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +34,24 @@ const Categories = () => {
 
     fetchData();
   }, []);
+
+  function reszletekButtonClicked(id)
+  {
+      setSelectedCategory(categories.find(c => c.id == id));
+      setModalShown(true)
+  }
+
+  const updateCategory = async () => {
+    try
+    {
+      let response = axios.post()
+    }
+    catch(error)
+    {
+
+    }
+  }
+
   return (
     <div>
       <h2>Kategóriák</h2>
@@ -42,9 +63,12 @@ const Categories = () => {
             key={c.id}
             id={c.id}
             nev={c.categroy_name}
+            reszletek={()=>{reszletekButtonClicked(c.id)}}
           />
         )}
       </div>
+
+      {<CategoryModal isOpen={modalShown} categoryDetails={selectedCategory} onClose={()=> setModalShown(false)}/>}
     </div>
   );
 };
