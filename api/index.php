@@ -191,7 +191,7 @@ function handleKategoriaModositas(string $method, ?array $bodyData): ?array
  */
 function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -207,7 +207,7 @@ function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
  */
 function handleKategoriaTorles(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "DELETE") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -239,7 +239,7 @@ function handleBufeModositas(string $method, ?array $bodyData): ?array
  */
 function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -292,7 +292,7 @@ function handleFelhasznaloAdatok(string $method, array $getData): ?array
  */
 function handleFelhasznaloRegisztracio(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -340,7 +340,7 @@ function handleJelszoValtoztat(string $method, ?array $bodyData): ?array
  */
 function handleIskolaFeltoltes(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -365,7 +365,7 @@ function handleIskolak($method)
  */
 function handleCimFeltoltes(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
@@ -474,7 +474,7 @@ function handleRendelesStatusz(string $method, ?array $bodyData) : ?array
  */
 function handleTermekFelv(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 

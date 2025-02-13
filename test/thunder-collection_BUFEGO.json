@@ -1,0 +1,191 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "BUFEGO",
+    "collectionId": "03e287e7-48ce-4780-a582-270caaf4387e",
+    "dateExported": "2025-02-13T11:51:29.021Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "671811e4-c853-42c5-8518-9fdad7a43e50",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "stat_monthly_income_hiba",
+            "url": "http://localhost:8000/stat_monthly_income?place_id=1",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2025-02-13T11:44:22.795Z",
+            "modified": "2025-02-13T11:44:22.795Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "place_id",
+                    "value": "1",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "1b80af1c-e761-44f4-96b4-dcacce122f6b",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "stat_monthly_income_hiba",
+            "url": "http://localhost:8000/stat_monthly_income?place_id=1",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2025-02-13T11:44:31.274Z",
+            "modified": "2025-02-13T11:44:31.274Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "place_id",
+                    "value": "1",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "0d41138b-a1a4-4c42-8966-75a905a5571b",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "stat_monthly_income_hiba3",
+            "url": "http://localhost:8000/stat_monthly_income?place_id=999&year=2023",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2025-02-13T11:44:42.162Z",
+            "modified": "2025-02-13T11:44:42.162Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "place_id",
+                    "value": "999",
+                    "isPath": false
+                },
+                {
+                    "name": "year",
+                    "value": "2023",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "2cee172c-0cb6-432c-a2b0-2f63b5c3d263",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "stat_monthly_income_hiba",
+            "url": "http://localhost:8000/stat_monthly_income?place_id=1",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2025-02-13T11:44:46.546Z",
+            "modified": "2025-02-13T11:44:46.546Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "place_id",
+                    "value": "1",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "f617b7c2-3410-43d8-9700-ea64ae3623f1",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "legjobbanfogyo",
+            "url": "http://localhost:8000/legjobbanfogyo?year=2023&week=2&place_id=1",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2025-02-13T11:45:51.963Z",
+            "modified": "2025-02-13T11:45:51.963Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "year",
+                    "value": "2023",
+                    "isPath": false
+                },
+                {
+                    "name": "week",
+                    "value": "2",
+                    "isPath": false
+                },
+                {
+                    "name": "place_id",
+                    "value": "1",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "952a8ec6-f715-4c1a-add0-ce7faa30f7b2",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "kategoriak",
+            "url": "http://localhost:8000/kategoriak?bufeId=1",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2025-02-13T11:48:16.611Z",
+            "modified": "2025-02-13T11:48:16.611Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "bufeId",
+                    "value": "1",
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "6c52633e-5f2c-4f7a-9225-ba6a419c8fdd",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "kategoriatorles",
+            "url": "http://localhost:8000/kategoriatorles",
+            "method": "DELETE",
+            "sortNum": 90000,
+            "created": "2025-02-13T11:50:10.075Z",
+            "modified": "2025-02-13T11:50:10.075Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"katId\" : 1\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "56870f02-1244-4576-8aba-3443e46b0d81",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "kategoriafeltoltes",
+            "url": "http://localhost:8000/kategoriafeltoltes",
+            "method": "PUT",
+            "sortNum": 110000,
+            "created": "2025-02-13T11:50:39.595Z",
+            "modified": "2025-02-13T11:50:39.595Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"bufeId\" : 1,\n  \"katName\"  : \"Új kategória\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "32bcdf9f-a2a4-4c54-a13c-285d197b4624",
+            "colId": "03e287e7-48ce-4780-a582-270caaf4387e",
+            "containerId": "",
+            "name": "kategoriamodositas",
+            "url": "http://localhost:8000/kategoriamodositas",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2025-02-13T11:50:42.619Z",
+            "modified": "2025-02-13T11:50:42.619Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"katId\": \"1\",\n  \"katName\": \"Új név\"\n}",
+                "form": []
+            }
+        }
+    ],
+    "ref": "kOq6EZyoh3zF3D3lVHiujp4mxlOJ0TL8EkmHUk9CWwEB-FejrKpX0T3ZP3GKuWE8btYzAyh0pG2LJ5zOsz5oaA"
+}
