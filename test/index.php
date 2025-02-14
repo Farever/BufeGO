@@ -700,7 +700,7 @@ function felhasznaloAdatokModositas($userId, $email, $name, $address_id, $phone,
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin)
@@ -709,7 +709,7 @@ function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $pho
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function jelszoValtoztatas($userId, $passcode)
@@ -718,7 +718,7 @@ function jelszoValtoztatas($userId, $passcode)
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function cimFeltoltes($zip, $city, $address)
@@ -727,7 +727,7 @@ function cimFeltoltes($zip, $city, $address)
 
     $cim = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $cim], JSON_UNESCAPED_UNICODE);
+    return $cim;
 }
 
 function iskolaFeltoltes($name)
@@ -736,7 +736,7 @@ function iskolaFeltoltes($name)
 
     $iskola = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $iskola], JSON_UNESCAPED_UNICODE);
+    return $iskola;
 }
 
 //Kategóriák
