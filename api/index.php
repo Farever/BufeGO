@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
 $method = $_SERVER["REQUEST_METHOD"];
-$bodyData = ($method === "POST") ? json_decode(file_get_contents('php://input'), true) : null;
+$bodyData = json_decode(file_get_contents('php://input'), true);
 $getData = $_GET;
 
 handleEndpoint($endpoint, $method, $bodyData, $getData);
@@ -82,7 +82,7 @@ function handleStatMonthlyIncome(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT MONTH(orders.collected_at) as 'honap', SUM(orders.price) as 'average_income' FROM orders WHERE orders.place_id = " . $getData['place_id'] . " AND YEAR(orders.collected_at) = " . $getData["year"] . " GROUP BY YEAR(orders.collected_at), MONTH(orders.collected_at)");
+    $response = lekeres("SELECT MONTH(orders.orderd_at) as 'honap', SUM(orders.price) as 'average_income' FROM orders WHERE orders.place_id = " . $getData['place_id'] . " AND YEAR(orders.orderd_at) = " . $getData["year"] . " GROUP BY YEAR(orders.orderd_at), MONTH(orders.orderd_at)");
     return ['valasz' => $response];
 }
 
@@ -99,7 +99,36 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT products.*, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg', orders.collected_at FROM orderedproducts INNER JOIN orders ON orderedproducts.order_id = orders.id INNER JOIN products ON orderedproducts.product_id = products.id WHERE YEAR(orders.collected_at) = " . $getData["year"] . " AND MONTH(orders.collected_at) = " . $getData["month"] . " AND orders.place_id = " . $getData['place_id'] . " GROUP BY orderedproducts.product_id, WEEK(orders.collected_at) ORDER BY vasarolt_mennyiseg;", "bufego");
+    // Biztonságosabb paraméterkezelés a SQL injection elkerülése érdekében
+    $year = intval($getData["year"]);
+    $month = intval($getData["month"]);
+    $placeId = intval($getData["place_id"]);
+
+    // SQL injection elleni védelem + pontosabb lekérdezés a legtöbbet eladott termékre
+    $query = "SELECT products.*, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg'
+              FROM orderedproducts
+              INNER JOIN orders ON orderedproducts.order_id = orders.id
+              INNER JOIN products ON orderedproducts.product_id = products.id
+              WHERE YEAR(orders.orderd_at) = ?
+              AND MONTH(orders.orderd_at) = ?
+              AND orders.place_id = ?
+              GROUP BY orderedproducts.product_id
+              ORDER BY vasarolt_mennyiseg DESC
+              LIMIT 1";
+
+    $params = [$year,$month,$placeId,];
+
+    $response = lekeres($query, "ssi", $params);
+
+    // Ha nincs találat, üres tömböt adjunk vissza
+    if (empty($response)) {
+        return ['valasz' => []];
+    }
+   // Tömbbe csomagolás, ha a lekeres függvény nem tömböt ad vissza, hanem egyetlen sort.
+    if (!is_array($response)) {
+        $response = [$response];
+    }
+
     return ['valasz' => $response];
 }
 
@@ -231,7 +260,7 @@ function handleBufeModositas(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => bufeModositas($bodyData['bufeId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'], $bodyData['payment'], $bodyData['avaliable'])];
+    return ['valasz' => bufeModositas($bodyData['bufeId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
 }
 
 /**
@@ -247,7 +276,7 @@ function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'], $bodyData['payment'], $bodyData['avaliable'])];
+    return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
 }
 
 function handleBejelentkezes($method, $data) : ?array
@@ -595,7 +624,7 @@ function handleKosarba(string $method, ?array $bodyData): ?array
 
 function lekeres($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego');
+    $db = new mysqli('localhost', 'root', '', 'bufego_test');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
@@ -627,7 +656,7 @@ function lekeres($muvelet, $tipus = null, $adatok = null)
 
 function valtoztatas($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego');
+    $db = new mysqli('localhost', 'root', '', 'bufego_test');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
@@ -700,7 +729,7 @@ function felhasznaloAdatokModositas($userId, $email, $name, $address_id, $phone,
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin)
@@ -709,7 +738,7 @@ function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $pho
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function jelszoValtoztatas($userId, $passcode)
@@ -718,7 +747,7 @@ function jelszoValtoztatas($userId, $passcode)
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $felhasznalo], JSON_UNESCAPED_UNICODE);
+    return $felhasznalo;
 }
 
 function cimFeltoltes($zip, $city, $address)
@@ -760,16 +789,16 @@ function kategoriaModosit($katId, $katName)
 
     $kategoriak = valtoztatas($query, 'si', [$katName, $katId]);
 
-    return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
+    return $kategoriak;
 }
 
 function kategoriaFeltolt($bufeId, $katName)
 {
     $query = "INSERT INTO `categories`(`place_id`, `categroy_name`) VALUES (?,?);";
 
-    $kategoriak = valtoztatas($query, 'iis', [$bufeId, $katName]);
+    $kategoriak = valtoztatas($query, 'is', [$bufeId, $katName]);
 
-    return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
+    return $kategoriak;
 }
 
 function kategoriaTorol($katId)
@@ -778,8 +807,8 @@ function kategoriaTorol($katId)
     if (is_array($check)) {
         $query = "UPDATE `categories` SET `deleted`='1' WHERE `id` = ? ";
         $kategoriak = valtoztatas($query, 'i', [$katId]);
-        return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
+        return $kategoriak;
     } else {
-        return json_encode(['valasz' => "Nincs ilyen kategória!"], JSON_UNESCAPED_UNICODE);
+        return "Nincs ilyen kategória!";
     }
 }
