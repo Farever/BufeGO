@@ -62,11 +62,11 @@ const Landing = () => {
                 </Col>
             </Row>
 
-            <Row className="schools mx-auto">
+            <Row className="schools mx-auto text-center">
                 <Col xs={12}>
                     <h2>Iskolák, ahol ott vagyunk</h2>
                 </Col>
-                <Row className='justify-content-center mx-auto'>
+                <Row className='justify-content-around'>
                     {schoolsData?.map((school, index) => {
                         return (
                             <Col lg={4} md={6} className="schools-grid mx-auto">
@@ -75,13 +75,12 @@ const Landing = () => {
                         )
                     })}
                 </Row>
-
             </Row>
 
-            <Row className="call-to-action">
+            <Row className="call-to-action text-center justify-content-center">
                 <Col xs={12} md={8}>
                     <h2>Esetleg büféd van?</h2>
-                    <div className="cta-box mx-auto">
+                    <div className="cta-box">
                         <p>Szolgálj ki még több embert és csatlakozz hozzánk partnerként</p>
                         <a href="#" className="cta-button">Jelentkezz most</a>
                     </div>

@@ -17,9 +17,6 @@ const Footer = () => {
                             <Nav.Item className="mb-2">
                                 <Nav.Link as={Link} to="/" className="p-0 text-body-secondary">Főoldal</Nav.Link>
                             </Nav.Item>
-                            <Nav.Item className="mb-2">
-                                <Nav.Link as={Link} to="/admin" className="p-0 text-body-secondary">Admin</Nav.Link>
-                            </Nav.Item>
                         </Nav>
                     </Col>
 

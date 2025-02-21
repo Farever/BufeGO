@@ -56,7 +56,7 @@ const AdminNavbar = () => {
                             </Nav>
                         </Navbar.Collapse>
                         {
-                        //TODO : ez a rész majd csak azután jelenjen meg, ha a felhasználó választott büfét.
+                        /*TODO : ez a rész majd csak azután jelenjen meg, ha a felhasználó választott büfét.
                         <div className="user-info">
                             <div className="input-group mb-3">
                                 <span className="input-group-text" id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></span>
@@ -69,7 +69,7 @@ const AdminNavbar = () => {
                                 </select>
                             </div>
                         </div>
-                        }
+                        */}
                     </Container>
                 </Navbar>
 

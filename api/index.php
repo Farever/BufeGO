@@ -624,7 +624,7 @@ function handleKosarba(string $method, ?array $bodyData): ?array
 
 function lekeres($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego_test');
+    $db = new mysqli('localhost', 'root', '', 'bufego');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
@@ -656,7 +656,7 @@ function lekeres($muvelet, $tipus = null, $adatok = null)
 
 function valtoztatas($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego_test');
+    $db = new mysqli('localhost', 'root', '', 'bufego');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
