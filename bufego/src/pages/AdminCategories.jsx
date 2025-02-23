@@ -11,44 +11,102 @@ const Categories = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalShown, setModalShown] = useState(false);
+  const [modalType, setModalType] = useState("mod");
   const [selectedCategory, setSelectedCategory] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-          const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
-
-          if(response.status == 200)
-          {
-            console.log(response);
-            let data = await response.data.valasz;
-            setCategories(data);
-          }
-      } catch (error) {
-        setError('Hiba történt az adatok betöltése közben.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+        const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
+
+        if(response.status == 200)
+        {
+          let data = await response.data.valasz;
+          setCategories(data);
+        }
+    } catch (error) {
+      setError('Hiba történt az adatok betöltése közben.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   function reszletekButtonClicked(id)
   {
       setSelectedCategory(categories.find(c => c.id == id));
+      setModalType("mod");
       setModalShown(true)
   }
 
-  const updateCategory = async () => {
+  function ujButtonClicked()
+  {
+      setSelectedCategory({"id" : -1, 'categroy_name' : "Új kategória"});
+      setModalType("uj");
+      setModalShown(true);
+  }
+
+  const updateCategory = async (id, nev) => {
     try
     {
-      let response = axios.post()
+      let response = axios.post("http://localhost:8000/kategoriamodositas", {
+        "katId": id,
+        "katName" : nev
+      })
+
+      let data = (await response).data;
+      alert(data['valasz']);
     }
     catch(error)
     {
+      alert(error);
+    }
+  }
 
+  const newCategory = async (id, nev) => {
+    try
+    {
+      let response = axios.post("http://localhost:8000/kategoriafeltoltes", {
+        "bufeId": id,
+        "katName" : nev
+      })
+
+      let data = (await response).data;
+      alert(data['valasz']);
+    }
+    catch(error)
+    {
+      alert(error);
+    }
+  }
+
+  function deleteButtonPropmt(id)
+  {
+    let mehet = confirm("Biztosan törli ezt a kategóriát?");
+
+    if(mehet)
+    {
+      deleteCategory(id);
+    }
+  }
+
+  const deleteCategory = async (id) =>
+  {
+    try
+    {
+      let response = axios.post("http://localhost:8000/kategoriatorles", {
+        "katId": id,
+      })
+
+      let data = (await response).data;
+      alert(data['valasz']);
+    }
+    catch(error)
+    {
+      alert(error);
     }
   }
 
@@ -67,8 +125,9 @@ const Categories = () => {
           />
         )}
       </div>
-
-      {<CategoryModal isOpen={modalShown} categoryDetails={selectedCategory} onClose={()=> setModalShown(false)}/>}
+      <hr/>
+      <Button type='button' variant='success' onClick={ujButtonClicked}>Új kategória létrehozása</Button>
+      {<CategoryModal isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
     </div>
   );
 };

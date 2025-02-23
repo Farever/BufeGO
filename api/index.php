@@ -183,7 +183,7 @@ function handleKategoriaModositas(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => kategoriaModosit($bodyData['katId'], $bodyData['katName'])];
+    return ["valasz" => kategoriaModosit($bodyData['katId'], $bodyData['katName'])];
 }
 
 /**
@@ -760,14 +760,14 @@ function kategoriaModosit($katId, $katName)
 
     $kategoriak = valtoztatas($query, 'si', [$katName, $katId]);
 
-    return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
+    return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
 }
 
 function kategoriaFeltolt($bufeId, $katName)
 {
     $query = "INSERT INTO `categories`(`place_id`, `categroy_name`) VALUES (?,?);";
 
-    $kategoriak = valtoztatas($query, 'iis', [$bufeId, $katName]);
+    $kategoriak = valtoztatas($query, 'is', [$bufeId, $katName]);
 
     return json_encode(['valasz' => $kategoriak], JSON_UNESCAPED_UNICODE);
 }
