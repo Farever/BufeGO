@@ -11,12 +11,26 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
         setUjNev(event.target.value)
     }
 
+    function TorleGomb()
+    {
+        if(type == "mod")
+        {
+            return(
+                <>
+                <Button type="button" onClick={()=>del(categoryDetails.id)} variant="danger">Törlés</Button>
+                </>
+            )
+        }
+        else
+         return(<></>)
+    }
+
     if(!isOpen) return null;
 
     return(
         <Modal show={isOpen} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{categoryDetails.categroy_name} {type == "mod" ? részletei : ""}</Modal.Title>
+                <Modal.Title>{categoryDetails.categroy_name} {type == "mod" ? "részletei" : ""}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -26,7 +40,7 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
             </Modal.Body>
             <Modal.Footer>
                 <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
-                <Button type="button" onClick={()=>del(categoryDetails.id)} variant="danger">Törlés</Button>
+                {TorleGomb()}
                 <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev) : save(1, ujNev ?? categoryDetails.categroy_name); onClose()}} variant="success">Mentés</Button>
             </Modal.Footer>
         </Modal>

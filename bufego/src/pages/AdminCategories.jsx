@@ -59,7 +59,8 @@ const Categories = () => {
 
       let data = (await response).data;
       alert(data['valasz']);
-    }
+      fetchData();
+     }
     catch(error)
     {
       alert(error);
@@ -131,7 +132,7 @@ const Categories = () => {
       </div>
       <hr/>
       <Button type='button' variant='success' onClick={ujButtonClicked}>Új kategória létrehozása</Button>
-      {<CategoryModal isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
+      {<CategoryModal type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
     </div>
   );
 };

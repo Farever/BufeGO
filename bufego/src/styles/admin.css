@@ -96,9 +96,9 @@ body{
   
 
     .btn-orange{
-      background-color: #e69138;
+      background-color: #e69138 !important;
       color: white;
-      border: none;
+      border: none !important;
     }
 
     .btn-orange:hover{
