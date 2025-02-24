@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminNavbar from './components/AdminNavbar';
-import Home from './pages/home';
+import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Admin from './pages/Admin';
 import NoPage from "./pages/NoPage";
@@ -13,12 +13,14 @@ import AdminProducts from "./pages/AdminProducts";
 import AdminStats from "./pages/AdminStats";
 import AdminCategories from "./pages/AdminCategories";
 import AdminReviews from "./pages/AdminReviews";
+import Navigation from "./components/UserNavBar";
 
 function App() {
   return (
     <BrowserRouter>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <AdminNavbar />
+        <Navigation/>
         <div className="container mt-4" style={{ flex: 1 }}>
           <Routes>
             <Route>

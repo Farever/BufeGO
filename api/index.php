@@ -37,6 +37,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriatorles' => handleKategoriaTorles($method, $bodyData),
         'bufemodositas' => handleBufeModositas($method, $bodyData),
         'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
+        'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
@@ -277,6 +278,26 @@ function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
     }
 
     return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
+}
+
+function handleUserBufe($method, $data){
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($data['school_Id'])) {
+        
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    $sql = "SELECT * FROM `places` WHERE `school_id` = {$data['school_Id']}";
+    $buffetData = lekeres($sql);
+
+    if(is_array($buffetData)){
+        return ['valasz' => $buffetData];
+    }else{
+        return ['valasz' => 'Nincs ilyen e-mail cím'];
+    }
 }
 
 function handleBejelentkezes($method, $data) : ?array
