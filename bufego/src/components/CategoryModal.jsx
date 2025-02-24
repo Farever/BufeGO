@@ -27,7 +27,7 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
             <Modal.Footer>
                 <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
                 <Button type="button" onClick={()=>del(categoryDetails.id)} variant="danger">Törlés</Button>
-                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev) : save(1, ujNev); onClose()}} variant="success">Mentés</Button>
+                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev) : save(1, ujNev ?? categoryDetails.categroy_name); onClose()}} variant="success">Mentés</Button>
             </Modal.Footer>
         </Modal>
     )
