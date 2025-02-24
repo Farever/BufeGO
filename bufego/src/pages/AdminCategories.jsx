@@ -69,13 +69,15 @@ const Categories = () => {
   const newCategory = async (id, nev) => {
     try
     {
-      let response = axios.post("http://localhost:8000/kategoriafeltoltes", {
+      let response = axios.put("http://localhost:8000/kategoriafeltoltes", {
         "bufeId": id,
         "katName" : nev
       })
 
       let data = (await response).data;
       alert(data['valasz']);
+      fetchData();
+      setModalShown(false);
     }
     catch(error)
     {
@@ -97,12 +99,14 @@ const Categories = () => {
   {
     try
     {
-      let response = axios.post("http://localhost:8000/kategoriatorles", {
-        "katId": id,
+      let response = axios.delete("http://localhost:8000/kategoriatorles", {
+       params : {"katId" : id}
       })
 
       let data = (await response).data;
       alert(data['valasz']);
+      fetchData();
+      setModalShown(false);
     }
     catch(error)
     {
@@ -116,7 +120,7 @@ const Categories = () => {
       {isLoading && <Loading />}
       {error && <div className="error-message">{error}</div>}
       <div className="categories-grid">
-        {categories.map((c) => 
+        {categories.filter(c => c.deleted == 0).map((c) =>
           <CategoryCard
             key={c.id}
             id={c.id}

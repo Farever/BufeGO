@@ -1,6 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
@@ -34,7 +34,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriak' => handleKategoriak($method, $getData),
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
-        'kategoriatorles' => handleKategoriaTorles($method, $bodyData),
+        'kategoriatorles' => handleKategoriaTorles($method, $getData),
         'bufemodositas' => handleBufeModositas($method, $bodyData),
         'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
         'userbufe' => handleUserBufe($method, $getData),
