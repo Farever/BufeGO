@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { FaStar } from 'react-icons/fa'; // Importáljuk a csillag ikont
-
-// Hook deklarációk a komponensen kívül helytelen! A komponensen belül kell lenniük!
-// const [rating, setRating] = useState(0);
-// const [isLoading, setIsLoading] = useState(false);
-// const [error, setError] = useState(null);
-const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+import Rating from '@mui/material/Rating';
+const refreshInterval = 5000;
 
 const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
-  // Hook deklarációk a komponensen belül
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,11 +24,11 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
           const formattedRatings = response.data.valasz.map(item => ({
             current_rating: Number(item.current_rating),
           }));
-          setRating(formattedRatings[0].current_rating);
+          setRating(Math.round(formattedRatings[0].current_rating * 2) / 2);
         } else {
           console.warn("No rating data received from the API");
           //Kezelheted itt a helyzetet, amikor nincs adat
-          setRating(0); //pl. alapértelmezett érték beállítása
+          setRating(0);
         }
       } catch (err) {
         setError(err.message);
@@ -44,12 +38,12 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
       }
     };
 
-    fetchRatings(); // Az első lekérdezés a komponens mountolásakor
+    fetchRatings();
 
-    const intervalId = setInterval(fetchRatings, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(fetchRatings, refreshInterval)
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, []); // refreshInterval eltávolítva, mert nem változik
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleClick = () => {
     console.log(isOnAdminPage);
@@ -58,21 +52,6 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
     } else {
       console.log("User" + buffet.id);
     }
-  };
-
-  // Értékelés megjelenítése (csillagokkal)
-  const renderStars = () => {
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          color={i < Math.floor(rating) ? '#FFC107' : '#ddd'} // Arany vagy szürke szín
-          style={{ marginRight: '2px' }}
-        />
-      );
-    }
-    return stars;
   };
 
   return (
@@ -90,7 +69,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
 
         {/* Értékelés megjelenítése */}
         <Card.Text>
-          Értékelés: {renderStars()} ({rating}/5)
+          Értékelés: <Rating name="read-only" value={rating} precision={0.5} readOnly /> ({rating}/5)
         </Card.Text>
         {isLoading && <p>Loading ratings...</p>}
         {error && <p>Error: {error}</p>}

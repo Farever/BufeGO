@@ -8,7 +8,7 @@ function Navigation() {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
 
-    const notShowNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
+    const notShowNavbar = ['/', '/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
 
     useEffect(() => {
         const fetchIskolak = async () => {

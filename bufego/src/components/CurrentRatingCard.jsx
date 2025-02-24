@@ -18,7 +18,7 @@ function MonthlyIncomeChart() {
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/currentrating', {
-        params: { place_id: "1"},
+        params: { place_id: "1" },
       });
 
       const formattedRatings = response.data.valasz.map(item => ({
@@ -43,14 +43,18 @@ function MonthlyIncomeChart() {
 
   return (
     <div className="col-sm-12 col-md-12">
-      
+
       {/*<ApiTest returnData={setTextData}/>*/}
-      <Card className=' rating text-center'>
+      <Card className='rating text-center w-50'>
+        <Card.Title>
+          Jelenlegi értékelés
+        </Card.Title>
         <Card.Body>
-          <h1>Jelenlegi értékelés</h1>
-          <Rating className='rating' name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
-      </Card.Body>
-    </Card>
+          <Card.Text>
+            <Rating className='rating' name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
+          </Card.Text>
+        </Card.Body>
+      </Card>
     </div>
   );
 }
