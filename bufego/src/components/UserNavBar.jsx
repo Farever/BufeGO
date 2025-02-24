@@ -8,7 +8,7 @@ function Navigation() {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
 
-    const notShowNavbar = ['/', '/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
+    const ShowNavbar = location.pathname.startsWith('/home');
 
     useEffect(() => {
         const fetchIskolak = async () => {
@@ -32,7 +32,7 @@ function Navigation() {
         //navigate(`/iskola/${iskolaId}`);
     };
 
-    if (!notShowNavbar) {
+    if (ShowNavbar) {
         return (
             <Navbar bg="light" expand="lg">
                 <Container>
@@ -40,7 +40,7 @@ function Navigation() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <select className='form-select' onChange={handleIskolaValasztas}>
+                            <select className='form-select' name='iskola' onChange={handleIskolaValasztas}>
                                 <option value="">Válassz iskolát</option>
                                 {iskolak.map(iskola => (
                                     <option key={iskola.id} value={iskola.id}>

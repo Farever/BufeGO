@@ -16,11 +16,6 @@ const Orders = () => {
 
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
 
-  var ms = 0;
-    setInterval(function () {
-      ms+=5;
-    }, 5);
-
   const handleCloseDetailsModal = () => {
     fetchOrders();
     setIsDetailsModalOpen(false);
@@ -35,10 +30,6 @@ const Orders = () => {
         params: { place_id: "1" },
       });
       await setOrders(response.data.valasz.rendelesek);
-      console.log(response.data.valasz.rendelesek)
-      if(response.status == 200){
-        console.log(ms + "ms - kész")
-      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,30 +39,15 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
-    console.log(orders);
-
     const intervalId = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
   }, [refreshInterval]);
 
-  const handleAccept = (orderId) => {
-    // Kezeld az "Elfogad" gomb kattintást
-    console.log('Elfogadva:', orderId);
-    // Itt frissítheted az adott rendelés állapotát az adatbázisban
-  };
-
-  const handleReject = (orderId) => {
-    // Kezeld az "Elutasít" gomb kattintást
-    console.log('Elutasítva:', orderId);
-    // Itt frissítheted az adott rendelés állapotát az adatbázisban
-  };
-
   const handleDetails = (orderId) => {
     console.log(orderId);
     setSelectedOrder(orders.filter(order => order.id == orderId));
     setIsDetailsModalOpen(true);
-    // Itt megnyithatsz egy modalt vagy navigálhatsz egy másik oldalra a rendelés részleteivel
   };
 
   return (
@@ -90,8 +66,6 @@ const Orders = () => {
           <OrderCard
             key={order.id}
             order={order}
-            onAccept={handleAccept}
-            onReject={handleReject}
             onDetails={handleDetails}
           />
         ))}
@@ -105,8 +79,6 @@ const Orders = () => {
           <OrderCard
             key={order.id}
             order={order}
-            onAccept={handleAccept}
-            onReject={handleReject}
             onDetails={handleDetails}
           />
         ))}

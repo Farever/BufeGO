@@ -19,7 +19,6 @@ const Home = () => {
           params: { "school_Id": "1" },
         });
         await setBuffets(response.data.valasz);
-        console.log(response.data.valasz)
       } catch (err) {
         setError(err.message);
       } finally {
