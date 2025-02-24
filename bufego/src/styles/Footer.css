@@ -1,0 +1,40 @@
+footer {
+    margin-top: auto;
+    background-color: #f5b761 !important; /* Háttérszín */
+    color: #fff; /* Szövegszín */
+  }
+  
+  footer h5 {
+    color: #212529;
+    font-weight: bold;
+  }
+  
+  footer a {
+      color: #212529 !important;
+      font-weight: bold;
+  }
+  
+  footer a:hover{
+    text-decoration: underline;
+  }
+  
+  footer p {
+    color: white;
+    font-weight: bold;
+  }
+  
+  footer .nav-link {
+    padding: 0; /* Eltávolítjuk az alapértelmezett padding-et */
+  
+  }
+  
+  footer .btn-primary {
+      background-color: white !important;
+      border: none !important;
+      color: #e69138 !important;
+      font-weight: bold;
+  }
+  
+  footer .btn-primary:hover{
+      background-color: #e0e0e0 !important;
+  }

@@ -212,7 +212,7 @@ function handleKategoriaModositas(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ["valasz" => kategoriaModosit($bodyData['katId'], $bodyData['katName'])];
+    return ['valasz' => kategoriaModosit($bodyData['katId'], $bodyData['katName'])];
 }
 
 /**
@@ -624,7 +624,7 @@ function handleKosarba(string $method, ?array $bodyData): ?array
 
 function lekeres($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego');
+    $db = new mysqli('localhost', 'root', '', 'bufego_test');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
@@ -656,7 +656,7 @@ function lekeres($muvelet, $tipus = null, $adatok = null)
 
 function valtoztatas($muvelet, $tipus = null, $adatok = null)
 {
-    $db = new mysqli('localhost', 'root', '', 'bufego');
+    $db = new mysqli('localhost', 'root', '', 'bufego_test');
 
     if ($db->connect_errno != 0) {
         return $db->connect_error;
@@ -789,8 +789,7 @@ function kategoriaModosit($katId, $katName)
 
     $kategoriak = valtoztatas($query, 'si', [$katName, $katId]);
 
-    return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
-
+    return $kategoriak;
 }
 
 function kategoriaFeltolt($bufeId, $katName)

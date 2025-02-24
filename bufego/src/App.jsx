@@ -6,6 +6,7 @@ import Admin from './pages/Admin';
 import NoPage from "./pages/NoPage";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from "./components/Footer";
 import './styles/App.css'
 import AdminOrders from "./pages/AdminOrders";
 import AdminProducts from "./pages/AdminProducts";
@@ -16,20 +17,25 @@ import AdminReviews from "./pages/AdminReviews";
 function App() {
   return (
     <BrowserRouter>
-      <AdminNavbar />
-      <Routes>
-        <Route>
-          <Route index element={<Landing />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/orders" element={<AdminOrders />} />
-          <Route path="/admin/statistics" element={<AdminStats />} />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/reviews" element={<AdminReviews />} />
-          <Route path="*" element={< NoPage />} />
-        </Route>
-      </Routes>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <AdminNavbar />
+        <div className="container mt-4" style={{ flex: 1 }}>
+          <Routes>
+            <Route>
+              <Route index element={<Landing />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/orders" element={<AdminOrders />} />
+              <Route path="/admin/statistics" element={<AdminStats />} />
+              <Route path="/admin/products" element={<AdminProducts />} />
+              <Route path="/admin/categories" element={<AdminCategories />} />
+              <Route path="/admin/reviews" element={<AdminReviews />} />
+              <Route path="*" element={< NoPage />} />
+            </Route>
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }
