@@ -52,7 +52,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
         'termek_felv' => handleTermekFelv($method, $bodyData),
-        'termekek' => handleTermekek($method, $bodyData),
+        'termekek' => handleTermekek($method, $getData),
         'termek_valt' => handleTermekValt($method, $bodyData),
         'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
@@ -539,17 +539,17 @@ function handleTermekFelv(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a termékek lekérdezését.
  */
-function handleTermekek(string $method, ?array $bodyData): ?array
+function handleTermekek(string $method, ?array $getData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData['place_id'])) {
+    if (!isset($getData['place_id'])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $bodyData['place_id']);
+    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
     return ['valasz' => $response];
 }
 
@@ -793,7 +793,7 @@ function iskolaFeltoltes($name)
 
 function kategoriakLekerese($bufeId)
 {
-    $query = "SELECT * FROM `categories` WHERE `place_id` = {$bufeId};";
+    $query = "SELECT * FROM `categories` WHERE `place_id` = {$bufeId} ORDER BY category_placement;";
 
     $kategoriak = lekeres($query, 'bufego');
 

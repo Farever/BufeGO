@@ -14,6 +14,7 @@ import AdminStats from "./pages/AdminStats";
 import AdminCategories from "./pages/AdminCategories";
 import AdminReviews from "./pages/AdminReviews";
 import Navigation from "./components/UserNavBar";
+import UserBufe from "./pages/UserBufe";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route>
               <Route index element={<Landing />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/home/bufe" element={<UserBufe />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
               <Route path="/admin/statistics" element={<AdminStats />} />
