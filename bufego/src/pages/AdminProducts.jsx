@@ -4,28 +4,44 @@ import Loading from '../components/Loading';
 import data from '../data.json';
 import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
+import axios from 'axios';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  let place_id = 1;
 
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('http://localhost/13c-vegh/api/index.php/termekek', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({place_id:place_id})
+      });
+
+      let data = await response.json();
+      setProducts(data.valasz);  // Update state with the formatted data
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        // Simulált API hívás a lokális JSON adatbázisból
-        const response = { data: data.products };
-        setProducts(response.data);
-      } catch (error) {
-        setError('Hiba történt az adatok betöltése közben.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    fetchProducts(); // Az első lekérdezés a komponens mountolásakor
 
-    fetchData();
-  }, []);
+    const intervalId = setInterval(fetchProducts, refreshInterval); // Lekérdezés a beállított időközönként
+
+    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
+  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
     <div>
