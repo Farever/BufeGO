@@ -1,12 +1,12 @@
 <?php
 header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
 $method = $_SERVER["REQUEST_METHOD"];
-$bodyData = ($method === "POST") ? json_decode(file_get_contents('php://input'), true) : null;
+$bodyData = ($method === "POST" || $method === "DELETE" || $method === "PUT") ? json_decode(file_get_contents('php://input'), true) : null;
 $getData = $_GET;
 
 handleEndpoint($endpoint, $method, $bodyData, $getData);

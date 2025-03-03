@@ -14,6 +14,7 @@ const Products = () => {
   let place_id = 1;
 
   const fetchProducts = async () => {
+    console.log("asd")
     setIsLoading(true);
     setError(null);
     try {
@@ -50,7 +51,7 @@ const Products = () => {
       {error && <div className="error-message">{error}</div>}
       <div className="products-grid">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product}/> //TODO a lista frissítése lekérés után
         ))}
       </div>
       <ProductUploadForm></ProductUploadForm>
