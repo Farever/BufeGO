@@ -136,8 +136,8 @@ const ProductUploadForm = () => {
                 </Modal.Body>
                 <Modal.Footer>
                 
-                <ActionButton type="reject" onClick={handleClose}></ActionButton>
-                <ActionButton type="accept" onClick={() => {
+                <ActionButton type="cancel" onClick={handleClose}></ActionButton>
+                <ActionButton type="ok" onClick={() => {
                     uploadProduct();
                 }}></ActionButton>
                 </Modal.Footer>

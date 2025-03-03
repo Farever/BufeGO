@@ -6,7 +6,11 @@ const ActionButton = ({ type, onClick }) => {
     switch (type) {
       case 'accept':
         return 'accept-button';
+      case 'ok':
+        return 'accept-button';
       case 'reject':
+        return 'reject-button';
+      case 'cancel':
         return 'reject-button';
       case 'details':
         return 'details-button';
@@ -23,8 +27,12 @@ const ActionButton = ({ type, onClick }) => {
     switch (type) {
       case 'accept':
         return 'Elfogad';
+      case 'ok':
+        return 'Ok';
       case 'reject':
         return 'Elutasít';
+      case 'cancel':
+        return 'Mégsem';
       case 'details':
         return 'Részletek';
       case 'done':
