@@ -9,6 +9,7 @@ function Navigation() {
     const location = useLocation();
 
     const ShowNavbar = location.pathname.startsWith('/home');
+    const ShowSchoolSelect = !location.pathname.startsWith('/home/bufe');
 
     useEffect(() => {
         const fetchIskolak = async () => {
@@ -32,7 +33,7 @@ function Navigation() {
         //navigate(`/iskola/${iskolaId}`);
     };
 
-    if (ShowNavbar) {
+    if (ShowNavbar && ShowSchoolSelect) {
         return (
             <Navbar bg="light" expand="lg">
                 <Container>
@@ -48,6 +49,28 @@ function Navigation() {
                                     </option>
                                 ))}
                             </select>
+                        </Nav>
+                        <Nav>
+                            <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
+                                <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        );
+    }
+    if(ShowNavbar && !ShowSchoolSelect){
+        return (
+            <Navbar bg="light" expand="lg">
+                <Container>
+                    <Navbar.Brand as={Link} to="/home">BüféGO</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
                         </Nav>
                         <Nav>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useLocation, Outlet } from 'react-router-dom'; // Importáljuk a useLocation hook-ot
 import axios from 'axios';
+import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 
 const AdminNavbar = () => {
     const location = useLocation();
@@ -27,6 +28,14 @@ const AdminNavbar = () => {
         fetchBuffets();
       }, []);
 
+      const handleBufeValasztas = (event) => {
+        const bufeId = event.target.value;
+        // Itt végezheted el az iskola ID-jával kapcsolatos műveleteket, pl. navigálás
+        console.log("Kiválasztott bufe ID:", bufeId);
+        //például:
+        //navigate(`/iskola/${iskolaId}`);
+    };
+
 
     if (showNavbar) {
         return (
@@ -36,7 +45,6 @@ const AdminNavbar = () => {
                         <Navbar.Brand href="/admin">BüféGO</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
-                            {/* Mindig rendereljük a Nav komponenst, de a tartalmát elrejtjük, ha a showNavbar false */}
                             <Nav className="me-auto">
                                 <Nav.Item>
                                     <Nav.Link href='/admin/orders'>Rendelések</Nav.Link>
@@ -54,22 +62,25 @@ const AdminNavbar = () => {
                                     <Nav.Link href="/admin/reviews">Értékelések</Nav.Link>
                                 </Nav.Item>
                             </Nav>
+                            <Nav className="me-auto">
+                            <select className='form-select' name='bufe' onChange={handleBufeValasztas}>
+                                <option value="">Válassz büfét</option>
+                                {buffets.map(bufe => (
+                                    <option key={bufe.id} value={bufe.id}>
+                                        {bufe.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </Nav>
+                        <Nav>
+                            <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
+                                <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
                         </Navbar.Collapse>
-                        {
-                        /*TODO : ez a rész majd csak azután jelenjen meg, ha a felhasználó választott büfét.
-                        <div className="user-info">
-                            <div className="input-group mb-3">
-                                <span className="input-group-text" id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></span>
-                                <select className="form-select d-inline">
-                                    {
-                                        buffets.map((buffet) => (
-                                            <option value={buffet.id} key={"bufe+" + buffet.id}>{buffet.name}</option>
-                                          ))
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        */}
                     </Container>
                 </Navbar>
 
