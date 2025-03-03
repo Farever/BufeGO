@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import Loading from "../components/Loading";
 import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
-import { Container } from "react-bootstrap";
+import { Container, Navbar, NavbarText, Nav } from "react-bootstrap";
+import UserProductCard from "../components/UserProductCard";
 
 export default function UserBufe()
 {
@@ -67,17 +68,25 @@ export default function UserBufe()
         <>     
             {isLoading && <Loading />}
             {error && <div className="error-message">{error}</div>}
+            
+            <Navbar>
+                <Container>
+                    <Navbar.Collapse>
+                        <Nav className="me-auto">
+                            {categories.filter(c => c.deleted == 0).map((c) => 
+                                <Nav.Link key={c.id} href={"#"+c.categroy_name}>{c.categroy_name}</Nav.Link>
+                            )}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+
             <Container>
-                <nav>
-                    <ul>
-                        {categories.filter(c => c.deleted == 0).map((c) => 
-                            <li key={c.id}><a href={"#"+c.categroy_name}>{c.categroy_name}</a></li>
-                        )}
-                    </ul>
-                </nav>
-                {categories.map((c) => 
+
+                {categories.filter(c => c.deleted == 0).map((c) => 
                     <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products}/>
                 )}
+
             </Container>
         </>
     )

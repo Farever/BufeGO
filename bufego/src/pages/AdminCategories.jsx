@@ -49,12 +49,14 @@ const Categories = () => {
       setModalShown(true);
   }
 
-  const updateCategory = async (id, nev) => {
+  const updateCategory = async (id, nev, hely) => {
+    console.log(hely);
     try
     {
       let response = axios.post("http://localhost:8000/kategoriamodositas", {
         "katId": id,
-        "katName" : nev
+        "katName" : nev,
+        "katHely" : hely
       })
 
       let data = (await response).data;

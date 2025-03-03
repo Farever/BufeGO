@@ -209,11 +209,11 @@ function handleKategoriaModositas(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['katId']) || empty($bodyData['katName'])) {
+    if (empty($bodyData['katId']) || empty($bodyData['katName']) || empty($bodyData['katHely'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ["valasz" => kategoriaModosit($bodyData['katId'], $bodyData['katName'])];
+    return ["valasz" => kategoriaModosit($bodyData['katId'], $bodyData['katName'], $bodyData['katHely'])];
 }
 
 /**
@@ -804,11 +804,11 @@ function kategoriakLekerese($bufeId)
     }
 }
 
-function kategoriaModosit($katId, $katName)
+function kategoriaModosit($katId, $katName, $katHely)
 {
-    $query = "UPDATE `categories` SET `categroy_name` = ? WHERE `categories`.`id` = ?;";
+    $query = "UPDATE `categories` SET `categroy_name` = ?, 'category_placement' = ? WHERE `categories`.`id` = ?;";
 
-    $kategoriak = valtoztatas($query, 'si', [$katName, $katId]);
+    $kategoriak = valtoztatas($query, 'sii', [$katName, $katHely, $katId]);
 
     return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
 

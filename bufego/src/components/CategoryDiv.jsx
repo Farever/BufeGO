@@ -5,16 +5,17 @@ import UserProductCard from "./UserProductCard";
 export default function CategoryDiv({catId, catNev, termekek})
 {
     return(
-        <Row className="border border-warning rounded my-2">
+        <Row className="border border-warning rounded my-2" id={catNev}>
             <h1 style={{textDecoration: "underline"}}>{catNev}</h1>
             {termekek.filter((p) => p.category_id == catId).map((p) => {
-                {console.log(p.category_id)}
-                <UserProductCard 
-                    nev={p.name} 
-                    ar={p.price}
-                    img={p.image}
-                    key={p.id}
+                return(
+                    <UserProductCard 
+                        nev={p.name} 
+                        ar={p.price}
+                        img={p.image}
+                        key={p.id}
                     />
+                )
                 })}
         </Row>
     )
