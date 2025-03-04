@@ -1,1 +1,3 @@
-# I dunno what to write here
+# PHP kód futattása:
+## /api mappán belül következő paranccsal lehetséges:
+##  php -S localhost:8000
