@@ -56,7 +56,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'termek_valt' => handleTermekValt($method, $bodyData),
         'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
-        'user_remdelesek' => handleUserRendelesek($method, $bodyData),
+        'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
     };
@@ -607,18 +607,25 @@ function handleRendel(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a felhasználó rendeléseinek lekérdezését.
  */
-function handleUserRendelesek(string $method, ?array $bodyData): ?array
+function handleUserRendelesek(string $method, ?array $getData): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["user_id"])) {
+    if (!isset($getData["userId"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT place_id, status, price, payment_method, orderd_at, expected_pickup_time FROM orders WHERE orders.user_id = " . $bodyData['user_id']);
+    $orderadatok = lekeres("SELECT * FROM orders WHERE orders.user_id =" . $getData['userId'] . " ORDER BY `orderd_at` DESC");
+    for($i = 0; $i < count($orderadatok); $i++)
+    {
+        $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.price, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable, orderedproducts.quantity FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
+        $orderadatok[$i]["place"] = lekeres("SELECT * FROM places INNER JOIN orders ON orders.place_id = places.id WHERE orders.id ={$orderadatok[$i]['id']}");
+    }
+    $response = ["rendelesek" => $orderadatok];
     return ['valasz' => $response];
+
 }
 
 /**
