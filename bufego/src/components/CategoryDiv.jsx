@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Row } from "react-bootstrap";
 import UserProductCard from "./UserProductCard";
 
-export default function CategoryDiv({catId, catNev, termekek})
+export default function CategoryDiv({catId, catNev, termekek, buttonActions})
 {
     return(
         <Row className="border border-warning rounded my-2" id={catNev}>
@@ -14,6 +14,7 @@ export default function CategoryDiv({catId, catNev, termekek})
                         ar={p.price}
                         img={p.image}
                         key={p.id}
+                        action={()=>{buttonActions(p.id)}}
                     />
                 )
                 })}

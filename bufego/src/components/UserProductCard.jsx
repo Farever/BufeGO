@@ -1,6 +1,6 @@
 import { Button, Card } from "react-bootstrap";
 
-export default function UserProductCard({nev, img, ar})
+export default function UserProductCard({nev, img, ar, action})
 {
 
     return (
@@ -13,7 +13,7 @@ export default function UserProductCard({nev, img, ar})
                 {ar} Ft
               </Card.Text>
             </Card.Body>
-            <Card.Footer><Button type="button">+</Button></Card.Footer>
+            <Card.Footer><Button type="button" onClick={action}>+</Button></Card.Footer>
         </Card>
         </>
     )

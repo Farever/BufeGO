@@ -4,6 +4,7 @@ import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
 import { Container, Navbar, NavbarText, Nav } from "react-bootstrap";
 import UserProductCard from "../components/UserProductCard";
+import ProductToCartModal from "../components/ProductToCartModal";
 
 export default function UserBufe()
 {
@@ -11,6 +12,9 @@ export default function UserBufe()
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [selectedProduct, setSeletdetProduct] = useState([]);
+
+    const [modalShown, setModalShown] = useState(false);
     
     useEffect(() =>
     {
@@ -64,6 +68,37 @@ export default function UserBufe()
         fetchProduct();
     }, [])
 
+    const AddToCart = async (q, pid) => 
+    {
+        try
+            {
+                const response = await axios.post("http://localhost:8000/kosarba", {
+                    "place_id" : 1,
+                    "user_id" : 1,
+                    "quantity" : q,
+                    "product_id" : pid
+                });
+
+                if(response.status == 200)
+                {
+                    alert("Sikeres kosárba tétel!");
+                    setModalShown(false);
+                }
+
+            } 
+            catch (error) 
+            {
+                setError('Hiba történt a kosárba rakáskor.');
+            } 
+    }
+
+    function openOrderModal(pid)
+    {
+        setSeletdetProduct(products.find(p => p.id == pid));     
+        setModalShown(true);
+    }   
+
+
     return(
         <>     
             {isLoading && <Loading />}
@@ -84,10 +119,11 @@ export default function UserBufe()
             <Container>
 
                 {categories.filter(c => c.deleted == 0).map((c) => 
-                    <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products}/>
+                    <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products} buttonActions={openOrderModal}/>
                 )}
 
             </Container>
+            <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={()=>{setModalShown(false)}} addToCart={AddToCart} />
         </>
     )
 }
