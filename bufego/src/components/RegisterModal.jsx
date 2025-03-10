@@ -85,7 +85,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const addressResponse = await axios.post(
+      const addressResponse = await axios.put(
         "http://localhost:8000/cimfeltoltes",
         { zip, city, address },
         { headers: { "Content-Type": "application/json" } }
@@ -94,7 +94,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
       const newAddId = addressResponse.data.valasz;
       setAddId(newAddId);
 
-      const registerResponse = await axios.post(
+      const registerResponse = await axios.put(
         "http://localhost:8000/felhasznaloregisztracio",
         {
           email,
