@@ -19,7 +19,7 @@ const ProductUploadForm = () => {
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost:8000/index.php/kategoriak', {
+          const response = await axios.get('http://localhost:8000/kategoriak', {
             params: { 
                 bufeId: 1
             },
@@ -55,7 +55,7 @@ const ProductUploadForm = () => {
         formData.append('price', parseFloat(price.current.value));
 
 
-        let response = await fetch('http://localhost:8000/index.php/termek_felv', {
+        let response = await fetch('http://localhost:8000/termek_felv', {
             method: "POST",
             body: formData
         })
