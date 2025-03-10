@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
-const refreshInterval = 5000;
 
 const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const refreshInterval = 5000;
 
   useEffect(() => {
     const fetchRatings = async () => {
@@ -56,7 +56,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
 
   return (
     <Card className="buffet-card">
-      <Card.Img variant="top" src={buffet.image} />
+      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${buffet.image}`}/>
       <Card.Body>
         <Card.Title>
           {buffet.name} - {buffet.school}
