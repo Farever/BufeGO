@@ -55,7 +55,7 @@ const Products = () => {
           <ProductCard key={product.id} product={product}/>
         ))}
       </div>
-      <Editmodal></Editmodal> {/*A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
+      {/*<Editmodal></Editmodal> A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
       <ProductUploadForm></ProductUploadForm>
     </div>
   );
