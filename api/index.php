@@ -492,20 +492,10 @@ function handleTermekFelv(string $method, ?array $bodyData): ?array
     $imgName = $bodyData["place"]."_product_".str_replace(' ', '_', $bodyData["name"]);
 
     $file = $_FILES['img'];
-    $target_dir = "uploads/";
-    var_dump($file);
-    $target_file = $target_dir . basename($file['name']);
-
-    if (move_uploaded_file($file["tmp_name"], $target_file)) {
-    (new UploadApi())->upload($_FILES[$target_file], [
+    (new UploadApi())->upload($file["tmp_name"], [
         'public_id' => $imgName, 
         'quality_analysis' => true,  
-        'colors' => true, 
-        'categorization' => 'google_tagging', 
-        'auto_tagging' => 0.8]);
-    }else{
-        return ['valasz' => 'Sikertelen fájl feltöltés', 'status' => 400];
-    }
+        'colors' => true]);
 
     $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$imgName}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
     return ['valasz' => $response];
