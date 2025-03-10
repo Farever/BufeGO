@@ -52,7 +52,7 @@ function Navigation() {
                         </Nav>
                         <Nav>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/home/myorders">Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>

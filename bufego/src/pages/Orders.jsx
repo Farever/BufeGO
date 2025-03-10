@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Card, Button, Modal, Table } from 'react-bootstrap';
 import axios from 'axios';
 import OrderBadge from '../components/OrderBadge';
+import '../styles/myorders.css';
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -48,7 +49,7 @@ function OrdersPage() {
                   Rendelve: {order.orderd_at}
                 </Card.Subtitle>
                 <Card.Text><OrderBadge status={order.status*1}/></Card.Text>
-                <Button variant="primary" onClick={() => handleShowDetails(order)}>
+                <Button variant="primary" onClick={() => handleShowDetails(order)} className='btn-orange '>
                   Részletek
                 </Button>
               </Card.Body>

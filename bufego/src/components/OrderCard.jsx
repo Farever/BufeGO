@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import OrderBadge from './OrderBadge';
+import '../styles/admin.css';
 
 const OrderCard = ({ order, onAccept, onReject, onDetails }) => {
   return (
