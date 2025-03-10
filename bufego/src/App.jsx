@@ -15,6 +15,7 @@ import AdminCategories from "./pages/AdminCategories";
 import AdminReviews from "./pages/AdminReviews";
 import Navigation from "./components/UserNavBar";
 import UserBufe from "./pages/UserBufe";
+import OrdersPage from "./pages/Orders";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route index element={<Landing />} />
               <Route path="/home" element={<Home />} />
               <Route path="/home/bufe" element={<UserBufe />} />
+              <Route path="/home/myorders" element={<OrdersPage />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
               <Route path="/admin/statistics" element={<AdminStats />} />

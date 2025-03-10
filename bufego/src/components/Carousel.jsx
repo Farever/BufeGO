@@ -14,7 +14,7 @@ function CarouselComponent() {
   };
 
     return (
-        <Carousel interval={null}>
+        <Carousel interval={null} controls={false}>
             <Carousel.Item>
                 <div style={carouselStyle}>
                     <h2>Mi is az a BüféGO?</h2>
@@ -22,31 +22,6 @@ function CarouselComponent() {
                     <img
                         className="d-block w-100"
                         src=""
-                        alt="First slide"
-                        style={imageStyle}
-                    />
-                </div>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={carouselStyle}>
-                    <h2>Mi is az a BüféGO?</h2>
-                    <p>Ha érdekel a szotri, olvasd el a cikket.</p>
-                    <img
-                        className="d-block w-100"
-                        src=""
-                        alt="Second slide"
-                        style={imageStyle}
-                    />
-                </div>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={carouselStyle}>
-                    <h2>Mi is az a BüféGO?</h2>
-                    <p>Ha érdekel a szotri, olvasd el a cikket.</p>
-                    <img
-                        className="d-block w-100"
-                        src=""
-                        alt="Third slide"
                         style={imageStyle}
                     />
                 </div>

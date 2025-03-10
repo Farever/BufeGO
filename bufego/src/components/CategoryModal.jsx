@@ -5,10 +5,16 @@ import { Modal, Form, Button } from "react-bootstrap";
 export default function CategoryModal({isOpen,type, onClose ,categoryDetails, save, del})
 {
     const [ujNev, setUjNev] = useState(categoryDetails.categroy_name);
+    const [ujHely, setUjHely] = useState(categoryDetails.categroy_name);
 
     function GetUjNev(event)
     {
         setUjNev(event.target.value)
+    }
+
+    function GetUjHely(event)
+    {
+        setUjHely(event.target.value)
     }
 
     function TorleGomb()
@@ -36,12 +42,14 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
                 <Form>
                     <label>Kategória neve:</label>
                     <input type="text" id="NevInput" defaultValue={categoryDetails.categroy_name} onChange={GetUjNev}/>
+                    <label>Kategória helye:</label>
+                    <input type="number" id="helyInput" defaultValue={categoryDetails.category_placement} onChange={GetUjHely}/>
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
                 {TorleGomb()}
-                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev) : save(1, ujNev ?? categoryDetails.categroy_name); onClose()}} variant="success">Mentés</Button>
+                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev, ujHely) : save(1, ujNev ?? categoryDetails.categroy_name); onClose()}} variant="success">Mentés</Button>
             </Modal.Footer>
         </Modal>
     )
