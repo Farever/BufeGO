@@ -62,6 +62,7 @@ const Categories = () => {
       let data = (await response).data;
       alert(data['valasz']);
       fetchData();
+      location.reload();
      }
     catch(error)
     {
@@ -81,6 +82,7 @@ const Categories = () => {
       alert(data['valasz']);
       fetchData();
       setModalShown(false);
+      location.reload();
     }
     catch(error)
     {
