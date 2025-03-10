@@ -596,11 +596,18 @@ function handleRendel(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["user_id"]) || !isset($bodyData["place_id"]) || !isset($bodyData["status"]) || !isset($bodyData["price"]) || !isset($bodyData["payment_method"]) || !isset($bodyData["orderd_at"]) || !isset($bodyData["expected_pickup_time"])) {
+    if (!isset($bodyData["user_id"]) || !isset($bodyData["place_id"]) || !isset($bodyData["status"]) || !isset($bodyData["price"]) || !isset($bodyData["payment_method"]) || !isset($bodyData["orderd_at"]) || !isset($bodyData["expected_pickup_time"]) || !isset($bodyData["products"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
     $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},{$bodyData['orderd_at']},{$bodyData['expected_pickup_time']})");
+    
+/*
+    foreach($bodyData["products"] as $p)
+    {
+        valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$p[]},,)");
+    }*/
+    
     return ['valasz' => $response];
 }
 
@@ -812,9 +819,9 @@ function kategoriakLekerese($bufeId)
 
 function kategoriaModosit($katId, $katName, $katHely)
 {
-    $query = "UPDATE `categories` SET `categroy_name` = ?, 'category_placement' = ? WHERE `categories`.`id` = ?;";
-
-    $kategoriak = valtoztatas($query, 'sii', [$katName, $katHely, $katId]);
+    $query = "UPDATE `categories` SET `categroy_name`='{$katName}',`category_placement`={$katHely} WHERE id = {$katId};";
+    
+    $kategoriak = valtoztatas($query);
 
     return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
 

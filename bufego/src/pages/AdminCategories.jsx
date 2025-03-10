@@ -54,9 +54,9 @@ const Categories = () => {
     try
     {
       let response = axios.post("http://localhost:8000/kategoriamodositas", {
-        "katId": id,
+        "katId": parseInt(id),
         "katName" : nev,
-        "katHely" : hely
+        "katHely" : parseInt(hely)
       })
 
       let data = (await response).data;

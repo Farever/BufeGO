@@ -23,7 +23,7 @@ export default function ProductToCartModal({product, addToCart, isOpen, onClose}
                 <p>{price}Ft</p>
                 <Form>
                     <FormLabel>Mennyiség:</FormLabel>
-                    <input type="number" onChange={getQuantity}/>
+                    <input type="number" min={1} max={99} onChange={getQuantity}/>
                 </Form>
                 <Button variant="success" onClick={()=>{addToCart(quantity, product.id)}}>Kosárba</Button>
             </Modal.Body>
