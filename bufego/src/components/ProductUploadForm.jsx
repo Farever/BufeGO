@@ -19,7 +19,7 @@ const ProductUploadForm = () => {
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost/13c-vegh/api/index.php/kategoriak', {
+          const response = await axios.get('http://localhost:8000/index.php/kategoriak', {
             params: { 
                 bufeId: 1
             },
@@ -44,21 +44,20 @@ const ProductUploadForm = () => {
 
       const uploadProduct = async() => {
         console.log(category.current.value)
-        let response = await fetch('http://localhost/13c-vegh/api/index.php/termek_felv', {
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const formData = new FormData();
+        formData.append('place', place_id);
+        formData.append('category', category.current.value);
+        formData.append('img', img.current.files[0]);
+        formData.append('name', product_name.current.value);
+        formData.append('description', product_desc.current.value);
+        formData.append('allergens', allergens.current.value);
+        formData.append('is_avaliable', availability.current.checked);
+        formData.append('price', parseFloat(price.current.value));
+
+
+        let response = await fetch('http://localhost:8000/index.php/termek_felv', {
             method: "POST",
-            body: JSON.stringify({
-                place: place_id,
-                category: category.current.value,
-                img: img.current.value,
-                name: product_name.current.value,
-                description: product_desc.current.value,
-                allergens: allergens.current.value,
-                is_avaliable: availability.current.checked,
-                price: parseFloat(price.current.value)
-            })
+            body: formData
         })
         let data = await response.json();
         if(response.ok)
@@ -114,7 +113,7 @@ const ProductUploadForm = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Kép placeholder</Form.Label> {/*TODO Kép feltöltését megoldani */}
-                            <Form.Control type="text" ref={img}/>
+                            <Form.Control type="file" ref={img}/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>

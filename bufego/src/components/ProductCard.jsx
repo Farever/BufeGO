@@ -24,7 +24,7 @@ const ProductCard = ({ product, fetchProducts }) => {
 
   return (
     <div className="product-card">
-      <img src={product.image} alt={product.name} className="product-image" />
+      <img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${product.image}`} alt={product.name} className="product-image" />
       <div className="product-details">
         <h5 className="product-name">{product.name}</h5>
         <p className="product-info">Ár: {product.price} Ft</p>

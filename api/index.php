@@ -1,4 +1,11 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
+
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
+
+Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
+
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -50,7 +57,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
-        'termek_felv' => handleTermekFelv($method, $bodyData),
+        'termek_felv' => handleTermekFelv($method, $_POST),
         'termekek' => handleTermekek($method, $bodyData),
         'termek_valt' => handleTermekValt($method, $bodyData),
         'termek_del' => handleTermekDel($method, $bodyData),
@@ -478,11 +485,29 @@ function handleTermekFelv(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["place"]) || !isset($bodyData["category"]) || !isset($bodyData['img']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
+    if (!isset($bodyData["place"]) || !isset($bodyData["category"]) || !isset($_FILES['img']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$bodyData['img']}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
+    $imgName = $bodyData["place"]."_product_".str_replace(' ', '_', $bodyData["name"]);
+
+    $file = $_FILES['img'];
+    $target_dir = "uploads/";
+    var_dump($file);
+    $target_file = $target_dir . basename($file['name']);
+
+    if (move_uploaded_file($file["tmp_name"], $target_file)) {
+    (new UploadApi())->upload($_FILES[$target_file], [
+        'public_id' => $imgName, 
+        'quality_analysis' => true,  
+        'colors' => true, 
+        'categorization' => 'google_tagging', 
+        'auto_tagging' => 0.8]);
+    }else{
+        return ['valasz' => 'Sikertelen fájl feltöltés', 'status' => 400];
+    }
+
+    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$imgName}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
     return ['valasz' => $response];
 }
 

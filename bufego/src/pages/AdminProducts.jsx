@@ -18,7 +18,7 @@ const Products = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost/13c-vegh/api/index.php/termekek', {
+      const response = await fetch('http://localhost:8000/index.php/termekek', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
