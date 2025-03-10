@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 composer.phar
-/vendor/
+./api/vendor/
