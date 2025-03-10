@@ -5,6 +5,7 @@ import data from '../data.json';
 import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
 import axios from 'axios';
+import Editmodal from '../components/Editmodal';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -42,7 +43,7 @@ const Products = () => {
     const intervalId = setInterval(fetchProducts, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+  }, [refreshInterval, products]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
     <div>
@@ -51,9 +52,10 @@ const Products = () => {
       {error && <div className="error-message">{error}</div>}
       <div className="products-grid">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product}/> //TODO a lista frissítése lekérés után
+          <ProductCard key={product.id} product={product}/>
         ))}
       </div>
+      <Editmodal></Editmodal> {/*A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
       <ProductUploadForm></ProductUploadForm>
     </div>
   );

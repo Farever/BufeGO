@@ -112,22 +112,22 @@ const ProductUploadForm = () => {
                             </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Kép placeholder</Form.Label> {/*TODO Kép feltöltését megoldani */}
+                            <Form.Label>Kép</Form.Label>
                             <Form.Control type="file" ref={img}/>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Leírás</Form.Label>
                             <Form.Control type="text" ref={product_desc}/>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Alergens</Form.Label>
+                            <Form.Label>Allergének</Form.Label>
                             <Form.Control type="text" ref={allergens}/>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Check type="checkbox" label="Available" className="checkbox" ref={availability}></Form.Check>
+                            <Form.Check type="checkbox" label="Elérhető" className="checkbox" ref={availability}></Form.Check>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Price</Form.Label> {/*TODO Kép feltöltését megoldani */}
+                            <Form.Label>Ár</Form.Label>
                             <Form.Control type="number" ref={price}/>
                         </Form.Group>
                     </Form>
