@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 const ProductCard = ({ product, fetchProducts }) => {
   const deleteProduct = async() => {
     console.log(JSON.stringify({id: parseInt(product.id)}))
-    let response = await fetch('http://localhost/13c-vegh/api/index.php/termek_del', {
+    let response = await fetch('http://localhost:8000/termek_del', {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"

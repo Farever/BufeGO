@@ -415,7 +415,7 @@ function handleAdminFo(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
+    $response = lekeres("SELECT places.id, places.name, places.description, places.images, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
     return ['valasz' => $response];
 }
 
@@ -514,7 +514,7 @@ function handleTermekek(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $bodyData['place_id']);
+    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $bodyData['place_id'] . " AND products.deleted=0");
     return ['valasz' => $response];
 }
 
@@ -549,7 +549,7 @@ function handleTermekDel(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("DELETE FROM products WHERE id = {$bodyData['id']}");
+    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$bodyData["id"]}");
     return ['valasz' => $response];
 }
 
