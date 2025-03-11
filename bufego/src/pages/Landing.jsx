@@ -58,7 +58,7 @@ const Landing = () => {
                     <p>Nézd meg a te sulidban ott vagyunk-e már</p>
                 </Col>
                 <Col xs={12} md={6} className="hero-image text-center">
-                    <img src="../src/assets/images/coffe-cup.png" alt="Coffee cup" className="img-fluid" />
+                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup_lhxmbu" alt="Coffee cup" className="img-fluid" />
                 </Col>
             </Row>
 
