@@ -5,6 +5,16 @@ import ActionButton from "./ActionButton";
 
 function Editmodal({show, handleClose, product})
 {
+    let place_id = 1;
+    const product_name = useRef("");
+    const category = useRef("");
+    const img = useRef("");
+    const product_desc = useRef("");
+    const allergens = useRef("");
+    const availability = useRef(true);
+    const price = useRef(0);
+
+    
     return(
         <>
             <Modal show={show} onHide={handleClose}>
