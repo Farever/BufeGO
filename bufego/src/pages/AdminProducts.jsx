@@ -14,6 +14,14 @@ const Products = () => {
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
   let place_id = 1;
 
+  const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const handleClose = () => {setShow(false)};
+  const handleShow = (product) => {
+    setShow(true);
+    setSelected(product);
+  };
+
   const fetchProducts = async () => {
     console.log("asd")
     setIsLoading(true);
@@ -43,7 +51,7 @@ const Products = () => {
     const intervalId = setInterval(fetchProducts, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval, products]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
     <div>
@@ -52,10 +60,10 @@ const Products = () => {
       {error && <div className="error-message">{error}</div>}
       <div className="products-grid">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product}/>
+          <ProductCard key={product.id} product={product} handleShow={handleShow}/>
         ))}
       </div>
-      {/*<Editmodal></Editmodal> A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
+      <Editmodal show={show} handleClose={handleClose} product={selected}></Editmodal> {/*A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
       <ProductUploadForm></ProductUploadForm>
     </div>
   );

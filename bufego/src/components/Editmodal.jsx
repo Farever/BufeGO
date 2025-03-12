@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import ActionButton from "./ActionButton";
 
-function Editmodal()
+function Editmodal({show, handleClose, product})
 {
     return(
         <>
@@ -12,6 +12,7 @@ function Editmodal()
                 <Modal.Title>Termék hozzáadása</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Termék neve</Form.Label>
@@ -47,13 +48,14 @@ function Editmodal()
                             <Form.Control type="number" ref={price}/>
                         </Form.Group>
                     </Form>
-                    <Alert variant={uploadstatus}>{responseMessage}</Alert>
+                    {/*<Alert variant={uploadstatus}>{responseMessage}</Alert>*/}
+                    
                 </Modal.Body>
                 <Modal.Footer>
                 
                 <ActionButton type="cancel" onClick={handleClose}></ActionButton>
                 <ActionButton type="ok" onClick={() => {
-                    uploadProduct();
+                    alert("Edit");
                 }}></ActionButton>
                 </Modal.Footer>
             </Modal>

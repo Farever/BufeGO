@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const ProductCard = ({ product, fetchProducts }) => {
+const ProductCard = ({ product, handleShow }) => {
   const deleteProduct = async() => {
     console.log(JSON.stringify({id: parseInt(product.id)}))
     let response = await fetch('http://localhost:8000/termek_del', {
@@ -31,7 +31,9 @@ const ProductCard = ({ product, fetchProducts }) => {
         <p className="product-info">Állapot: {product.status}</p>
         <p className="product-info">Kategória: {product.category}</p>
         <div className="product-actions">
-          <Button variant="primary" size="sm">
+          <Button variant="primary" size="sm" onClick={() => {
+              handleShow(product);
+            }}>
             Módosítás
           </Button>
           <Button variant="danger" size="sm" onClick={() => {
