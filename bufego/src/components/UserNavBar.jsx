@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
+import { TiShoppingCart } from "react-icons/ti";
 
 function Navigation() {
     const [iskolak, setIskolak] = useState([]);
@@ -73,6 +74,7 @@ function Navigation() {
                         <Nav className="me-auto">
                         </Nav>
                         <Nav>
+                            <TiShoppingCart size="1.5em" onClick={()=>{alert("asd")}} />
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
                                 <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
