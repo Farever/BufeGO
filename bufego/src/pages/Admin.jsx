@@ -4,11 +4,15 @@ import BuffetCard from '../components/BuffetCard';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import '../styles/admin.css';
+import BuffetDetailsModal from '../components/BuffetDetailsModal';
 
 const Admin = () => {
   const [buffets, setBuffets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [selectedBuffet, setSelectedBuffet] = useState(null);
 
   useEffect(() => {
     const fetchBuffets = async () => {
@@ -30,8 +34,23 @@ const Admin = () => {
     fetchBuffets();
   }, []);
 
+  const handleCloseDetailsModal = () => {
+    fetchBuffets();
+    setIsDetailsModalOpen(false);
+    setSelectedBuffet(null);
+  };
+
+  const handleModClick = (buffetId) => {
+    setSelectedBuffet(buffets.filter(buffet => buffet.id == buffetId))
+    setIsDetailsModalOpen(true);
+  }
+
   return (
     <Container>
+      <BuffetDetailsModal
+              isOpen={isDetailsModalOpen}
+              onClose={handleCloseDetailsModal}
+              buffet={selectedBuffet}/>
       <Row>
         <Col>
           <h2>Büféim</h2>
@@ -42,7 +61,7 @@ const Admin = () => {
       <Row>
         {buffets.map((buffet) => (
           <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
-            <BuffetCard buffet={buffet} isOnAdminPage={true}/>
+            <BuffetCard buffet={buffet} isOnAdminPage={true} onModClick={handleModClick(buffet.id)}/>
           </Col>
         ))}
       </Row>

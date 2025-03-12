@@ -4,7 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 
-const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
+const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick }) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,7 +56,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
 
   return (
     <Card className="buffet-card">
-      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${buffet.image}`}/>
+      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${buffet.image}`} />
       <Card.Body>
         <Card.Title>
           {buffet.name} - {buffet.school}
@@ -77,6 +77,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false }) => {
         <Button variant="primary" onClick={handleClick} className="button">
           Megtekintés
         </Button>
+        { isOnAdminPage ? <Button variant="secondary" onClick={onModClick} className="button">Modósítás</Button> : null}
       </Card.Body>
     </Card>
   );
