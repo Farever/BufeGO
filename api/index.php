@@ -1,4 +1,12 @@
 <?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
+
+Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
+
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -35,7 +43,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
         'kategoriatorles' => handleKategoriaTorles($method, $getData),
-        'bufemodositas' => handleBufeModositas($method, $bodyData),
+        'bufemodositas' => handleBufeModositas($method),
         'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
         'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
@@ -251,17 +259,25 @@ function handleKategoriaTorles(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a büfé módosítását.
  */
-function handleBufeModositas(string $method, ?array $bodyData): ?array
+function handleBufeModositas(string $method): ?array
 {
-    if ($method !== "POST") {
+    if ($method !== "PUT") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['bufeId']) || empty($bodyData['bufeName']) || empty($bodyData['desc']) || empty($bodyData['phone']) || empty($bodyData['addressId']) || empty($bodyData['schoolId'])) {
+    if (empty($_POST['id']) || empty($_POST['name']) || empty($_POST['desc']) || empty($_POST['phone'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => bufeModositas($bodyData['bufeId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
+    $imgName = str_replace(' ', '_', $_POST["name"]);
+
+    $file = $_FILES['img'];
+    (new UploadApi())->upload($file["tmp_name"], [
+        'public_id' => $imgName, 
+        'quality_analysis' => true,  
+        'colors' => true]);
+
+    return ['valasz' => bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone'], $imgName)];
 }
 
 /**
@@ -734,11 +750,11 @@ function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, 
     return json_encode(['valasz' => $bufe], JSON_UNESCAPED_UNICODE);
 }
 
-function bufeModositas($bufeId, $bufeName, $desc, $phone, $addressId, $schoolId, $payment = false, $avaliable = false)
+function bufeModositas($bufeId, $bufeName, $desc, $phone, $imgName, $payment = 0, $avaliable = 0)
 {
-    $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`address_id`=?,`school_id`=?,`payment_on_collect_enabled`=?',`is_avaliable`=? WHERE `id` = ?";
+    $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`image`=?,`payment_on_collect_enabled`=?',`is_avaliable`=? WHERE `id` = ?";
 
-    $bufe = valtoztatas($query, "sssiiiii", [$bufeName, $desc, $phone, $addressId, $schoolId, $payment, $avaliable, $bufeId]);
+    $bufe = valtoztatas($query, "ssssiii", [$bufeName, $desc, $phone, $imgName, $payment, $avaliable, $bufeId]);
 
     return json_encode(['valasz' => $bufe], JSON_UNESCAPED_UNICODE);
 }

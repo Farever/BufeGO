@@ -32,13 +32,13 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
       // Adatok hozzáadása a FormData-hoz
       formData.append('id', buffet.id);
       formData.append('name', buffet.name);
-      formData.append('description', buffet.description);
-      formData.append('phone_number', buffet.phone_number);
+      formData.append('desc', buffet.description);
+      formData.append('phone', buffet.phone_number);
 
       if (selectedImage) {
-        formData.append('image', selectedImage); // Kép hozzáadása a FormData-hoz
+        formData.append('img', selectedImage); // Kép hozzáadása a FormData-hoz
       } else if (buffet.cover_image) {
-          formData.append('image', buffet.cover_image);
+          formData.append('img', buffet.cover_image);
       }
 
       const response = await axios.put(`http://localhost:8000/bufemodositas`, formData, {
