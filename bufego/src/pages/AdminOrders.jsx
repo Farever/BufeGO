@@ -45,7 +45,6 @@ const Orders = () => {
   }, [refreshInterval]);
 
   const handleDetails = (orderId) => {
-    console.log(orderId);
     setSelectedOrder(orders.filter(order => order.id == orderId));
     setIsDetailsModalOpen(true);
   };
@@ -75,7 +74,7 @@ const Orders = () => {
       {error && <div className="error-message">{error}</div>}
       <div className="orders-grid">
         {
-        orders.filter(order => order.status == 2).map((order) => (
+        orders.filter(order => order.status == 2 || order.status == 3 ).map((order) => (
           <OrderCard
             key={order.id}
             order={order}

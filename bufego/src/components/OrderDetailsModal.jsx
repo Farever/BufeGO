@@ -16,7 +16,9 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
 
   useEffect(() => {
     if (order) {
+      console.log(order.status);
       generateActionButtons(order.status);
+      console.log(actionButtons)
     }
   }, [order]);
 
@@ -35,6 +37,13 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
         setActionButtons(
           <>
             <ActionButton type={'done'} onClick={() => handleDone(order.id)} />
+          </>
+        );
+        break;
+      case 3:
+        setActionButtons(
+          <>
+            <ActionButton type={'toCostumer'} onClick={() => handleToConsumer(order.id)} />
           </>
         );
         break;
@@ -69,6 +78,11 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
     console.log('Kész:', orderId);
     handleStatusChange(orderId, 3);
   };
+
+  const handleToConsumer = (orderId) => {
+    console.log("Kiadva: ", orderId);
+    handleStatusChange(orderId, 4);
+  }
 
   if (!isOpen || !order) return null;
 
