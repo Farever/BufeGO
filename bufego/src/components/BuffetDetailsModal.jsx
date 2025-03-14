@@ -33,7 +33,7 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
       formData.append('id', buffet.id);
       formData.append('name', buffet.name);
       formData.append('desc', buffet.description);
-      formData.append('phone', buffet.phone_number);
+      formData.append('phone', buffet.phone);
 
       if (selectedImage) {
         formData.append('img', selectedImage); // Kép hozzáadása a FormData-hoz
@@ -41,22 +41,23 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
           formData.append('img', buffet.cover_image);
       }
 
-      const response = await axios.put(`http://localhost:8000/bufemodositas`, formData, {
+      const response = await axios.post(`http://localhost:8000/bufemodositas`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data' // Fontos a képküldéshez
         }
       });
 
+
       if (response.status === 200) {
-        console.log('Sikeres mentés!');
+        alert(response.data.valasz);
         onClose();
       } else {
         console.error('Hiba a mentés során:', response);
-        // TODO: Felhasználói értesítés a hiba kezelésére
+        alert("Hiba a mentés során " . response.status);
       }
     } catch (error) {
       console.error('Hiba a mentés során:', error);
-      // TODO: Felhasználói értesítés a hiba kezelésére
+      alert("Hiba: " . error)
     }
   };
 
@@ -96,9 +97,9 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
           <Form.Group controlId="formPhoneNumber">
             <Form.Label>Telefonszám</Form.Label>
             <Form.Control
-              type="tel"
+              type="text"
               placeholder="Telefonszám"
-              name="phone_number"
+              name="phone"
               value={buffet.phone || ''}
               onChange={handleChange}
             />
