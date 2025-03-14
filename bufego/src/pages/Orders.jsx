@@ -8,6 +8,9 @@ function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [rating, setRating] = useState(null);
+  const [comment, setComment] = useState("");
   const userId = 1; // Példa felhasználói ID - cseréld le a tényleges felhasználói azonosítóra
 
   useEffect(() => {
@@ -35,12 +38,24 @@ function OrdersPage() {
     setSelectedOrder(null);
   };
 
+  const handleCloseRatingModal = () => {
+    setShowRatingModal(false);
+    setSelectedOrder(null);
+  };
+
+  const handleRatings = () => {
+    setShowRatingModal(true);
+  }
+
+  const sendRating = () => {
+
+  }
+
   return (
     <Container>
       <h2>Rendeléseim</h2>
       {orders.length > 0 ? (
         orders.map((order, index) => {
-          console.log(order);
           return (
             <Card key={index} className="mb-3">
               <Card.Body>
@@ -48,7 +63,7 @@ function OrdersPage() {
                 <Card.Subtitle className="mb-2 text-muted">
                   Rendelve: {order.orderd_at}
                 </Card.Subtitle>
-                <Card.Text><OrderBadge status={order.status*1}/></Card.Text>
+                <Card.Text><OrderBadge status={order.status * 1} /></Card.Text>
                 <Button variant="primary" onClick={() => handleShowDetails(order)} className='btn-orange '>
                   Részletek
                 </Button>
@@ -69,7 +84,7 @@ function OrdersPage() {
           {selectedOrder && (
             <div>
               <p>Étterem: {selectedOrder.place[0].name}</p>
-              <p><OrderBadge status={selectedOrder.status*1}/></p>
+              <p><OrderBadge status={selectedOrder.status * 1} /></p>
               <p>Rendelve: {selectedOrder.orderd_at}</p>
               <h4>Termékek:</h4>
               <Table striped bordered hover>
@@ -96,7 +111,52 @@ function OrdersPage() {
           )}
         </Modal.Body>
         <Modal.Footer>
+          {
+            (selectedOrder != null) ?
+              selectedOrder.status == 4 ? <><Button variant="primary" onClick={handleRatings}>
+                Értékel
+              </Button></> : <></> : <></>
+          }
           <Button variant="secondary" onClick={handleCloseModal}>
+            Bezár
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal a rendelés értékeléséhet */}
+      <Modal show={showRatingModal} onHide={handleCloseRatingModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Rendelés értékelés</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {selectedOrder && (
+            <div>
+              <p>Étterem: {selectedOrder.place[0].name}</p>
+              <Typography component="legend">Értékelés:</Typography>
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                onChange={handleRatingChange}
+              />
+              <Typography component="legend">Megjegyzés:</Typography>
+              <textarea
+                className="form-control"
+                rows="3"
+                value={comment}
+                onChange={handleCommentChange}
+              />
+            </div>
+          )}
+          <form>
+            {/*TODO : 5 csillag, ahol lehet értékelni mui vagy hasonló val megoldás */}
+            {/* TODO: Textarea a megjegyzés leírásához */}
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={sendRating}>
+            Értékelés küldése
+          </Button>
+          <Button variant="secondary" onClick={handleCloseRatingModal}>
             Bezár
           </Button>
         </Modal.Footer>
