@@ -66,6 +66,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'rendel' => handleRendel($method, $bodyData),
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
+        'rating' => handleRating($method, $bodyData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
     };
 
@@ -672,6 +673,19 @@ function handleKosarba(string $method, ?array $bodyData): ?array
     }
 
     $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    return ['valasz' => $response];
+}
+
+function handleRating(string $method, ?array $bodyData){
+    if($method != "POST"){
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("INSERT INTO `ratings`(`user_id`, `place_id`, `rating`, `comment`, `date`, `status`) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["rating"]}','{$bodyData["comment"]}',NOW(),1)");
     return ['valasz' => $response];
 }
 

@@ -3,13 +3,15 @@ import { Container, Card, Button, Modal, Table } from 'react-bootstrap';
 import axios from 'axios';
 import OrderBadge from '../components/OrderBadge';
 import '../styles/myorders.css';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(0); // Alapértelmezett érték 0-ra állítva
   const [comment, setComment] = useState("");
   const userId = 1; // Példa felhasználói ID - cseréld le a tényleges felhasználói azonosítóra
 
@@ -38,18 +40,46 @@ function OrdersPage() {
     setSelectedOrder(null);
   };
 
+  const handleShowRatingModal = () => {
+    setShowModal(false);
+    setShowRatingModal(true);
+  };
+
   const handleCloseRatingModal = () => {
     setShowRatingModal(false);
     setSelectedOrder(null);
+    setRating(0); // Reset rating when closing the modal
+    setComment(""); // Reset comment when closing the modal
   };
 
-  const handleRatings = () => {
-    setShowRatingModal(true);
-  }
+  const handleRatingChange = (event, newValue) => {
+    setRating(newValue);
+  };
 
-  const sendRating = () => {
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
 
-  }
+  const handleSubmitRating = async () => {
+
+
+    try {
+      let resp = await axios.post('http://localhost:8000/rating', {
+        "user_id": selectedOrder.user_id,
+        "place_id": selectedOrder.place_id,
+        "rating": rating,
+        "comment": comment
+      });
+
+      if(resp.ok){
+        alert("Sikeres értékelés!");
+      }
+
+      handleCloseRatingModal();
+    } catch (error) {
+      console.error("Hiba az értékelés beküldésekor:", error);
+    }
+  };
 
   return (
     <Container>
@@ -113,7 +143,7 @@ function OrdersPage() {
         <Modal.Footer>
           {
             (selectedOrder != null) ?
-              selectedOrder.status == 4 ? <><Button variant="primary" onClick={handleRatings}>
+              selectedOrder.status == 4 ? <><Button variant="primary" onClick={handleShowRatingModal}>
                 Értékel
               </Button></> : <></> : <></>
           }
@@ -129,7 +159,7 @@ function OrdersPage() {
           <Modal.Title>Rendelés értékelés</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {selectedOrder && (
+          {selectedOrder && (
             <div>
               <p>Étterem: {selectedOrder.place[0].name}</p>
               <Typography component="legend">Értékelés:</Typography>
@@ -147,13 +177,9 @@ function OrdersPage() {
               />
             </div>
           )}
-          <form>
-            {/*TODO : 5 csillag, ahol lehet értékelni mui vagy hasonló val megoldás */}
-            {/* TODO: Textarea a megjegyzés leírásához */}
-          </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={sendRating}>
+          <Button variant="primary" onClick={handleSubmitRating}>
             Értékelés küldése
           </Button>
           <Button variant="secondary" onClick={handleCloseRatingModal}>
