@@ -1,4 +1,12 @@
 <?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
+
+Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
+
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -35,7 +43,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
         'kategoriatorles' => handleKategoriaTorles($method, $getData),
-        'bufemodositas' => handleBufeModositas($method, $bodyData),
+        'bufemodositas' => handleBufeModositas($method),
         'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
         'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
@@ -50,7 +58,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'admin_fo' => handleAdminFo($method, $getData),
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
-        'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
+        'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData),
         'termek_felv' => handleTermekFelv($method, $bodyData),
         'termekek' => handleTermekek($method, $getData),
         'termek_valt' => handleTermekValt($method, $bodyData),
@@ -58,6 +66,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'rendel' => handleRendel($method, $bodyData),
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
+        'rating' => handleRating($method, $bodyData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
     };
 
@@ -117,7 +126,7 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
               ORDER BY vasarolt_mennyiseg DESC
               LIMIT 1";
 
-    $params = [$year,$month,$placeId,];
+    $params = [$year, $month, $placeId,];
 
     $response = lekeres($query, "ssi", $params);
 
@@ -125,7 +134,7 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
     if (empty($response)) {
         return ['valasz' => []];
     }
-   // Tömbbe csomagolás, ha a lekeres függvény nem tömböt ad vissza, hanem egyetlen sort.
+    // Tömbbe csomagolás, ha a lekeres függvény nem tömböt ad vissza, hanem egyetlen sort.
     if (!is_array($response)) {
         $response = [$response];
     }
@@ -251,17 +260,36 @@ function handleKategoriaTorles(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a büfé módosítását.
  */
-function handleBufeModositas(string $method, ?array $bodyData): ?array
+function handleBufeModositas(string $method)
 {
     if ($method !== "POST") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['bufeId']) || empty($bodyData['bufeName']) || empty($bodyData['desc']) || empty($bodyData['phone']) || empty($bodyData['addressId']) || empty($bodyData['schoolId'])) {
+    if (empty($_POST['id']) || empty($_POST['name']) || empty($_POST['desc']) || empty($_POST['phone'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => bufeModositas($bodyData['bufeId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
+    if (isset($_FILES["img"])) {
+        $imgName = str_replace(' ', '_', $_POST["name"]);
+    }
+
+    $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone'], $imgName);
+
+    if (isset($_FILES["img"])) {
+        $file = $_FILES['img'];
+        (new UploadApi())->upload($file["tmp_name"], [
+            'public_id' => $imgName,
+            'quality_analysis' => true,
+            'colors' => true
+        ]);
+
+        if($valasz = "Sikertelen művelet!"){
+            return ['valasz' => "Kép feltöltése sikeres!"];
+        }
+    }
+
+    return ['valasz' => $valasz];
 }
 
 /**
@@ -280,42 +308,43 @@ function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
     return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
 }
 
-function handleUserBufe($method, $data){
+function handleUserBufe($method, $data)
+{
     if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
     if (empty($data['school_Id'])) {
-        
+
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
     $buffetData = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.school_id = " . $data['school_Id'] . ";");
 
-    if(is_array($buffetData)){
+    if (is_array($buffetData)) {
         return ['valasz' => $buffetData];
-    }else{
+    } else {
         return ['valasz' => $buffetData];
     }
 }
 
-function handleBejelentkezes($method, $data) : ?array
+function handleBejelentkezes($method, $data): ?array
 {
     if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
     if (empty($data['email'])) {
-        
+
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
     $sql = "SELECT `id`,`passcode` FROM `users` WHERE `email` = '{$data['email']}'";
     $userData = lekeres($sql);
 
-    if(is_array($userData)){
+    if (is_array($userData)) {
         return ['valasz' => $userData];
-    }else{
+    } else {
         return ['valasz' => 'Nincs ilyen e-mail cím'];
     }
 }
@@ -492,8 +521,7 @@ function handleBufeRendelesek(string $method, ?array $getData): ?array
     }
 
     $orderadatok = lekeres("SELECT * FROM orders WHERE orders.place_id =" . $getData["place_id"] . " ORDER BY `expected_pickup_time`");
-    for($i = 0; $i < count($orderadatok); $i++)
-    {
+    for ($i = 0; $i < count($orderadatok); $i++) {
         $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.price, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable, orderedproducts.quantity FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
         $orderadatok[$i]["user"] = lekeres("SELECT users.id, users.name, users.email, users.push_notification_key FROM users INNER JOIN orders ON orders.user_id = users.id WHERE orders.id ={$orderadatok[$i]['id']}");
     }
@@ -501,15 +529,13 @@ function handleBufeRendelesek(string $method, ?array $getData): ?array
     return ['valasz' => $response];
 }
 
-function handleRendelesStatusz(string $method, ?array $bodyData) : ?array
+function handleRendelesStatusz(string $method, ?array $bodyData): ?array
 {
-    if($method !== "POST")
-    {
+    if ($method !== "POST") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(!isset($bodyData['rendeles_id']) || !isset($bodyData['status']))
-    {
+    if (!isset($bodyData['rendeles_id']) || !isset($bodyData['status'])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
@@ -601,8 +627,6 @@ function handleRendel(string $method, ?array $bodyData): ?array
     }
 
     $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},{$bodyData['orderd_at']},{$bodyData['expected_pickup_time']})");
-    
-
     foreach($bodyData["products"] as $p)
     {
         valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$response},{$p['quantity']},{$p['product_id']})");
@@ -625,14 +649,12 @@ function handleUserRendelesek(string $method, ?array $getData): ?array
     }
 
     $orderadatok = lekeres("SELECT * FROM orders WHERE orders.user_id =" . $getData['userId'] . " ORDER BY `orderd_at` DESC");
-    for($i = 0; $i < count($orderadatok); $i++)
-    {
+    for ($i = 0; $i < count($orderadatok); $i++) {
         $orderadatok[$i]["products"] = lekeres("SELECT products.id, products.price, products.name, products.category_id, products.description, products.allergens, products.image, products.is_avaliable, orderedproducts.quantity FROM products INNER JOIN orderedproducts ON products.id = orderedproducts.product_id INNER JOIN orders ON orders.id = orderedproducts.order_id WHERE orders.id = {$orderadatok[$i]['id']} ");
         $orderadatok[$i]["place"] = lekeres("SELECT * FROM places INNER JOIN orders ON orders.place_id = places.id WHERE orders.id ={$orderadatok[$i]['id']}");
     }
     $response = ["rendelesek" => $orderadatok];
     return ['valasz' => $response];
-
 }
 
 /**
@@ -649,6 +671,19 @@ function handleKosarba(string $method, ?array $bodyData): ?array
     }
 
     $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    return ['valasz' => $response];
+}
+
+function handleRating(string $method, ?array $bodyData){
+    if($method != "POST"){
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("INSERT INTO `ratings`(`user_id`, `place_id`, `rating`, `comment`, `date`, `status`) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["rating"]}','{$bodyData["comment"]}',NOW(),1)");
     return ['valasz' => $response];
 }
 
@@ -734,13 +769,13 @@ function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, 
     return json_encode(['valasz' => $bufe], JSON_UNESCAPED_UNICODE);
 }
 
-function bufeModositas($bufeId, $bufeName, $desc, $phone, $addressId, $schoolId, $payment = false, $avaliable = false)
+function bufeModositas($bufeId, $bufeName, $desc, $phone, $imgName = null, $payment = false, $avaliable = false)
 {
-    $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`address_id`=?,`school_id`=?,`payment_on_collect_enabled`=?',`is_avaliable`=? WHERE `id` = ?";
+    $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`image`=?,`payment_on_collect_enabled`=?,`is_avaliable`=? WHERE `id` = ?";
 
-    $bufe = valtoztatas($query, "sssiiiii", [$bufeName, $desc, $phone, $addressId, $schoolId, $payment, $avaliable, $bufeId]);
+    $bufe = valtoztatas($query, "ssssiii", [$bufeName, $desc, $phone, $imgName, $payment, $avaliable, $bufeId]);
 
-    return json_encode(['valasz' => $bufe], JSON_UNESCAPED_UNICODE);
+    return $bufe;
 }
 
 //Felhasználó adatok
@@ -820,11 +855,10 @@ function kategoriakLekerese($bufeId)
 function kategoriaModosit($katId, $katName, $katHely)
 {
     $query = "UPDATE `categories` SET `categroy_name`='{$katName}',`category_placement`={$katHely} WHERE id = {$katId};";
-    
+
     $kategoriak = valtoztatas($query);
 
     return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
-
 }
 
 function kategoriaFeltolt($bufeId, $katName)
