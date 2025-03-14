@@ -66,7 +66,7 @@ function OrdersPage() {
         rendeles_id: orderId,
         status: newStatus,
       });
-      setOrder((prevOrder) => ({ ...prevOrder, status: newStatus }));
+      setSelectedOrder((prevOrder) => ({ ...prevOrder, status: newStatus }));
     } catch (error) {
       console.error('Hiba a rendelés státuszának frissítésekor:', error);
     }
@@ -85,7 +85,7 @@ function OrdersPage() {
 
       if(resp.ok){
         alert("Sikeres értékelés!");
-        handleStatusChange(selectedOrder.id, 5)
+        handleStatusChange(selectedOrder.id, 5);
       }
 
       handleCloseRatingModal();
