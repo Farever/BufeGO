@@ -627,13 +627,11 @@ function handleRendel(string $method, ?array $bodyData): ?array
     }
 
     $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},{$bodyData['orderd_at']},{$bodyData['expected_pickup_time']})");
-
-    /*
     foreach($bodyData["products"] as $p)
     {
-        valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$p[]},,)");
-    }*/
-
+        valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$response},{$p['quantity']},{$p['product_id']})");
+    }
+    
     return ['valasz' => $response];
 }
 
