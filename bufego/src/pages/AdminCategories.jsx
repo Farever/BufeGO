@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
-import data from '../data.json';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import CategoryCard from '../components/CategoryCard';

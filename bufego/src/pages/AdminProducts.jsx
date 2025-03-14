@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
-import data from '../data.json';
 
 const Products = () => {
   const [products, setProducts] = useState([]);

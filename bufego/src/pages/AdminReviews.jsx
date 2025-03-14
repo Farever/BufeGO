@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReviewCard from '../components/ReviewCard';
 import Loading from '../components/Loading';
-import data from '../data.json';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
