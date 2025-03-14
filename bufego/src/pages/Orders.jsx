@@ -60,6 +60,18 @@ function OrdersPage() {
     setComment(event.target.value);
   };
 
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await axios.post('http://localhost:8000/bufe_rendelesstatusz', {
+        rendeles_id: orderId,
+        status: newStatus,
+      });
+      setOrder((prevOrder) => ({ ...prevOrder, status: newStatus }));
+    } catch (error) {
+      console.error('Hiba a rendelés státuszának frissítésekor:', error);
+    }
+  };
+
   const handleSubmitRating = async () => {
 
 
@@ -73,6 +85,7 @@ function OrdersPage() {
 
       if(resp.ok){
         alert("Sikeres értékelés!");
+        handleStatusChange(selectedOrder.id, 5)
       }
 
       handleCloseRatingModal();

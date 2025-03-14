@@ -11,6 +11,8 @@ const OrderBadge = ({status}) => {
           return 'ready';
       case 4:
           return 'collected';
+      case 5:
+         return 'rated';
       default:
         return '';
     }
@@ -26,6 +28,8 @@ const OrderBadge = ({status}) => {
         return 'Elkészült';
       case 4:
         return 'Átvett';
+      case 5:
+        return 'Értékelt'
       default:
         return 'Ismeretlen állapot';
     }
