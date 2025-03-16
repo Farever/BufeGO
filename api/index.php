@@ -65,6 +65,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
+        'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
@@ -622,11 +623,11 @@ function handleRendel(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["user_id"]) || !isset($bodyData["place_id"]) || !isset($bodyData["status"]) || !isset($bodyData["price"]) || !isset($bodyData["payment_method"]) || !isset($bodyData["orderd_at"]) || !isset($bodyData["expected_pickup_time"]) || !isset($bodyData["products"])) {
+    if (!isset($bodyData["user_id"]) || !isset($bodyData["place_id"]) || !isset($bodyData["status"]) || !isset($bodyData["price"]) || !isset($bodyData["payment_method"]) || !isset($bodyData["products"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},{$bodyData['orderd_at']},{$bodyData['expected_pickup_time']})");
+    $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())");
     foreach($bodyData["products"] as $p)
     {
         valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$response},{$p['quantity']},{$p['product_id']})");
@@ -656,6 +657,22 @@ function handleUserRendelesek(string $method, ?array $getData): ?array
     $response = ["rendelesek" => $orderadatok];
     return ['valasz' => $response];
 }
+
+function handleKosar(string $method, ?array $getData)
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData["user_id"]) || empty($getData["place_id"])) {
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = lekeres("SELECT cart.quantity, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
+    return ['valasz' => $response];
+}
+
+
 
 /**
  * Kezeli a kosárba helyezést.

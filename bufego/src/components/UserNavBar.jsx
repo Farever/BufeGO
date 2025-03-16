@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
 
-function Navigation() {
+function Navigation({cartClickAction}) {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
 
@@ -74,7 +74,7 @@ function Navigation() {
                         <Nav className="me-auto">
                         </Nav>
                         <Nav>
-                            <TiShoppingCart size="1.5em" onClick={()=>{alert("asd")}} />
+                            <Navbar.Brand size="1.5em" role="button" onClick={cartClickAction} > <TiShoppingCart size="1.5em" /> </Navbar.Brand>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
                                 <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>

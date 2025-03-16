@@ -14,6 +14,7 @@ export default function CategoryDiv({catId, catNev, termekek, buttonActions})
                         ar={p.price}
                         img={p.image}
                         key={p.id}
+                        isAvaliable={p.is_avaliable}
                         action={()=>{buttonActions(p.id)}}
                     />
                 )

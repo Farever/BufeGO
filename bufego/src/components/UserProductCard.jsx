@@ -1,6 +1,6 @@
 import { Button, Card } from "react-bootstrap";
 
-export default function UserProductCard({nev, img, ar, action})
+export default function UserProductCard({nev, img, ar,isAvaliable, action})
 {
 
     return (
@@ -13,7 +13,9 @@ export default function UserProductCard({nev, img, ar, action})
                 {ar} Ft
               </Card.Text>
             </Card.Body>
-            <Card.Footer><Button type="button" onClick={action}>+</Button></Card.Footer>
+            <Card.Footer>{
+              isAvaliable == '1'? (<Button type="button" onClick={action}>+</Button>) : (<Button type="button" variant="secondary" disabled>Nem elérhető</Button>)
+              }</Card.Footer>
         </Card>
         </>
     )

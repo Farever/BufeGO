@@ -5,8 +5,9 @@ import CategoryDiv from "../components/CategoryDiv";
 import { Container, Navbar, NavbarText, Nav } from "react-bootstrap";
 import UserProductCard from "../components/UserProductCard";
 import ProductToCartModal from "../components/ProductToCartModal";
+import CartModal from "../components/CartModal";
 
-export default function UserBufe()
+export default function UserBufe({isCartShown, cartSet})
 {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -29,6 +30,7 @@ export default function UserBufe()
                 if(response.status == 200)
                 {
                     let data = await response.data.valasz;
+                    console.log(data);
                     setCategories(data);
                 }
 
@@ -124,6 +126,7 @@ export default function UserBufe()
 
             </Container>
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={()=>{setModalShown(false)}} addToCart={AddToCart} />
+            <CartModal isShown={isCartShown} onClose={()=>{cartSet(false)}}/>
         </>
     )
 }
