@@ -1,7 +1,13 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { useState } from "react";
+import { Modal, Button, Alert } from "react-bootstrap"
+import ActionButton from "./ActionButton";
 
 const ProductCard = ({ product, handleShow }) => {
+  const [deleteShow, setDeleteShow] = useState(false);
+  const deleteClose = () => {setDeleteShow(false)};
+  const deleteOpen = () => {setDeleteShow(true);};
+
   const deleteProduct = async() => {
     console.log(JSON.stringify({id: parseInt(product.id)}))
     let response = await fetch('http://localhost:8000/termek_del', {
@@ -37,11 +43,23 @@ const ProductCard = ({ product, handleShow }) => {
             Módosítás
           </Button>
           <Button variant="danger" size="sm" onClick={() => {
-              deleteProduct();
+              deleteOpen();
             }}>
             Törlés
           </Button>
+          <Modal show={deleteShow} onHide={deleteClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Biztosan törölni szeretné?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <ActionButton type="cancel" onClick={deleteClose}></ActionButton>
+                      <ActionButton type="ok" onClick={() => {
+                          deleteProduct();
+                      }}></ActionButton>
+                    </Modal.Body>
+                </Modal>
         </div>
+
       </div>
     </div>
   );

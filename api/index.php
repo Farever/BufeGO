@@ -531,7 +531,7 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("UPDATE products SET category_id={$bodyData['category_id']},image={$bodyData['image']},name={$bodyData['name']},description={$bodyData['description']},allergens={$bodyData['allergens']},is_avaliable={$bodyData['is_avaliable']},price= {$bodyData['price']} WHERE id = {$bodyData['id']}");
+    $response = valtoztatas("UPDATE products SET category_id={$bodyData['category_id']},image='{$bodyData['image']}',name='{$bodyData['name']}',description='{$bodyData['description']}',allergens='{$bodyData['allergens']}',is_avaliable={$bodyData['is_avaliable']},price= {$bodyData['price']} WHERE id = {$bodyData['id']}");
 
     return ['valasz' => $response];
 }
