@@ -12,12 +12,13 @@ function Editmodal({show, handleClose, product})
     const [uploadstatus, setUploadStatus] = useState("");
     const [responseMessage, setResponseMessage] = useState("");
 
+    const [selectedImage, setSelectedImage] = useState(null); 
+
     const refreshInterval = 5000;
 
     let place_id = 1;
     const product_name = useRef("");
     const category = useRef("");
-    const img = useRef("");
     const product_desc = useRef("");
     const allergens = useRef("");
     const availability = useRef(true);
@@ -42,35 +43,36 @@ function Editmodal({show, handleClose, product})
         }
       };
 
+      const handleImageChange = (e) => {
+        setSelectedImage(e.target.files[0]);
+      };
+
       const editProduct = async() => {
         console.log(category.current.value)
-        /*
+        
         const formData = new FormData();
         formData.append('id', product.id);
         formData.append('category_id', category.current.value);
-        formData.append('image', "https://piccadillypizzeria.hu/storage/app/public/admin-assets/images/item/item-6504933c02731.jpg");
         formData.append('name', product_name.current.value);
         formData.append('description', product_desc.current.value);
         formData.append('allergens', allergens.current.value);
-        formData.append('is_avaliable', availability.current.checked);
+        formData.append('is_avaliable', availability.current.checked ? 1 : 0);
         formData.append('price', parseFloat(price.current.value));
-        */
-       const bodydata ={
-        id: product.id,
-        category_id: category.current.value,
-        image: "image.jpg", //az image részt majd meg kell beszélni
-        name: product_name.current.value,
-        description: product_desc.current.value,
-        allergens: allergens.current.value,
-        is_avaliable: availability.current.checked ? 1 : 0,
-        price: parseFloat(price.current.value)
-       } 
+        
+        if(selectedImage)
+        {
+            formData.append('image', selectedImage);
+        } else if(product.image){
+            formData.append('image', product.image);
+        }
 
 
-        let response = await fetch('http://localhost:8000/termek_valt', {
-            method: "POST",
-            body: JSON.stringify(bodydata)
-        })
+        let response = await axios.post('http://localhost:8000/termek_valt', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
         let data = await response.json();
         if(response.ok)
         {
@@ -121,7 +123,23 @@ function Editmodal({show, handleClose, product})
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Kép</Form.Label>
-                                <Form.Control type="file" ref={img}/>
+                                <Form.Control type="file" accept="image/*" onChange={handleImageChange}/>
+                                {product.image && !selectedImage && (
+                                    <img
+                                    src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${product.image}`}
+                                    alt="Korábbi kép"
+                                    style={{ maxWidth: '100px', marginTop: '10px' }}
+                                    />
+                                )}
+                                {selectedImage && (
+                                    <>
+                                      <img
+                                        src={URL.createObjectURL(selectedImage)}
+                                        alt="Kiválasztott borítókép"
+                                        style={{ maxWidth: '100px', marginTop: '10px' }}
+                                      />
+                                    </>
+                                )}
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Leírás</Form.Label>
