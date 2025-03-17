@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Loading from "../components/Loading";
 import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
@@ -16,6 +16,7 @@ export default function UserBufe({isCartShown, cartSet})
     const [selectedProduct, setSeletdetProduct] = useState([]);
 
     const [modalShown, setModalShown] = useState(false);
+    const [frissits, setFrissits] = useState(false);
     
     useEffect(() =>
     {
@@ -30,7 +31,6 @@ export default function UserBufe({isCartShown, cartSet})
                 if(response.status == 200)
                 {
                     let data = await response.data.valasz;
-                    console.log(data);
                     setCategories(data);
                 }
 
@@ -84,6 +84,7 @@ export default function UserBufe({isCartShown, cartSet})
                 if(response.status == 200)
                 {
                     alert("Sikeres kosárba tétel!");
+                    setFrissits(true);
                     setModalShown(false);
                 }
 
@@ -126,7 +127,7 @@ export default function UserBufe({isCartShown, cartSet})
 
             </Container>
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={()=>{setModalShown(false)}} addToCart={AddToCart} />
-            <CartModal isShown={isCartShown} onClose={()=>{cartSet(false)}}/>
+            <CartModal isShown={isCartShown} onClose={()=>{cartSet(false)}} stopFrissit={() => {setFrissits(false)}} frissits={frissits}/>
         </>
     )
 }

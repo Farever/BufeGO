@@ -67,6 +67,8 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
+        'kosartargytorles' => handleKosarTargyTorles($method, $bodyData),
+        'kosartorles' => handleKosarTorles($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
         'ertekelesek' => handleErtekelesek($method, $getData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
@@ -576,7 +578,7 @@ function handleTermekek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
+    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price, deleted FROM products WHERE place_id = " . $getData['place_id']);
     return ['valasz' => $response];
 }
 
@@ -669,7 +671,7 @@ function handleKosar(string $method, ?array $getData)
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT cart.quantity, products.id, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
+    $response = lekeres("SELECT cart.id as 'cid', cart.quantity, products.id, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
     return ['valasz' => $response];
 }
 
@@ -690,6 +692,37 @@ function handleKosarba(string $method, ?array $bodyData): ?array
 
     $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
     return ['valasz' => $response];
+}
+
+function handleKosarTargyTorles(string $method, ?array $bodyData)
+{
+    if($method !== "DELETE")
+    {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+    
+    if(empty($bodyData['id']))
+    {
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("DELETE FROM `cart` WHERE cart.id = {$bodyData['id']}");
+    return ["valasz" => $response];
+}
+
+function handleKosarTorles(string $method, ?array $bodyData)
+{
+    if($method !== "DELETE")
+    {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"])){
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("DELETE FROM `cart` WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']}");
+    return ["valasz" => $response];
 }
 
 function handleRating(string $method, ?array $bodyData){

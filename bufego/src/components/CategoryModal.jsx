@@ -11,13 +11,11 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
 
     function GetUjNev(event)
     {
-        console.log("HIHIHIHIHI")
         setUjNev(event.target.value)
     }
 
     function GetUjHely(event)
     {
-        console.log("HEHEHEHE")
         setUjHely(event.target.value)
     }
 
