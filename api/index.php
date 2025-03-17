@@ -627,10 +627,10 @@ function handleRendel(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())");
+    $response = valtoztatas("INSERT INTO orders(user_id, place_id, status, price, payment_method, orderd_at, expected_pickup_time) VALUES ({$bodyData['user_id']},{$bodyData['place_id']},{$bodyData['status']},{$bodyData['price']},{$bodyData['payment_method']},CURRENT_TIMESTAMP(),DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 MINUTE))");
     foreach($bodyData["products"] as $p)
     {
-        valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$response},{$p['quantity']},{$p['product_id']})");
+        valtoztatas("INSERT INTO `orderedproducts`(`order_id`, `quantity`, `product_id`) VALUES ({$response},{$p['quantity']},{$p['id']})");
     }
     
     return ['valasz' => $response];
@@ -668,7 +668,7 @@ function handleKosar(string $method, ?array $getData)
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT cart.quantity, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
+    $response = lekeres("SELECT cart.quantity, products.id, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
     return ['valasz' => $response];
 }
 
