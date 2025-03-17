@@ -5,7 +5,7 @@
 
 `php -S localhost:8000`
 
-#Frontend futtatása:
+# Frontend futtatása:
 /bufego mappán belül a következő parancsokkal lehetsége:
 
 `npm install`
