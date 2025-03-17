@@ -697,7 +697,7 @@ function handleRating(string $method, ?array $bodyData){
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["order_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["order_id"]) || empty($bodyData["rating"])){
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
