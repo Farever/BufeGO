@@ -31,7 +31,7 @@ function App() {
             <Route>
               <Route index element={<Landing />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/home/bufe" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
+              <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
               <Route path="/home/myorders" element={<OrdersPage />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
