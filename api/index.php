@@ -68,6 +68,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
+        'ertekelesek' => handleErtekelesek($method, $getData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
     };
 
@@ -696,12 +697,25 @@ function handleRating(string $method, ?array $bodyData){
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["order_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO `ratings`(`user_id`, `place_id`, `rating`, `comment`, `date`, `status`) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["rating"]}','{$bodyData["comment"]}',NOW(),1)");
+    $response = valtoztatas("INSERT INTO `ratings`(`user_id`, `place_id`,`order_id`, `rating`, `comment`, `date`, `status`) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["order_id"]}','{$bodyData["rating"]}','{$bodyData["comment"]}',NOW(),1)");
     return ['valasz' => $response];
+}
+
+function handleErtekelesek(string $method, ?array $getData){
+    if($method != "GET"){
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(empty($getData["placeId"])){
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $resp = lekeres("SELECT *, users.name FROM `ratings` INNER JOIN users ON ratings.user_id = users.id WHERE ratings.place_id = " . $getData["placeId"]);
+    return ['valasz' => $resp];
 }
 
 //Függvények

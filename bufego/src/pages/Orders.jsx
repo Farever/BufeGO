@@ -77,6 +77,7 @@ function OrdersPage() {
       let resp = await axios.post('http://localhost:8000/rating', {
         "user_id": selectedOrder.user_id,
         "place_id": selectedOrder.place_id,
+        "order_id" : selectedOrder.id,
         "rating": rating,
         "comment": comment
       });
