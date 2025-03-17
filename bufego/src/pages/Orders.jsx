@@ -50,6 +50,7 @@ function OrdersPage() {
     setRating(0); // Reset rating when closing the modal
     setComment(""); // Reset comment when closing the modal
     setSelectedOrder(null);
+    handleCloseModal();
   };
 
   const handleRatingChange = (event, newValue) => {
@@ -66,7 +67,7 @@ function OrdersPage() {
         rendeles_id: orderId,
         status: newStatus,
       });
-      setSelectedOrder((prevOrder) => ({ ...prevOrder, status: newStatus }));
+      location.reload();
     } catch (error) {
       console.error('Hiba a rendelés státuszának frissítésekor:', error);
     }

@@ -6,6 +6,7 @@ import { Container, Navbar, NavbarText, Nav } from "react-bootstrap";
 import UserProductCard from "../components/UserProductCard";
 import ProductToCartModal from "../components/ProductToCartModal";
 import CartModal from "../components/CartModal";
+import { useParams } from "react-router-dom";
 
 export default function UserBufe({isCartShown, cartSet})
 {
@@ -14,9 +15,10 @@ export default function UserBufe({isCartShown, cartSet})
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSeletdetProduct] = useState([]);
-
     const [modalShown, setModalShown] = useState(false);
     const [frissits, setFrissits] = useState(false);
+
+    const { bufeId } = useParams();
     
     useEffect(() =>
     {
@@ -26,7 +28,7 @@ export default function UserBufe({isCartShown, cartSet})
         {
             try
             {
-                const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
+                const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : bufeId}});
 
                 if(response.status == 200)
                 {
@@ -48,7 +50,7 @@ export default function UserBufe({isCartShown, cartSet})
         const fetchProduct = async () => {
             try
             {
-                const response = await axios.get("http://localhost:8000/termekek", {params : {place_id : "1"}});
+                const response = await axios.get("http://localhost:8000/termekek", {params : {place_id : bufeId}});
 
                 if(response.status == 200)
                 {
@@ -75,7 +77,7 @@ export default function UserBufe({isCartShown, cartSet})
         try
             {
                 const response = await axios.post("http://localhost:8000/kosarba", {
-                    "place_id" : 1,
+                    "place_id" : bufeId,
                     "user_id" : 1,
                     "quantity" : q,
                     "product_id" : pid

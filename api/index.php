@@ -410,11 +410,11 @@ function handleJelszoValtoztat(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData["userId"]) || empty($bodyData["passcode"])) {
+    if (empty($bodyData["email"]) || empty($bodyData["passcode"])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => jelszoValtoztatas($bodyData["userId"], $bodyData["passcode"])];
+    return ['valasz' => jelszoValtoztatas($bodyData["email"], $bodyData["passcode"])];
 }
 
 /**
@@ -730,7 +730,7 @@ function handleRating(string $method, ?array $bodyData){
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["order_id"]) || empty($bodyData["rating"]) || empty($bodyData["comment"])){
+    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"]) || empty($bodyData["order_id"]) || empty($bodyData["rating"])){
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
@@ -874,9 +874,9 @@ function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $pho
     return $felhasznalo;
 }
 
-function jelszoValtoztatas($userId, $passcode)
+function jelszoValtoztatas($email, $passcode)
 {
-    $query = "UPDATE `users` SET `passcode` = '{$passcode}' WHERE `id` = {$userId};";
+    $query = "UPDATE `users` SET `passcode` = '{$passcode}' WHERE `email` = '{$email}';";
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
