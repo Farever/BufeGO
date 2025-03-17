@@ -527,15 +527,15 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($_POST['id']) || !isset($_POST['category_id']) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price'])) {
+    if (!isset($_POST['id']) || !isset($_POST['category_id']) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price']) || !isset($_POST['place_id'])) {
         return ['valasz' => "Hiányos adat", 'status' => 400];
     }
 
     if (isset($_FILES["image"])) {
-        $imgName = str_replace(' ', '_', $_POST["name"]);
+        $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
     }
 
-    $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE id = {$_POST['id']}");
+    $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE id = {$_POST['id']} && deleted = 0");
 
     if (isset($_FILES["image"])) {
         $file = $_FILES['image'];
@@ -545,7 +545,7 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
             'colors' => true
         ]);
 
-        if($valasz = "Sikertelen művelet!"){
+        if($response == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
     }

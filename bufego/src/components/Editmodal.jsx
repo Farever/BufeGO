@@ -58,6 +58,7 @@ function Editmodal({show, handleClose, product})
         formData.append('allergens', allergens.current.value);
         formData.append('is_avaliable', availability.current.checked ? 1 : 0);
         formData.append('price', parseFloat(price.current.value));
+        formData.append('place_id', place_id);
         
         if(selectedImage)
         {
@@ -73,7 +74,6 @@ function Editmodal({show, handleClose, product})
             }
         });
 
-        let data = await response.json();
         if(response.ok)
         {
             setUploadStatus("success")
@@ -82,7 +82,7 @@ function Editmodal({show, handleClose, product})
         else
         {
             setUploadStatus("danger");
-            setResponseMessage(data.valasz);
+            setResponseMessage(response.data.valasz);
         }
         
     }
