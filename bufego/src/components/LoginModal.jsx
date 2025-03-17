@@ -4,7 +4,7 @@ import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginState, setLoginState] = useState(false);
@@ -108,7 +108,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           </Button>
 
           <div className="modal-links">
-            <a href="#">Elfelejtetted a jelszavad?</a>
+            <a onClick={onForgottenPassword}>Elfelejtetted a jelszavad?</a>
           </div>
         </Form>
       </Modal.Body>
