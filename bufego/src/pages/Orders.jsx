@@ -47,9 +47,9 @@ function OrdersPage() {
 
   const handleCloseRatingModal = () => {
     setShowRatingModal(false);
-    setSelectedOrder(null);
     setRating(0); // Reset rating when closing the modal
     setComment(""); // Reset comment when closing the modal
+    setSelectedOrder(null);
   };
 
   const handleRatingChange = (event, newValue) => {
@@ -73,8 +73,6 @@ function OrdersPage() {
   };
 
   const handleSubmitRating = async () => {
-
-
     try {
       let resp = await axios.post('http://localhost:8000/rating', {
         "user_id": selectedOrder.user_id,
@@ -83,7 +81,7 @@ function OrdersPage() {
         "comment": comment
       });
 
-      if(resp.ok){
+      if(resp.status == 200){
         alert("Sikeres értékelés!");
         handleStatusChange(selectedOrder.id, 5);
       }
@@ -126,8 +124,8 @@ function OrdersPage() {
         <Modal.Body>
           {selectedOrder && (
             <div>
-              <p>Étterem: {selectedOrder.place[0].name}</p>
-              <p><OrderBadge status={selectedOrder.status * 1} /></p>
+              <p>Étterem: {(selectedOrder != null) ? selectedOrder.place[0].name : null}</p>
+              <p><OrderBadge status={selectedOrder.status * 1} /></p>{/*(selectedOrder.status == 5) ? <><Rating name="read-only" value={rating} precision={0.5} readOnly /> ({rating}/5)</> : null*/}
               <p>Rendelve: {selectedOrder.orderd_at}</p>
               <h4>Termékek:</h4>
               <Table striped bordered hover>
@@ -174,7 +172,7 @@ function OrdersPage() {
         <Modal.Body>
           {selectedOrder && (
             <div>
-              <p>Étterem: {selectedOrder.place[0].name}</p>
+              <p>Étterem: {(selectedOrder != null) ? selectedOrder.place[0].name : null}</p>
               <Typography component="legend">Értékelés:</Typography>
               <Rating
                 name="simple-controlled"
