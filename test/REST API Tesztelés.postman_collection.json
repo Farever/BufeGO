@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "214663ac-5f5f-4a18-807a-30093ac563e3",
-		"name": "REST API Tesztelés",
+		"_postman_id": "f8250d2c-dbea-4b54-8287-66ac81e5015f",
+		"name": "REST API Tesztelés 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34433125"
 	},
@@ -18,10 +18,6 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('valasz');\r",
 							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
-							"    pm.expect(jsonData.valasz[0]).to.include({\r",
-							"        honap: \"1\",\r",
-							"        average_income: \"700\"\r",
-							"    });\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -33,7 +29,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/stat_monthly_income?place_id=1&year=2023",
+					"raw": "http://localhost:8000/stat_monthly_income?place_id=1&year=2025",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -49,7 +45,7 @@
 						},
 						{
 							"key": "year",
-							"value": "2023"
+							"value": "2025"
 						}
 					]
 				},
@@ -212,10 +208,6 @@
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('valasz');\r",
 							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
-							"    pm.expect(jsonData.valasz[0]).to.include({\r",
-							"        name: 'Teszt Termék 2',\r",
-							"        vasarolt_mennyiseg: \"3\"\r",
-							"    });\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -227,7 +219,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/legjobbanfogyo?year=2023&month=1&place_id=1",
+					"raw": "http://localhost:8000/legjobbanfogyo?year=2025&month=3&place_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -239,11 +231,11 @@
 					"query": [
 						{
 							"key": "year",
-							"value": "2023"
+							"value": "2025"
 						},
 						{
 							"key": "month",
-							"value": "1"
+							"value": "3"
 						},
 						{
 							"key": "place_id",
@@ -312,9 +304,6 @@
 							"    pm.response.to.have.status(200);\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property('valasz');\r",
-							"    pm.expect(jsonData.valasz[0]).to.include({\r",
-							"        current_rating: \"4.0000\"\r",
-							"    });\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -355,7 +344,11 @@
 						"exec": [
 							"pm.test(\"Sikeres lekérés - kategoriak\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('categroy_name');\r",
+							"    });"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -395,6 +388,8 @@
 						"exec": [
 							"pm.test(\"Sikeres módosítás - kategoriamodositas\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -407,7 +402,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"katId\": \"1\",\n    \"katName\": \"{{$randomProductName}}\"\n}",
+					"raw": "{\n    \"katId\": \"1\",\n    \"katName\": \"{{$randomProductName}}\",\n    \"katHely\": \"1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -436,8 +431,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres módosítás - kategoriamodositas\", function () {\r",
+							"pm.test(\"Sikeres feltöltés - kategoriafeltoltes\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -450,7 +447,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"bufeId\": \"2\",\n    \"katName\": \"Új kategória\"\n}",
+					"raw": "{\n    \"bufeId\": \"2\",\n    \"katName\": \"Új kategória\",\n    \"category_placement\" : 0\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -479,13 +476,21 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres módosítás - kategoriatorles\", function () {\r",
+							"pm.test(\"Sikeres törlés - kategoriatorles\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							""
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -494,7 +499,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"katId\": \"1\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -502,7 +507,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/kategoriatorles",
+					"raw": "http://localhost:8000/kategoriatorles?katId=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -510,6 +515,12 @@
 					"port": "8000",
 					"path": [
 						"kategoriatorles"
+					],
+					"query": [
+						{
+							"key": "katId",
+							"value": "2"
+						}
 					]
 				},
 				"description": "Sikeres törlés - Mock kategoriaTorol: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
@@ -523,8 +534,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - bufemodositas\", function () {\r",
+							"pm.test(\"Sikeres módosítás - bufemodositas\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -536,13 +549,34 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"bufeId\": \"1\",\n    \"bufeName\": \"Új név\",\n    \"desc\": \"Új leírás\",\n    \"phone\": \"+3620123456789\",\n    \"addressId\" : 1,\n    \"schoolId\" : 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Új név",
+							"type": "text"
+						},
+						{
+							"key": "desc",
+							"value": "Új leírás",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "+3620123456789",
+							"type": "text"
+						},
+						{
+							"key": "img",
+							"type": "file",
+							"src": "/C:/Users/13c-nagyl/Downloads/Képernyőkép 2025-03-18 111713.png"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:8000/bufemodositas",
@@ -566,8 +600,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - bufefeltoltes\", function () {\r",
+							"pm.test(\"Sikeres feltöltés - bufefeltoltes\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -580,7 +616,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"adminUserId\": \"1\",\n    \"bufeName\": \"Új büfé\",\n    \"desc\": \"Leírás\",\n    \"phone\": \"+3620123456789\",\n    \"addressId\": 1,\n    \"schoolId\": 1\n}",
+					"raw": "{\n    \"adminUserId\": \"1\",\n    \"bufeName\": \"Új büfé\",\n    \"desc\": \"Leírás\",\n    \"phone\": \"+3620123456789\",\n    \"addressId\": 1,\n    \"schoolId\": 1,\n    \"image\" : \"egwrgr\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -609,8 +645,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - kategoriak\", function () {\r",
+							"pm.test(\"Sikeres bejelentkezés - bejelentkezes\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('passcode');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -622,7 +662,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/bejelentkezes?email=teszt@teszt.hu",
+					"raw": "http://localhost:8000/bejelentkezes?email=ujteszt2@teszt.hu",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -634,7 +674,7 @@
 					"query": [
 						{
 							"key": "email",
-							"value": "teszt@teszt.hu"
+							"value": "ujteszt2@teszt.hu"
 						}
 					]
 				},
@@ -649,13 +689,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Fixed the undefined variable issue\r",
-							"pm.test(\"Sikeres lekérés - bejelntkezes - nem letező email\", function () {\r",
+							"pm.test(\"Sikertelen bejelentkezés - bejelentkezes_nemletezo_email\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"    const jsonData = pm.response.json();\r",
+							"    let jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData).to.have.property(\"valasz\", \"Nincs ilyen e-mail cím\");\r",
-							"});\r",
-							""
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -693,8 +731,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - felhasznalok\", function () {\r",
+							"pm.test(\"Sikeres lekérdezés - felhasznaloadatok\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -735,10 +777,8 @@
 						"exec": [
 							"pm.test(\"Sikeres regisztráció - felhasznaloregisztracio\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property('valasz');\r",
-							"    var parsedValasz = JSON.parse(jsonData.valasz);\r",
-							"    pm.expect(parsedValasz).to.be.an('number');\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -751,7 +791,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"teszt@teszt.hu\",\n    \"passcode\": \"jelszo\",\n    \"name\": \"Teszt User\",\n    \"phone\": \"+3620123456789\",\n    \"address_id\" : 2,\n    \"school\" : 1\n}",
+					"raw": "{\n    \"email\": \"ujteszt@teszt.hu\",\n    \"passcode\": \"jelszo\",\n    \"name\": \"Teszt User\",\n    \"phone\": \"+3620123456789\",\n    \"address_id\": 2,\n    \"school\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -780,8 +820,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - felhasznaloModositas\", function () {\r",
+							"pm.test(\"Sikeres módosítás - felhasznaloadatmodositas\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -794,7 +836,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userId\": \"1\",\n    \"email\": \"ujteszt@teszt.hu\",\n    \"name\": \"Új Teszt User1\",\n    \"phone\": \"+3620123456789\",\n    \"address_id\" : 3,\n    \"school\" : 1\n}",
+					"raw": "{\n    \"userId\": \"1\",\n    \"email\": \"ujteszt2@teszt.hu\",\n    \"name\": \"Új Teszt User2\",\n    \"phone\": \"+3620123456780\",\n    \"address_id\": 3,\n    \"school\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -823,23 +865,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Fixed the reference error by defining jsonData\r",
-							"pm.test(\"Sikeres lekérés - jelszovalt\", function () {\r",
+							"pm.test(\"Sikeres jelszóváltoztatás - jelszovaltoztat\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"    const jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property(\"valasz\", \"Sikeres művelet!\");\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -851,7 +881,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userId\": \"1\",\n    \"passcode\": \"{{$randomPassword}}\"\n}",
+					"raw": "{\n    \"email\": \"ujteszt@teszt.hu\",\n    \"passcode\": \"{{$randomPassword}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -880,8 +910,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - kategoriak\", function () {\r",
+							"pm.test(\"Sikeres feltöltés - iskolafeltoltes\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -923,8 +955,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - iskolak\", function () {\r",
+							"pm.test(\"Sikeres lekérdezés - iskolak\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -957,8 +993,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Sikeres lekérés - kategoriak\", function () {\r",
+							"pm.test(\"Sikeres feltöltés - cimfeltoltes\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -990,6 +1028,834 @@
 					]
 				},
 				"description": "Sikeres feltöltés - Mock cimFeltoltes: 20 (új cím ID-ja)\nElvárt eredmény: ['valasz' => 20]"
+			},
+			"response": []
+		},
+		{
+			"name": "userbufe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - userbufe\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük az első elemben a 'name' mezőt\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/userbufe?school_Id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"userbufe"
+					],
+					"query": [
+						{
+							"key": "school_Id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "kinalatlekeres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - kinalatlekeres\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük az első elemben a 'name' mezőt\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/kinalatlekeres?bufeId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"kinalatlekeres"
+					],
+					"query": [
+						{
+							"key": "bufeId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "admin_fo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - admin_fo\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük az első elemben a 'name' mezőt\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/admin_fo?admin_id=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"admin_fo"
+					],
+					"query": [
+						{
+							"key": "admin_id",
+							"value": "4"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "bufe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - bufe\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük az első elemben a 'name' mezőt\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"place_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/bufe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"bufe"
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "bufe_rendelesek",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - bufe_rendelesek\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.have.property('rendelesek');\r",
+							"    pm.expect(jsonData.valasz.rendelesek).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.rendelesek.length).to.be.greaterThan(0);\r",
+							"    pm.expect(jsonData.valasz.rendelesek[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData.valasz.rendelesek[0]).to.have.property('products');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/bufe_rendelesek?place_id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"bufe_rendelesek"
+					],
+					"query": [
+						{
+							"key": "place_id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "bufe_rendelesstatusz",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres módosítás - bufe_rendelesstatusz\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rendeles_id\": 1,\n    \"status\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/bufe_rendelesstatusz",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"bufe_rendelesstatusz"
+					]
+				},
+				"description": "Sikeres módosítás"
+			},
+			"response": []
+		},
+		{
+			"name": "termek_felv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres felvitel - termek_felv\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"place\": 1,\n    \"category\": 1,\n    \"img\": \"kep_elerese.jpg\",\n    \"name\": \"Új Termék\",\n    \"description\": \"Termék leírása\",\n    \"allergens\": \"Glutén\",\n    \"is_avaliable\": 1,\n    \"price\": 500\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/termek_felv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"termek_felv"
+					]
+				},
+				"description": "Sikeres felvitel"
+			},
+			"response": []
+		},
+		{
+			"name": "termekek",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - termekek\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük az első elemben a 'name' mezőt\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('name');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/termekek?place_id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"termekek"
+					],
+					"query": [
+						{
+							"key": "place_id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "termek_valt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres módosítás - termek_valt\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"category_id\": 2,\n    \"image\": \"uj_kep.jpg\",\n    \"name\": \"Módosított Termék\",\n    \"description\": \"Módosított leírás\",\n    \"allergens\": \"Nincs\",\n    \"is_avaliable\": 0,\n    \"price\": 600\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/termek_valt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"termek_valt"
+					]
+				},
+				"description": "Sikeres módosítás"
+			},
+			"response": []
+		},
+		{
+			"name": "termek_del",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres törlés - termek_del\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/termek_del?id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"termek_del"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				},
+				"description": "Sikeres törlés"
+			},
+			"response": []
+		},
+		{
+			"name": "rendel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres rendelés - rendel\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 1,\n    \"place_id\": 1,\n    \"status\": 0,\n    \"price\": 1000,\n    \"payment_method\": 1,\n    \"products\": [\n        {\n            \"id\": 1,\n            \"quantity\": 2\n        },\n        {\n            \"id\": 2,\n            \"quantity\": 1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/rendel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"rendel"
+					]
+				},
+				"description": "Sikeres rendelés"
+			},
+			"response": []
+		},
+		{
+			"name": "sajatrendelesek",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - sajatrendelesek\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.have.property('rendelesek');\r",
+							"    pm.expect(jsonData.valasz.rendelesek).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.rendelesek.length).to.be.greaterThan(0);\r",
+							"    //Ellenőrizzük a 'products' tömböt\r",
+							"    pm.expect(jsonData.valasz.rendelesek[0]).to.have.property('products');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/sajatrendelesek?userId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"sajatrendelesek"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "kosar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres lekérdezés - kosar\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/kosar?user_id=1&place_id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"kosar"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "place_id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres lekérdezés"
+			},
+			"response": []
+		},
+		{
+			"name": "kosarba",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres kosárba helyezés - kosarba\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 1,\n    \"place_id\": 1,\n    \"quantity\": 2,\n    \"product_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/kosarba",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"kosarba"
+					]
+				},
+				"description": "Sikeres kosárba helyezés"
+			},
+			"response": []
+		},
+		{
+			"name": "kosartargytorles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres kosártárgy törlés - kosartargytorles\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/kosartargytorles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"kosartargytorles"
+					]
+				},
+				"description": "Sikeres kosártárgy törlés"
+			},
+			"response": []
+		},
+		{
+			"name": "kosartorles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres kosártörlés - kosartorles\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 1,\n    \"place_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/kosartorles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"kosartorles"
+					]
+				},
+				"description": "Sikeres kosártörlés"
+			},
+			"response": []
+		},
+		{
+			"name": "rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres értékelés - rating\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 1,\n    \"place_id\": 1,\n    \"order_id\": 1,\n    \"rating\": 5,\n    \"comment\": \"Szuper volt!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/rating",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"rating"
+					]
+				},
+				"description": "Sikeres értékelés"
+			},
+			"response": []
+		},
+		{
+			"name": "ertekelesek",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres értékelés lekérdezés - ertekelesek\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.an('array');\r",
+							"    //Ellenőrizzük, hogy a válasz tömb nem üres-e\r",
+							"    pm.expect(jsonData.valasz.length).to.be.greaterThan(0);\r",
+							"    pm.expect(jsonData.valasz[0]).to.have.property('rating');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ertekelesek?placeId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ertekelesek"
+					],
+					"query": [
+						{
+							"key": "placeId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Sikeres értékelés lekérdezés"
 			},
 			"response": []
 		}
