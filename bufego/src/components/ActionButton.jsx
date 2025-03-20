@@ -37,8 +37,12 @@ const ActionButton = ({ type, onClick }) => {
         return 'Mégsem';
       case 'details':
         return 'Részletek';
+      case 'add':
+        return 'Új felvétele';
       case 'done':
         return 'Elkészült';
+      case 'toCostumer':
+        return 'Átadás';
       default:
         return 'Gomb';
     }

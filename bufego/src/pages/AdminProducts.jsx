@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
-import data from '../data.json';
 import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
 import axios from 'axios';
@@ -27,13 +26,7 @@ const Products = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/termekek', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({place_id:place_id})
-      });
+      const response = await fetch('http://localhost:8000/termekek?place_id='+place_id);
 
       let data = await response.json();
       setProducts(data.valasz);  // Update state with the formatted data

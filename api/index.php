@@ -60,7 +60,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
         'termek_felv' => handleTermekFelv($method, $bodyData),
-        'termekek' => handleTermekek($method, $bodyData),
+        'termekek' => handleTermekek($method, $getData),
         'termek_valt' => handleTermekValt($method, $bodyData),
         'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
@@ -490,7 +490,7 @@ function handleAdminFo(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT places.id, places.name, places.description, places.images, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
+    $response = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
     return ['valasz' => $response];
 }
 
@@ -586,7 +586,7 @@ function handleTermekek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $bodyData['place_id']);
+    $response = lekeres("SELECT category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
     return ['valasz' => $response];
 }
 
