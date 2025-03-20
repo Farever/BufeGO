@@ -36,13 +36,16 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
     setError(null);
     try {
       const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`);
+      console.log(response);
       if (sha512(password) === response.data.valasz[0].passcode) {
         setLoginState(true);
         alert('Sikeres bejelentkezés!');
+        
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }
     } catch (err) {
+      console.log(err);
       setError('Hiba történt a bejelentkezés során. Kérjük, próbálja újra később.');
     } finally {
       setIsLoading(false);
@@ -106,7 +109,7 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
           </Button>
 
           <div className="modal-links">
-            <a onClick={onForgottenPassword}>Elfelejtetted a jelszavad?</a>
+            <a href='#' onClick={onForgottenPassword}>Elfelejtetted a jelszavad?</a>
           </div>
         </Form>
       </Modal.Body>

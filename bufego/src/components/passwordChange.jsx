@@ -39,32 +39,42 @@ const PasswordModal = ({ isOpen, onClose }) => {
     const handleNewPassword = async () => {
         setIsLoading(true);
         setError(null);
+        let message;
         try {
             const response = await fetch(`http://localhost:8000/jelszovaltoztat`,
                 {
-                    method : 'post',
+                    method: 'post',
                     headers: {
-                        "Content-Type" : "application/json",
+                        "Content-Type": "application/json",
                     },
-                    body : JSON.stringify({"email" : email, "passcode" : sha512(password1)})
+                    body: JSON.stringify({ "email": email, "passcode": sha512(password1) })
                 }
             );
+            message = await response.json();
         } catch (err) {
             setError('Hiba történt. Kérjük, próbálja újra később.');
         } finally {
             setIsLoading(false);
-            if(error == null){
+            if(error != null){
+                alert(error);
+                return 0;
+            }
+            if (message.valasz == "Sikertelen művelet!") {
+                alert("Az új jelszavad nem egyezhet meg a mostanival!");
+            } else {
+                alert("Sikeres művelet!")
                 onClose();
                 setEmail('');
                 setPassword1('');
                 setPassword2('');
             }
+
         }
     };
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
-      };
+    };
 
     const handlePassword1Change = (event) => {
         setPassword1(event.target.value);
