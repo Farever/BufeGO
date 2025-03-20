@@ -6,12 +6,18 @@ const ActionButton = ({ type, onClick }) => {
     switch (type) {
       case 'accept':
         return 'accept-button';
+      case 'ok':
+        return 'accept-button';
       case 'reject':
+        return 'reject-button';
+      case 'cancel':
         return 'reject-button';
       case 'details':
         return 'details-button';
       case 'done':
         return 'done-button';
+      case 'add':
+        return 'accept-button';
       case 'toCostumer':
         return 'toCostumer-button';
       default:
@@ -23,14 +29,16 @@ const ActionButton = ({ type, onClick }) => {
     switch (type) {
       case 'accept':
         return 'Elfogad';
+      case 'ok':
+        return 'Ok';
       case 'reject':
         return 'Elutasít';
+      case 'cancel':
+        return 'Mégsem';
       case 'details':
         return 'Részletek';
       case 'done':
         return 'Elkészült';
-      case 'toCostumer':
-        return 'Átadás';
       default:
         return 'Gomb';
     }

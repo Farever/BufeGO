@@ -8,13 +8,13 @@ use Cloudinary\Configuration\Configuration;
 Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
 $method = $_SERVER["REQUEST_METHOD"];
-$bodyData = json_decode(file_get_contents('php://input'), true);
+$bodyData = ($method === "POST") ? json_decode(file_get_contents('php://input'), true) : null;
 $getData = $_GET;
 
 handleEndpoint($endpoint, $method, $bodyData, $getData);
@@ -58,9 +58,9 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'admin_fo' => handleAdminFo($method, $getData),
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
-        'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData),
+        'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
         'termek_felv' => handleTermekFelv($method, $bodyData),
-        'termekek' => handleTermekek($method, $getData),
+        'termekek' => handleTermekek($method, $bodyData),
         'termek_valt' => handleTermekValt($method, $bodyData),
         'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
@@ -490,7 +490,7 @@ function handleAdminFo(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT places.id, places.name, places.description, places.image, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
+    $response = lekeres("SELECT places.id, places.name, places.description, places.images, places.phone, addresses.zip_code, addresses.city, addresses.address, schools.name as 'school' FROM places INNER JOIN addresses ON places.address_id = addresses.id INNER JOIN schools ON schools.id = places.school_id WHERE places.admin_user_id =" . $getData["admin_id"]);
     return ['valasz' => $response];
 }
 
@@ -557,11 +557,19 @@ function handleTermekFelv(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["place"]) || !isset($bodyData["category"]) || !isset($bodyData['img']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
+    if (!isset($bodyData["place"]) || !isset($bodyData["category"]) || !isset($_FILES['img']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$bodyData['img']}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
+    $imgName = $bodyData["place"]."_product_".str_replace(' ', '_', $bodyData["name"]);
+
+    $file = $_FILES['img'];
+    (new UploadApi())->upload($file["tmp_name"], [
+        'public_id' => $imgName, 
+        'quality_analysis' => true,  
+        'colors' => true]);
+
+    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$imgName}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
     return ['valasz' => $response];
 }
 
@@ -578,7 +586,7 @@ function handleTermekek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price, deleted FROM products WHERE place_id = " . $getData['place_id']);
+    $response = lekeres("SELECT category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $bodyData['place_id']);
     return ['valasz' => $response];
 }
 
@@ -591,11 +599,28 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData['id']) || !isset($bodyData['category_id']) || !isset($bodyData['image']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
-        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    if (!isset($_POST['id']) || !isset($_POST['category_id']) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price']) || !isset($_POST['place_id'])) {
+        return ['valasz' => "Hiányos adat", 'status' => 400];
     }
 
-    $response = valtoztatas("UPDATE products SET category_id={$bodyData['category_id']},image={$bodyData['image']},name={$bodyData['name']},description={$bodyData['description']},allergens={$bodyData['allergens']},is_avaliable={$bodyData['is_avaliable']},price= {$bodyData['price']} WHERE id = {$bodyData['id']}");
+    if (isset($_FILES["image"])) {
+        $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
+    }
+
+    $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE id = {$_POST['id']} && deleted = 0");
+
+    if (isset($_FILES["image"])) {
+        $file = $_FILES['image'];
+        (new UploadApi())->upload($file["tmp_name"], [
+            'public_id' => $imgName,
+            'quality_analysis' => true,
+            'colors' => true
+        ]);
+
+        if($response == "Sikertelen művelet!"){
+            return ['valasz' => "Kép feltöltése sikeres!"];
+        }
+    }
 
     return ['valasz' => $response];
 }
@@ -613,7 +638,7 @@ function handleTermekDel(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("DELETE FROM products WHERE id = {$bodyData['id']}");
+    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$bodyData["id"]}");
     return ['valasz' => $response];
 }
 
