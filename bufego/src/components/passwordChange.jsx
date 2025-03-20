@@ -25,9 +25,10 @@ const PasswordModal = ({ isOpen, onClose }) => {
         // Jelszó validáció
         if (!password1) {
             errors.password = 'A jelszó megadása kötelező.';
-        } else if (password.length < 6) {
+        } else if (password1.length < 6) {
             errors.password = 'A jelszónak legalább 6 karakter hosszúnak kell lennie.';
-        } else if (password1 != password2) {
+        }
+        if (password1 != password2) {
             errors.password2 = 'A két jelszó nem egyeik.';
         }
 
@@ -52,6 +53,12 @@ const PasswordModal = ({ isOpen, onClose }) => {
             setError('Hiba történt. Kérjük, próbálja újra később.');
         } finally {
             setIsLoading(false);
+            if(error == null){
+                onClose();
+                setEmail('');
+                setPassword1('');
+                setPassword2('');
+            }
         }
     };
 

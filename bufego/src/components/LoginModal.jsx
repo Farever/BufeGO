@@ -25,8 +25,6 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
     // Jelszó validáció
     if (!password) {
       errors.password = 'A jelszó megadása kötelező.';
-    } else if (password.length < 6) {
-      errors.password = 'A jelszónak legalább 6 karakter hosszúnak kell lennie.';
     }
 
     setValidationError(errors);
