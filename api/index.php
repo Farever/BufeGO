@@ -284,7 +284,7 @@ function handleBufeModositas(string $method)
             'colors' => true
         ]);
 
-        if($valasz = "Sikertelen művelet!"){
+        if($valasz == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
     }
