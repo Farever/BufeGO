@@ -38,11 +38,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick }) => {
       }
     };
 
-    fetchRatings();
-
-    const intervalId = setInterval(fetchRatings, refreshInterval)
-
-    return () => clearInterval(intervalId);
+    fetchRatings();;
   }, []);
 
   const handleClick = () => {
