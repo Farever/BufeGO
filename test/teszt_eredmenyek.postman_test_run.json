@@ -1,0 +1,1293 @@
+{
+	"id": "05e9dc1b-b1a4-4da3-a541-1b8d8cbe6f54",
+	"name": "REST API Tesztelés 2",
+	"timestamp": "2025-03-21T10:13:26.068Z",
+	"collection_id": "34433125-f8250d2c-dbea-4b54-8287-66ac81e5015f",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 41,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-03-21T10:13:21.452Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "765e5771-b79b-42bb-8058-9f450ec651b0",
+			"name": "stat_monthly_income",
+			"url": "http://localhost:8000/stat_monthly_income?place_id=1&year=2025",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - stat_monthly_income": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - stat_monthly_income": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - stat_monthly_income": true
+				}
+			]
+		},
+		{
+			"id": "7bc00f4b-df3a-4d55-8b81-bf554b8cb7be",
+			"name": "stat_monthly_income_hibas_metodus",
+			"url": "http://localhost:8000/stat_monthly_income?place_id=1&year=2023",
+			"time": 16,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Hibás metódus - stat_monthly_income": true
+			},
+			"testPassFailCounts": {
+				"Hibás metódus - stat_monthly_income": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Hibás metódus - stat_monthly_income": true
+				}
+			]
+		},
+		{
+			"id": "570b1ffe-244c-4472-b6e0-78a2bf9dec2a",
+			"name": "stat_monthly_income_hianyzo_place_id",
+			"url": "http://localhost:8000/stat_monthly_income?year=2023",
+			"time": 9,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Hiányzó place_id - stat_monthly_income": true
+			},
+			"testPassFailCounts": {
+				"Hiányzó place_id - stat_monthly_income": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Hiányzó place_id - stat_monthly_income": true
+				}
+			]
+		},
+		{
+			"id": "05fea3cf-7043-4ad8-a9a9-d1cd98114b73",
+			"name": "stat_monthly_income_nemletezo_place_id",
+			"url": "http://localhost:8000/stat_monthly_income?place_id=999&year=2023",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Nem létező place_id - stat_monthly_income": true
+			},
+			"testPassFailCounts": {
+				"Nem létező place_id - stat_monthly_income": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Nem létező place_id - stat_monthly_income": true
+				}
+			]
+		},
+		{
+			"id": "d9dffc34-51b6-4861-89a8-ede3222bcb1b",
+			"name": "legjobbanfogyo",
+			"url": "http://localhost:8000/legjobbanfogyo?year=2025&month=3&place_id=1",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - legjobbanfogyo": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - legjobbanfogyo": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - legjobbanfogyo": true
+				}
+			]
+		},
+		{
+			"id": "2ef33257-a131-488b-8fd7-195deb807d6b",
+			"name": "legjobbanfogyo_hianyzo_year",
+			"url": "http://localhost:8000/legjobbanfogyo?week=2&place_id=1",
+			"time": 14,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Hiányzó year - legjobbanfogyo": true
+			},
+			"testPassFailCounts": {
+				"Hiányzó year - legjobbanfogyo": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Hiányzó year - legjobbanfogyo": true
+				}
+			]
+		},
+		{
+			"id": "4df1ec55-8584-4bab-b7e9-812ed6e4900d",
+			"name": "currentrating",
+			"url": "http://localhost:8000/currentrating?place_id=1",
+			"time": 30,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - currentrating": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - currentrating": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				30
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - currentrating": true
+				}
+			]
+		},
+		{
+			"id": "90decce4-81b9-44fa-990a-e3e3a4d33edc",
+			"name": "kategoriak",
+			"url": "http://localhost:8000/kategoriak?bufeId=1",
+			"time": 34,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérés - kategoriak": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérés - kategoriak": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"Sikeres lekérés - kategoriak": true
+				}
+			]
+		},
+		{
+			"id": "8600cd6b-c713-4991-84e2-582edfff877a",
+			"name": "kategoriamodositas",
+			"url": "http://localhost:8000/kategoriamodositas",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - kategoriamodositas": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - kategoriamodositas": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - kategoriamodositas": true
+				}
+			]
+		},
+		{
+			"id": "792e5c13-de28-4377-a317-fb1a9f162f11",
+			"name": "kategoriafeltoltes",
+			"url": "http://localhost:8000/kategoriafeltoltes",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres feltöltés - kategoriafeltoltes": true
+			},
+			"testPassFailCounts": {
+				"Sikeres feltöltés - kategoriafeltoltes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Sikeres feltöltés - kategoriafeltoltes": true
+				}
+			]
+		},
+		{
+			"id": "c246fb9e-6ab4-4f19-8b19-33568f4a8e02",
+			"name": "kategoriatorles",
+			"url": "http://localhost:8000/kategoriatorles?katId=3",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres törlés - kategoriatorles": true
+			},
+			"testPassFailCounts": {
+				"Sikeres törlés - kategoriatorles": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Sikeres törlés - kategoriatorles": true
+				}
+			]
+		},
+		{
+			"id": "950b913a-d626-43c7-b487-22f51393cd3f",
+			"name": "bufemodositas_új adatok",
+			"url": "http://localhost:8000/bufemodositas",
+			"time": 24,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - bufemodositas": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - bufemodositas": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - bufemodositas": true
+				}
+			]
+		},
+		{
+			"id": "ad3e1c7f-831c-4f80-9021-a9cc0909db8e",
+			"name": "bufemodositas_csak_uj_kep",
+			"url": "http://localhost:8000/bufemodositas",
+			"time": 30,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - bufemodositas": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - bufemodositas": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				30
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - bufemodositas": true
+				}
+			]
+		},
+		{
+			"id": "0027786e-d3e8-4fc9-9cfe-31da7b97c640",
+			"name": "bufefeltoltes",
+			"url": "http://localhost:8000/bufefeltoltes",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres feltöltés - bufefeltoltes": true
+			},
+			"testPassFailCounts": {
+				"Sikeres feltöltés - bufefeltoltes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Sikeres feltöltés - bufefeltoltes": true
+				}
+			]
+		},
+		{
+			"id": "0b0a9352-d263-4ae2-be4a-3d07bf406886",
+			"name": "bejelentkezes",
+			"url": "http://localhost:8000/bejelentkezes?email=ujteszt2@teszt.hu",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres bejelentkezés - bejelentkezes": true
+			},
+			"testPassFailCounts": {
+				"Sikeres bejelentkezés - bejelentkezes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Sikeres bejelentkezés - bejelentkezes": true
+				}
+			]
+		},
+		{
+			"id": "e51d0525-385e-49dc-9fbc-c38b0fb29afb",
+			"name": "bejelentkezes_nemletezo_email",
+			"url": "http://localhost:8000/bejelentkezes?email=nemletezo@teszt.hu",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikertelen bejelentkezés - bejelentkezes_nemletezo_email": true
+			},
+			"testPassFailCounts": {
+				"Sikertelen bejelentkezés - bejelentkezes_nemletezo_email": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Sikertelen bejelentkezés - bejelentkezes_nemletezo_email": true
+				}
+			]
+		},
+		{
+			"id": "d3d9419c-a895-434f-9c82-9637f4f05a5f",
+			"name": "felhasznaloadatok",
+			"url": "http://localhost:8000/felhasznaloadatok?userId=1",
+			"time": 45,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - felhasznaloadatok": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - felhasznaloadatok": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				45
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - felhasznaloadatok": true
+				}
+			]
+		},
+		{
+			"id": "629f669d-dd7f-47ca-9b5b-39264a2a3676",
+			"name": "felhasznaloregisztracio",
+			"url": "http://localhost:8000/felhasznaloregisztracio",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres regisztráció - felhasznaloregisztracio": true
+			},
+			"testPassFailCounts": {
+				"Sikeres regisztráció - felhasznaloregisztracio": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Sikeres regisztráció - felhasznaloregisztracio": true
+				}
+			]
+		},
+		{
+			"id": "b4f0ea1c-5d2a-4ea5-9f04-01633ed0aa19",
+			"name": "felhasznaloadatmodositas",
+			"url": "http://localhost:8000/felhasznaloadatmodositas",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - felhasznaloadatmodositas": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - felhasznaloadatmodositas": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - felhasznaloadatmodositas": true
+				}
+			]
+		},
+		{
+			"id": "ca70854d-a890-4950-8dc7-10d1c8cc0549",
+			"name": "jelszovaltoztat",
+			"url": "http://localhost:8000/jelszovaltoztat",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres jelszóváltoztatás - jelszovaltoztat": true
+			},
+			"testPassFailCounts": {
+				"Sikeres jelszóváltoztatás - jelszovaltoztat": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Sikeres jelszóváltoztatás - jelszovaltoztat": true
+				}
+			]
+		},
+		{
+			"id": "acaff74c-4c38-469c-9ff0-8b1345dfe3b6",
+			"name": "iskolafeltoltes",
+			"url": "http://localhost:8000/iskolafeltoltes",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres feltöltés - iskolafeltoltes": true
+			},
+			"testPassFailCounts": {
+				"Sikeres feltöltés - iskolafeltoltes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Sikeres feltöltés - iskolafeltoltes": true
+				}
+			]
+		},
+		{
+			"id": "ff81b292-a6e4-4280-91da-5f4a29b086b2",
+			"name": "iskolak",
+			"url": "http://localhost:8000/iskolak",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - iskolak": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - iskolak": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - iskolak": true
+				}
+			]
+		},
+		{
+			"id": "7b7c75fd-de32-4a52-a108-84df7a0a07e7",
+			"name": "cimfeltoltes",
+			"url": "http://localhost:8000/cimfeltoltes",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres feltöltés - cimfeltoltes": true
+			},
+			"testPassFailCounts": {
+				"Sikeres feltöltés - cimfeltoltes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Sikeres feltöltés - cimfeltoltes": true
+				}
+			]
+		},
+		{
+			"id": "1af909e6-01e3-473d-883d-0ee867ad72c0",
+			"name": "userbufe",
+			"url": "http://localhost:8000/userbufe?school_Id=1",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - userbufe": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - userbufe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - userbufe": true
+				}
+			]
+		},
+		{
+			"id": "da55fcce-ba10-480e-b0e2-cf0bf58d186a",
+			"name": "kinalatlekeres",
+			"url": "http://localhost:8000/kinalatlekeres?bufeId=1",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - kinalatlekeres": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - kinalatlekeres": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - kinalatlekeres": true
+				}
+			]
+		},
+		{
+			"id": "0f758833-0b48-4014-9b6b-2c9b2b02f61a",
+			"name": "admin_fo",
+			"url": "http://localhost:8000/admin_fo?admin_id=4",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - admin_fo": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - admin_fo": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - admin_fo": true
+				}
+			]
+		},
+		{
+			"id": "44ba438c-d269-480b-bbd5-9316aef96753",
+			"name": "bufe",
+			"url": "http://localhost:8000/bufe",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - bufe": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - bufe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - bufe": true
+				}
+			]
+		},
+		{
+			"id": "85cdceb9-2b6e-40ea-ab63-e3bc93fb644f",
+			"name": "bufe_rendelesek",
+			"url": "http://localhost:8000/bufe_rendelesek?place_id=1",
+			"time": 241,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - bufe_rendelesek": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - bufe_rendelesek": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				241
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - bufe_rendelesek": true
+				}
+			]
+		},
+		{
+			"id": "c441ea10-b74b-441d-ab93-d4fb9e84318d",
+			"name": "bufe_rendelesstatusz",
+			"url": "http://localhost:8000/bufe_rendelesstatusz",
+			"time": 31,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - bufe_rendelesstatusz": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - bufe_rendelesstatusz": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				31
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - bufe_rendelesstatusz": true
+				}
+			]
+		},
+		{
+			"id": "7197892e-15d8-4e14-9d95-840004c6ae4a",
+			"name": "termek_felv",
+			"url": "http://localhost:8000/termek_felv",
+			"time": 47,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres felvitel - termek_felv": true
+			},
+			"testPassFailCounts": {
+				"Sikeres felvitel - termek_felv": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				47
+			],
+			"allTests": [
+				{
+					"Sikeres felvitel - termek_felv": true
+				}
+			]
+		},
+		{
+			"id": "85cd04f5-3ad8-4294-97e5-0c5e3b0043c3",
+			"name": "termekek",
+			"url": "http://localhost:8000/termekek?place_id=1",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - termekek": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - termekek": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - termekek": true
+				}
+			]
+		},
+		{
+			"id": "55716823-0223-4319-b3c2-7af404a7fcff",
+			"name": "termek_valt",
+			"url": "http://localhost:8000/termek_valt",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres módosítás - termek_valt": true
+			},
+			"testPassFailCounts": {
+				"Sikeres módosítás - termek_valt": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Sikeres módosítás - termek_valt": true
+				}
+			]
+		},
+		{
+			"id": "dfc80cbd-d39c-4580-8ba9-ab85e9c5f8f3",
+			"name": "termek_del",
+			"url": "http://localhost:8000/termek_del?id=2",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres törlés - termek_del": true
+			},
+			"testPassFailCounts": {
+				"Sikeres törlés - termek_del": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Sikeres törlés - termek_del": true
+				}
+			]
+		},
+		{
+			"id": "03dc79f8-5074-4a24-9843-2926d700d454",
+			"name": "rendel",
+			"url": "http://localhost:8000/rendel",
+			"time": 69,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres rendelés - rendel": true
+			},
+			"testPassFailCounts": {
+				"Sikeres rendelés - rendel": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				69
+			],
+			"allTests": [
+				{
+					"Sikeres rendelés - rendel": true
+				}
+			]
+		},
+		{
+			"id": "fba9e526-c205-467f-8d5a-2810885822f0",
+			"name": "sajatrendelesek",
+			"url": "http://localhost:8000/sajatrendelesek?userId=1",
+			"time": 213,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - sajatrendelesek": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - sajatrendelesek": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				213
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - sajatrendelesek": true
+				}
+			]
+		},
+		{
+			"id": "a62992e6-49e1-4f7f-9523-2ab4cb016751",
+			"name": "kosar",
+			"url": "http://localhost:8000/kosar?user_id=1&place_id=1",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres lekérdezés - kosar": true
+			},
+			"testPassFailCounts": {
+				"Sikeres lekérdezés - kosar": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Sikeres lekérdezés - kosar": true
+				}
+			]
+		},
+		{
+			"id": "bcf48497-fe98-4b3a-b8fc-a2cf369ce5d0",
+			"name": "kosarba",
+			"url": "http://localhost:8000/kosarba",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres kosárba helyezés - kosarba": true
+			},
+			"testPassFailCounts": {
+				"Sikeres kosárba helyezés - kosarba": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Sikeres kosárba helyezés - kosarba": true
+				}
+			]
+		},
+		{
+			"id": "96900166-ae4d-466d-be80-d85f622b8cf7",
+			"name": "kosartargytorles",
+			"url": "http://localhost:8000/kosartargytorles?id=1",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres kosártárgy törlés - kosartargytorles": true
+			},
+			"testPassFailCounts": {
+				"Sikeres kosártárgy törlés - kosartargytorles": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Sikeres kosártárgy törlés - kosartargytorles": true
+				}
+			]
+		},
+		{
+			"id": "0594f40c-cbbd-489c-90b7-e1a237fece48",
+			"name": "kosartorles",
+			"url": "http://localhost:8000/kosartorles?user_id=1&place_id=1",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres kosártörlés - kosartorles": true
+			},
+			"testPassFailCounts": {
+				"Sikeres kosártörlés - kosartorles": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Sikeres kosártörlés - kosartorles": true
+				}
+			]
+		},
+		{
+			"id": "b923a146-c90e-4c31-9fd5-b668aafb3195",
+			"name": "rating",
+			"url": "http://localhost:8000/rating",
+			"time": 37,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres értékelés - rating": true
+			},
+			"testPassFailCounts": {
+				"Sikeres értékelés - rating": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Sikeres értékelés - rating": true
+				}
+			]
+		},
+		{
+			"id": "436837f6-c1e3-4358-8439-0b2108ad746d",
+			"name": "ertekelesek",
+			"url": "http://localhost:8000/ertekelesek?placeId=1",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Sikeres értékelés lekérdezés - ertekelesek": true
+			},
+			"testPassFailCounts": {
+				"Sikeres értékelés lekérdezés - ertekelesek": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Sikeres értékelés lekérdezés - ertekelesek": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1498,
+	"collection": {
+		"requests": [
+			{
+				"id": "765e5771-b79b-42bb-8058-9f450ec651b0",
+				"method": "GET"
+			},
+			{
+				"id": "7bc00f4b-df3a-4d55-8b81-bf554b8cb7be",
+				"method": "POST"
+			},
+			{
+				"id": "570b1ffe-244c-4472-b6e0-78a2bf9dec2a",
+				"method": "GET"
+			},
+			{
+				"id": "05fea3cf-7043-4ad8-a9a9-d1cd98114b73",
+				"method": "GET"
+			},
+			{
+				"id": "d9dffc34-51b6-4861-89a8-ede3222bcb1b",
+				"method": "GET"
+			},
+			{
+				"id": "2ef33257-a131-488b-8fd7-195deb807d6b",
+				"method": "GET"
+			},
+			{
+				"id": "4df1ec55-8584-4bab-b7e9-812ed6e4900d",
+				"method": "GET"
+			},
+			{
+				"id": "90decce4-81b9-44fa-990a-e3e3a4d33edc",
+				"method": "GET"
+			},
+			{
+				"id": "8600cd6b-c713-4991-84e2-582edfff877a",
+				"method": "POST"
+			},
+			{
+				"id": "792e5c13-de28-4377-a317-fb1a9f162f11",
+				"method": "PUT"
+			},
+			{
+				"id": "c246fb9e-6ab4-4f19-8b19-33568f4a8e02",
+				"method": "DELETE"
+			},
+			{
+				"id": "950b913a-d626-43c7-b487-22f51393cd3f",
+				"method": "POST"
+			},
+			{
+				"id": "ad3e1c7f-831c-4f80-9021-a9cc0909db8e",
+				"method": "POST"
+			},
+			{
+				"id": "0027786e-d3e8-4fc9-9cfe-31da7b97c640",
+				"method": "PUT"
+			},
+			{
+				"id": "0b0a9352-d263-4ae2-be4a-3d07bf406886",
+				"method": "GET"
+			},
+			{
+				"id": "e51d0525-385e-49dc-9fbc-c38b0fb29afb",
+				"method": "GET"
+			},
+			{
+				"id": "d3d9419c-a895-434f-9c82-9637f4f05a5f",
+				"method": "GET"
+			},
+			{
+				"id": "629f669d-dd7f-47ca-9b5b-39264a2a3676",
+				"method": "PUT"
+			},
+			{
+				"id": "b4f0ea1c-5d2a-4ea5-9f04-01633ed0aa19",
+				"method": "POST"
+			},
+			{
+				"id": "ca70854d-a890-4950-8dc7-10d1c8cc0549",
+				"method": "POST"
+			},
+			{
+				"id": "acaff74c-4c38-469c-9ff0-8b1345dfe3b6",
+				"method": "PUT"
+			},
+			{
+				"id": "ff81b292-a6e4-4280-91da-5f4a29b086b2",
+				"method": "GET"
+			},
+			{
+				"id": "7b7c75fd-de32-4a52-a108-84df7a0a07e7",
+				"method": "PUT"
+			},
+			{
+				"id": "1af909e6-01e3-473d-883d-0ee867ad72c0",
+				"method": "GET"
+			},
+			{
+				"id": "da55fcce-ba10-480e-b0e2-cf0bf58d186a",
+				"method": "GET"
+			},
+			{
+				"id": "0f758833-0b48-4014-9b6b-2c9b2b02f61a",
+				"method": "GET"
+			},
+			{
+				"id": "44ba438c-d269-480b-bbd5-9316aef96753",
+				"method": "POST"
+			},
+			{
+				"id": "85cdceb9-2b6e-40ea-ab63-e3bc93fb644f",
+				"method": "GET"
+			},
+			{
+				"id": "c441ea10-b74b-441d-ab93-d4fb9e84318d",
+				"method": "POST"
+			},
+			{
+				"id": "7197892e-15d8-4e14-9d95-840004c6ae4a",
+				"method": "POST"
+			},
+			{
+				"id": "85cd04f5-3ad8-4294-97e5-0c5e3b0043c3",
+				"method": "GET"
+			},
+			{
+				"id": "55716823-0223-4319-b3c2-7af404a7fcff",
+				"method": "POST"
+			},
+			{
+				"id": "dfc80cbd-d39c-4580-8ba9-ab85e9c5f8f3",
+				"method": "DELETE"
+			},
+			{
+				"id": "03dc79f8-5074-4a24-9843-2926d700d454",
+				"method": "POST"
+			},
+			{
+				"id": "fba9e526-c205-467f-8d5a-2810885822f0",
+				"method": "GET"
+			},
+			{
+				"id": "a62992e6-49e1-4f7f-9523-2ab4cb016751",
+				"method": "GET"
+			},
+			{
+				"id": "bcf48497-fe98-4b3a-b8fc-a2cf369ce5d0",
+				"method": "POST"
+			},
+			{
+				"id": "96900166-ae4d-466d-be80-d85f622b8cf7",
+				"method": "DELETE"
+			},
+			{
+				"id": "0594f40c-cbbd-489c-90b7-e1a237fece48",
+				"method": "DELETE"
+			},
+			{
+				"id": "b923a146-c90e-4c31-9fd5-b668aafb3195",
+				"method": "POST"
+			},
+			{
+				"id": "436837f6-c1e3-4358-8439-0b2108ad746d",
+				"method": "GET"
+			}
+		]
+	}
+}
