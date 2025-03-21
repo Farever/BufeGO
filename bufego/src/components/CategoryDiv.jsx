@@ -7,13 +7,14 @@ export default function CategoryDiv({catId, catNev, termekek, buttonActions})
     return(
         <Row className="border border-warning rounded my-2" id={catNev}>
             <h1 style={{textDecoration: "underline"}}>{catNev}</h1>
-            {termekek.filter((p) => p.category_id == catId).map((p) => {
+            {termekek.filter((p) => p.category_id == catId && p.deleted == "0").map((p) => {
                 return(
                     <UserProductCard 
                         nev={p.name} 
                         ar={p.price}
                         img={p.image}
                         key={p.id}
+                        isAvaliable={p.is_avaliable}
                         action={()=>{buttonActions(p.id)}}
                     />
                 )

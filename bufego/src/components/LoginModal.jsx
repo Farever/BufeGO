@@ -4,7 +4,7 @@ import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginState, setLoginState] = useState(false);
@@ -25,8 +25,6 @@ const LoginModal = ({ isOpen, onClose }) => {
     // Jelszó validáció
     if (!password) {
       errors.password = 'A jelszó megadása kötelező.';
-    } else if (password.length < 6) {
-      errors.password = 'A jelszónak legalább 6 karakter hosszúnak kell lennie.';
     }
 
     setValidationError(errors);
@@ -38,13 +36,16 @@ const LoginModal = ({ isOpen, onClose }) => {
     setError(null);
     try {
       const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`);
+      console.log(response);
       if (sha512(password) === response.data.valasz[0].passcode) {
         setLoginState(true);
         alert('Sikeres bejelentkezés!');
+        
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }
     } catch (err) {
+      console.log(err);
       setError('Hiba történt a bejelentkezés során. Kérjük, próbálja újra később.');
     } finally {
       setIsLoading(false);
@@ -108,7 +109,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           </Button>
 
           <div className="modal-links">
-            <a href="#">Elfelejtetted a jelszavad?</a>
+            <a href='#' onClick={onForgottenPassword}>Elfelejtetted a jelszavad?</a>
           </div>
         </Form>
       </Modal.Body>

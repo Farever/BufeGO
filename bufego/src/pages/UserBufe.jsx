@@ -1,20 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Loading from "../components/Loading";
 import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
 import { Container, Navbar, NavbarText, Nav } from "react-bootstrap";
 import UserProductCard from "../components/UserProductCard";
 import ProductToCartModal from "../components/ProductToCartModal";
+import CartModal from "../components/CartModal";
+import { useParams } from "react-router-dom";
 
-export default function UserBufe()
+export default function UserBufe({isCartShown, cartSet})
 {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSeletdetProduct] = useState([]);
-
     const [modalShown, setModalShown] = useState(false);
+    const [frissits, setFrissits] = useState(false);
+
+    const { bufeId } = useParams();
     
     useEffect(() =>
     {
@@ -24,7 +28,7 @@ export default function UserBufe()
         {
             try
             {
-                const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
+                const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : bufeId}});
 
                 if(response.status == 200)
                 {
@@ -46,7 +50,7 @@ export default function UserBufe()
         const fetchProduct = async () => {
             try
             {
-                const response = await axios.get("http://localhost:8000/termekek", {params : {place_id : "1"}});
+                const response = await axios.get("http://localhost:8000/termekek", {params : {place_id : bufeId}});
 
                 if(response.status == 200)
                 {
@@ -73,7 +77,7 @@ export default function UserBufe()
         try
             {
                 const response = await axios.post("http://localhost:8000/kosarba", {
-                    "place_id" : 1,
+                    "place_id" : bufeId,
                     "user_id" : 1,
                     "quantity" : q,
                     "product_id" : pid
@@ -82,6 +86,7 @@ export default function UserBufe()
                 if(response.status == 200)
                 {
                     alert("Sikeres kosárba tétel!");
+                    setFrissits(true);
                     setModalShown(false);
                 }
 
@@ -124,6 +129,7 @@ export default function UserBufe()
 
             </Container>
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={()=>{setModalShown(false)}} addToCart={AddToCart} />
+            <CartModal isShown={isCartShown} onClose={()=>{cartSet(false)}} stopFrissit={() => {setFrissits(false)}} frissits={frissits}/>
         </>
     )
 }

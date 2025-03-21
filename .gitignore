@@ -130,3 +130,4 @@ dist
 .pnp.*
 
 /api/vendor
+/test/vendor

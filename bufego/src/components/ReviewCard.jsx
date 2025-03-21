@@ -1,23 +1,19 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import Rating from '@mui/material/Rating';
+
 
 const ReviewCard = ({ review }) => {
-  const stars = Array.from({ length: 5 }, (_, index) => (
-    <i key={index} className={`fas fa-star ${index < review.rating ? 'filled' : ''}`}></i>
-  ));
-
   return (
     <div className="review-card">
       <div className="review-header">
-        <span className="review-customer">{review.customer}</span>
-        <span className="review-id">#{review.productId}</span>
+        <h3 className="review-customer">{review.name}</h3>
+        <p className="review-id">Rendelés: {review.order_id}</p>
+        <p>Dátum: {review.date}</p>
       </div>
       <div className="review-content">
-        <div className="review-stars">{stars}</div>
+      <Rating name="read-only" value={review.rating*1} precision={0.5} readOnly />
         <p className="review-comment">{review.comment}</p>
-        <Button variant="primary" size="sm">
-          Részletek
-        </Button>
       </div>
     </div>
   );

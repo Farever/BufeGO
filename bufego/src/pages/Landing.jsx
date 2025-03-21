@@ -6,10 +6,12 @@ import RegisterModal from '../components/RegisterModal';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../styles/landing.css';
 import axios from 'axios';
+import PasswordModal from '../components/passwordChange';
 
 const Landing = () => {
     const [schoolsData, setSchoolsData] = useState([]);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
     const handleLoginClick = () => {
@@ -18,6 +20,14 @@ const Landing = () => {
 
     const handleCloseLoginModal = () => {
         setIsLoginModalOpen(false);
+    };
+
+    const handlePasswordModalOpen = () => {
+        setIsPasswordModalOpen(true);
+    };
+
+    const handleClosePasswordModal = () => {
+        setIsPasswordModalOpen(false);
     };
 
     const handleRegisterClick = () => {
@@ -58,7 +68,7 @@ const Landing = () => {
                     <p>Nézd meg a te sulidban ott vagyunk-e már</p>
                 </Col>
                 <Col xs={12} md={6} className="hero-image text-center">
-                    <img src="../src/assets/images/coffe-cup.png" alt="Coffee cup" className="img-fluid" />
+                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup_lhxmbu" alt="Coffee cup" className="img-fluid" />
                 </Col>
             </Row>
 
@@ -87,7 +97,8 @@ const Landing = () => {
                 </Col>
             </Row>
 
-            <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
+            <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal}/>
+            <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} onForgottenPassword={handlePasswordModalOpen} />
             <RegisterModal isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
         </Container>
     );

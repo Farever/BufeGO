@@ -16,19 +16,22 @@ import AdminReviews from "./pages/AdminReviews";
 import Navigation from "./components/UserNavBar";
 import UserBufe from "./pages/UserBufe";
 import OrdersPage from "./pages/Orders";
+import { useState } from "react";
 
 function App() {
+  const [isCartOpen, setCartOpen] = useState(false);
+
   return (
     <BrowserRouter>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <AdminNavbar />
-        <Navigation/>
+        <Navigation cartClickAction={()=>{setCartOpen(true)}}/>
         <div className="container mt-4" style={{ flex: 1 }}>
           <Routes>
             <Route>
               <Route index element={<Landing />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/home/bufe" element={<UserBufe />} />
+              <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
               <Route path="/home/myorders" element={<OrdersPage />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
