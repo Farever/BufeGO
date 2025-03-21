@@ -5,6 +5,7 @@ import ActionButton from "./ActionButton";
 
 function Editmodal({show, handleClose, product})
 {
+    console.log(product);
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);

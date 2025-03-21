@@ -594,7 +594,7 @@ function handleTermekek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
+    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
     return ['valasz' => $response];
 }
 
@@ -613,7 +613,7 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
         
     $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
 
-    $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE id = {$_POST['id']} && deleted = 0");
+    $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE `id` = '{$_POST['id']}' && `deleted` = '0'");
 
     if (isset($_FILES["image"])) {
         $file = $_FILES['image'];

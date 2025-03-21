@@ -21,7 +21,7 @@ const Admin = () => {
       const response = await axios.get('http://localhost:8000/admin_fo', {
         params: { admin_id: "4" },
       });
-      setBuffets(response.data.valasz); // await eltávolítva, mert a setBuffets nem promóciót ad vissza
+      setBuffets(response.data.valasz);
       console.log(response.data.valasz);
     } catch (err) {
       setError(err.message);
