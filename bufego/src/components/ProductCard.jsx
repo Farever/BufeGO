@@ -9,7 +9,6 @@ const ProductCard = ({ product, handleShow }) => {
   const deleteOpen = () => {setDeleteShow(true);};
 
   const deleteProduct = async() => {
-    console.log(JSON.stringify({id: parseInt(product.id)}))
     let response = await fetch('http://localhost:8000/termek_del', {
       method: "DELETE",
       headers: {

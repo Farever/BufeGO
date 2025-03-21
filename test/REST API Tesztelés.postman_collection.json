@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "f8250d2c-dbea-4b54-8287-66ac81e5015f",
 		"name": "REST API Tesztelés 2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "34433125"
 	},
 	"item": [
@@ -409,17 +409,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/kategoriamodositas",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"kategoriamodositas"
-					]
-				},
+				"url": "http://localhost:8000/kategoriamodositas",
 				"description": "Sikeres módosítás - Mock kategoriaModosit: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
 			},
 			"response": []
@@ -447,24 +437,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"bufeId\": \"2\",\n    \"katName\": \"Új kategória\",\n    \"category_placement\" : 0\n}",
+					"raw": "{\n    \"bufeId\": \"2\",\n    \"katName\": \"Új kategória\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/kategoriafeltoltes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"kategoriafeltoltes"
-					]
-				},
+				"url": "http://localhost:8000/kategoriafeltoltes",
 				"description": "Sikeres feltöltés - Mock kategoriaFeltolt: 5 (új kategória ID-ja)\nElvárt eredmény: ['valasz' => 5]"
 			},
 			"response": []
@@ -489,8 +469,11 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"packages": {},
-						"type": "text/javascript"
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -507,7 +490,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/kategoriatorles?katId=2",
+					"raw": "http://localhost:8000/kategoriatorles?katId=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -519,7 +502,7 @@
 					"query": [
 						{
 							"key": "katId",
-							"value": "2"
+							"value": "3"
 						}
 					]
 				},
@@ -528,7 +511,7 @@
 			"response": []
 		},
 		{
-			"name": "bufemodositas",
+			"name": "bufemodositas_új adatok",
 			"event": [
 				{
 					"listen": "test",
@@ -558,7 +541,7 @@
 						},
 						{
 							"key": "name",
-							"value": "Új név",
+							"value": "Teszt név",
 							"type": "text"
 						},
 						{
@@ -574,21 +557,67 @@
 						{
 							"key": "img",
 							"type": "file",
-							"src": "/C:/Users/13c-nagyl/Downloads/Képernyőkép 2025-03-18 111713.png"
+							"src": "/C:/Users/13c-nagyl/Downloads/istockphoto-1147544807-612x612.jpg"
 						}
 					]
 				},
-				"url": {
-					"raw": "http://localhost:8000/bufemodositas",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"bufemodositas"
+				"url": "http://localhost:8000/bufemodositas",
+				"description": "Sikeres módosítás - Mock bufeModositas: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
+			},
+			"response": []
+		},
+		{
+			"name": "bufemodositas_csak_uj_kep",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Sikeres módosítás - bufemodositas\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Teszt név",
+							"type": "text"
+						},
+						{
+							"key": "desc",
+							"value": "Új leírás",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "+3620123456789",
+							"type": "text"
+						},
+						{
+							"key": "img",
+							"type": "file",
+							"src": "/C:/Users/13c-nagyl/Downloads/istockphoto-1147544807-612x612.jpg"
+						}
 					]
 				},
+				"url": "http://localhost:8000/bufemodositas",
 				"description": "Sikeres módosítás - Mock bufeModositas: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
 			},
 			"response": []
@@ -623,17 +652,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/bufefeltoltes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"bufefeltoltes"
-					]
-				},
+				"url": "http://localhost:8000/bufefeltoltes",
 				"description": "Sikeres feltöltés - Mock bufeAdatokFeltoles: 10 (új büfé ID-ja)\nElvárt eredmény: ['valasz' => 10]"
 			},
 			"response": []
@@ -778,7 +797,7 @@
 							"pm.test(\"Sikeres regisztráció - felhasznaloregisztracio\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"    let jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -798,17 +817,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/felhasznaloregisztracio",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"felhasznaloregisztracio"
-					]
-				},
+				"url": "http://localhost:8000/felhasznaloregisztracio",
 				"description": "Sikeres regisztráció - Mock felhasznaloAdatokFeltoltese: 5 (új user ID-ja)\nElvárt eredmény: ['valasz' => 5]"
 			},
 			"response": []
@@ -843,17 +852,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/felhasznaloadatmodositas",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"felhasznaloadatmodositas"
-					]
-				},
+				"url": "http://localhost:8000/felhasznaloadatmodositas",
 				"description": "Sikeres módosítás - Mock felhasznaloAdatokModositas: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
 			},
 			"response": []
@@ -869,6 +868,7 @@
 							"    pm.response.to.have.status(200);\r",
 							"    let jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('valasz', 'Sikeres művelet!');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -881,24 +881,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"ujteszt@teszt.hu\",\n    \"passcode\": \"{{$randomPassword}}\"\n}",
+					"raw": "{\n    \"email\": \"ujteszt2@teszt.hu\",\n    \"passcode\": \"{{$randomPassword}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/jelszovaltoztat",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"jelszovaltoztat"
-					]
-				},
+				"url": "http://localhost:8000/jelszovaltoztat",
 				"description": "Sikeres jelszóváltoztatás - Mock jelszoValtoztatas: 'Sikeres művelet!'\nElvárt eredmény: ['valasz' => 'Sikeres művelet!']"
 			},
 			"response": []
@@ -933,17 +923,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/iskolafeltoltes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"iskolafeltoltes"
-					]
-				},
+				"url": "http://localhost:8000/iskolafeltoltes",
 				"description": "Sikeres feltöltés - Mock iskolaFeltoltes: 10 (új iskola ID-ja)\nElvárt eredmény: ['valasz' => 10]"
 			},
 			"response": []
@@ -971,17 +951,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:8000/iskolak",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"iskolak"
-					]
-				},
+				"url": "http://localhost:8000/iskolak",
 				"description": "Sikeres lekérdezés - Mock lekeres: [['id' => 1, 'name' => 'Iskola 1'], ['id' => 2, 'name' => 'Iskola 2']]\nElvárt eredmény: ['valasz' => [['id' => 1, 'name' => 'Iskola 1'], ['id' => 2, 'name' => 'Iskola 2']]"
 			},
 			"response": []
@@ -1016,17 +986,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/cimfeltoltes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"cimfeltoltes"
-					]
-				},
+				"url": "http://localhost:8000/cimfeltoltes",
 				"description": "Sikeres feltöltés - Mock cimFeltoltes: 20 (új cím ID-ja)\nElvárt eredmény: ['valasz' => 20]"
 			},
 			"response": []
@@ -1203,17 +1163,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/bufe",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"bufe"
-					]
-				},
+				"url": "http://localhost:8000/bufe",
 				"description": "Sikeres lekérdezés"
 			},
 			"response": []
@@ -1295,17 +1245,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/bufe_rendelesstatusz",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"bufe_rendelesstatusz"
-					]
-				},
+				"url": "http://localhost:8000/bufe_rendelesstatusz",
 				"description": "Sikeres módosítás"
 			},
 			"response": []
@@ -1320,7 +1260,7 @@
 							"pm.test(\"Sikeres felvitel - termek_felv\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"    let jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.valasz).to.be.a('string');\r",
+							"    pm.expect(jsonData.valasz).to.be.a('number');\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1329,28 +1269,59 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"place\": 1,\n    \"category\": 1,\n    \"img\": \"kep_elerese.jpg\",\n    \"name\": \"Új Termék\",\n    \"description\": \"Termék leírása\",\n    \"allergens\": \"Glutén\",\n    \"is_avaliable\": 1,\n    \"price\": 500\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "place",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "img",
+							"type": "file",
+							"src": "/C:/Users/13c-nagyl/Downloads/V3dUM61eSA2xJOICQwNW9HAXZzLbG3kDahjmFUFX.jpeg"
+						},
+						{
+							"key": "name",
+							"value": "Új Termék",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Termék leírása",
+							"type": "text"
+						},
+						{
+							"key": "allergens",
+							"value": "Glutén",
+							"type": "text"
+						},
+						{
+							"key": "is_avaliable",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "500",
+							"type": "text"
+						},
+						{
+							"key": "place",
+							"value": "1",
+							"type": "text"
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/termek_felv",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"termek_felv"
 					]
 				},
+				"url": "http://localhost:8000/termek_felv",
 				"description": "Sikeres felvitel"
 			},
 			"response": []
@@ -1423,25 +1394,56 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"category_id\": 2,\n    \"image\": \"uj_kep.jpg\",\n    \"name\": \"Módosított Termék\",\n    \"description\": \"Módosított leírás\",\n    \"allergens\": \"Nincs\",\n    \"is_avaliable\": 0,\n    \"price\": 600\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "category_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/13c-nagyl/Downloads/V3dUM61eSA2xJOICQwNW9HAXZzLbG3kDahjmFUFX.jpeg"
+						},
+						{
+							"key": "name",
+							"value": "Módosított Termék",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Módosított leírás",
+							"type": "text"
+						},
+						{
+							"key": "allergens",
+							"value": "Nincs",
+							"type": "text"
+						},
+						{
+							"key": "is_avaliable",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "600",
+							"type": "text"
+						},
+						{
+							"key": "place_id",
+							"value": "1",
+							"type": "text"
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/termek_valt",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"termek_valt"
 					]
 				},
+				"url": "http://localhost:8000/termek_valt",
 				"description": "Sikeres módosítás"
 			},
 			"response": []
@@ -1467,15 +1469,6 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "http://localhost:8000/termek_del?id=2",
 					"protocol": "http",
@@ -1527,17 +1520,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/rendel",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"rendel"
-					]
-				},
+				"url": "http://localhost:8000/rendel",
 				"description": "Sikeres rendelés"
 			},
 			"response": []
@@ -1664,17 +1647,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/kosarba",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"kosarba"
-					]
-				},
+				"url": "http://localhost:8000/kosarba",
 				"description": "Sikeres kosárba helyezés"
 			},
 			"response": []
@@ -1700,17 +1673,8 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8000/kosartargytorles",
+					"raw": "http://localhost:8000/kosartargytorles?id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1718,6 +1682,12 @@
 					"port": "8000",
 					"path": [
 						"kosartargytorles"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
 					]
 				},
 				"description": "Sikeres kosártárgy törlés"
@@ -1745,17 +1715,8 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"user_id\": 1,\n    \"place_id\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8000/kosartorles",
+					"raw": "http://localhost:8000/kosartorles?user_id=1&place_id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1763,6 +1724,16 @@
 					"port": "8000",
 					"path": [
 						"kosartorles"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "place_id",
+							"value": "1"
+						}
 					]
 				},
 				"description": "Sikeres kosártörlés"
@@ -1799,17 +1770,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8000/rating",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"rating"
-					]
-				},
+				"url": "http://localhost:8000/rating",
 				"description": "Sikeres értékelés"
 			},
 			"response": []

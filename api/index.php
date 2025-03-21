@@ -8,13 +8,13 @@ use Cloudinary\Configuration\Configuration;
 Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
 $method = $_SERVER["REQUEST_METHOD"];
-$bodyData = ($method === "POST") ? json_decode(file_get_contents('php://input'), true) : null;
+$bodyData = ($method === "POST" || $method == "PUT") ? json_decode(file_get_contents('php://input'), true) : null;
 $getData = $_GET;
 
 handleEndpoint($endpoint, $method, $bodyData, $getData);
@@ -59,16 +59,16 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bufe' => handleBufe($method, $bodyData),
         'bufe_rendelesek' => handleBufeRendelesek($method, $getData),
         'bufe_rendelesstatusz' => handleRendelesStatusz($method, $bodyData), 
-        'termek_felv' => handleTermekFelv($method, $bodyData),
+        'termek_felv' => handleTermekFelv($method),
         'termekek' => handleTermekek($method, $getData),
         'termek_valt' => handleTermekValt($method, $bodyData),
-        'termek_del' => handleTermekDel($method, $bodyData),
+        'termek_del' => handleTermekDel($method, $getData),
         'rendel' => handleRendel($method, $bodyData),
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
-        'kosartargytorles' => handleKosarTargyTorles($method, $bodyData),
-        'kosartorles' => handleKosarTorles($method, $bodyData),
+        'kosartargytorles' => handleKosarTargyTorles($method, $getData),
+        'kosartorles' => handleKosarTorles($method, $getData),
         'rating' => handleRating($method, $bodyData),
         'ertekelesek' => handleErtekelesek($method, $getData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
@@ -238,7 +238,7 @@ function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['bufeId']) || empty($bodyData['katName'])) {
+    if (!isset($bodyData['bufeId']) || !isset($bodyData['katName'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
@@ -248,17 +248,17 @@ function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a kategória törlését.
  */
-function handleKategoriaTorles(string $method, ?array $bodyData): ?array
+function handleKategoriaTorles(string $method, ?array $getData): ?array
 {
     if ($method !== "DELETE") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['katId'])) {
+    if (empty($getData['katId'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => kategoriaTorol($bodyData['katId'])];
+    return ['valasz' => kategoriaTorol($getData['katId'])];
 }
 
 /**
@@ -274,9 +274,7 @@ function handleBufeModositas(string $method)
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    if (isset($_FILES["img"])) {
-        $imgName = str_replace(' ', '_', $_POST["name"]);
-    }
+    $imgName = str_replace(' ', '_', $_POST["name"]);
 
     $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone'], $imgName);
 
@@ -551,25 +549,35 @@ function handleRendelesStatusz(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a termék felvitelt.
  */
-function handleTermekFelv(string $method, ?array $bodyData): ?array
+function handleTermekFelv(string $method): ?array
 {
-    if ($method !== "PUT") {
+    if ($method !== "POST") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["place"]) || !isset($bodyData["category"]) || !isset($_FILES['img']) || !isset($bodyData['name']) || !isset($bodyData['description']) || !isset($bodyData['allergens']) || !isset($bodyData['is_avaliable']) || !isset($bodyData['price'])) {
+    if (!isset($_POST["place"]) || !isset($_POST["category"]) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price'])) {
+        var_dump($_POST);
+        var_dump($_FILES);
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $imgName = $bodyData["place"]."_product_".str_replace(' ', '_', $bodyData["name"]);
+    $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
 
-    $file = $_FILES['img'];
-    (new UploadApi())->upload($file["tmp_name"], [
-        'public_id' => $imgName, 
-        'quality_analysis' => true,  
-        'colors' => true]);
+    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$_POST['is_avaliable']},{$_POST['price']})");
 
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$bodyData['place']},{$bodyData['category']},'{$imgName}','{$bodyData['name']}','{$bodyData['description']}','{$bodyData['allergens']}',{$bodyData['is_avaliable']},{$bodyData['price']})");
+    if (isset($_FILES["img"])) {
+        $file = $_FILES['img'];
+        (new UploadApi())->upload($file["tmp_name"], [
+            'public_id' => $imgName,
+            'quality_analysis' => true,
+            'colors' => true
+        ]);
+
+        if($response == "Sikertelen művelet!"){
+            return ['valasz' => "Kép feltöltése sikeres!"];
+        }
+    }
+
     return ['valasz' => $response];
 }
 
@@ -602,10 +610,8 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
     if (!isset($_POST['id']) || !isset($_POST['category_id']) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price']) || !isset($_POST['place_id'])) {
         return ['valasz' => "Hiányos adat", 'status' => 400];
     }
-
-    if (isset($_FILES["image"])) {
-        $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
-    }
+        
+    $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
 
     $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE id = {$_POST['id']} && deleted = 0");
 
@@ -628,17 +634,17 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a termék törlést.
  */
-function handleTermekDel(string $method, ?array $bodyData): ?array
+function handleTermekDel(string $method, ?array $getData): ?array
 {
     if ($method !== "DELETE") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData["id"])) {
+    if (empty($getData["id"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$bodyData["id"]}");
+    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$getData["id"]}");
     return ['valasz' => $response];
 }
 
@@ -719,34 +725,34 @@ function handleKosarba(string $method, ?array $bodyData): ?array
     return ['valasz' => $response];
 }
 
-function handleKosarTargyTorles(string $method, ?array $bodyData)
+function handleKosarTargyTorles(string $method, ?array $getData)
 {
     if($method !== "DELETE")
     {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
     
-    if(empty($bodyData['id']))
+    if(empty($getData['id']))
     {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("DELETE FROM `cart` WHERE cart.id = {$bodyData['id']}");
+    $response = valtoztatas("DELETE FROM `cart` WHERE cart.id = {$getData['id']}");
     return ["valasz" => $response];
 }
 
-function handleKosarTorles(string $method, ?array $bodyData)
+function handleKosarTorles(string $method, ?array $getData)
 {
     if($method !== "DELETE")
     {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(empty($bodyData["user_id"]) || empty($bodyData["place_id"])){
+    if(empty($getData["user_id"]) || empty($getData["place_id"])){
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("DELETE FROM `cart` WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']}");
+    $response = valtoztatas("DELETE FROM `cart` WHERE cart.user_id = {$getData['user_id']} AND cart.place_id = {$getData['place_id']}");
     return ["valasz" => $response];
 }
 
