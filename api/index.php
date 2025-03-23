@@ -128,7 +128,7 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
               AND orders.place_id = ?
               GROUP BY orderedproducts.product_id
               ORDER BY vasarolt_mennyiseg DESC
-              LIMIT 1";
+              LIMIT 3";
 
     $params = [$year, $month, $placeId,];
 

@@ -47,19 +47,19 @@ const AdminNavbar = () => {
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/orders'>Rendelések</Nav.Link>
+                                    <Nav.Link href='/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/statistics'>Statisztika</Nav.Link>
+                                    <Nav.Link href='/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/products'>Termékek</Nav.Link>
+                                    <Nav.Link href='/admin/products' id='nav-products'>Termékek</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/categories'>Kategóriák</Nav.Link>
+                                    <Nav.Link href='/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href="/admin/reviews">Értékelések</Nav.Link>
+                                    <Nav.Link href="/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
                                 </Nav.Item>
                             </Nav>
                             <Nav className="me-auto">

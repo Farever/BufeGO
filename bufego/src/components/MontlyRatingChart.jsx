@@ -8,7 +8,7 @@ import "../styles/Stats.css"
 const monthNames = [
   'Jan', 'Febr', 'March', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
 ];
-const year = 1994;
+const year = 2025;
 
 
 function MonthlyRatingChart() {
