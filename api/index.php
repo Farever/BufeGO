@@ -47,6 +47,8 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
         'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
+        'bejelentkezescookie' => handleBejelentkezesCookie($method, $bodyData),
+        'bejelentkezescookieleker' => handleBejCookieVissza($method),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
@@ -341,7 +343,7 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $sql = "SELECT `id`,`passcode` FROM `users` WHERE `email` = '{$data['email']}'";
+    $sql = "SELECT `id`,`passcode`, `name` FROM `users` WHERE `email` = '{$data['email']}'";
     $userData = lekeres($sql);
 
     if (is_array($userData)) {
@@ -350,6 +352,40 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Nincs ilyen e-mail cím'];
     }
 }
+
+
+function handleBejelentkezesCookie($method, $bodyData)
+{
+    if ($method !== "POST") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($bodyData['id']) || empty($bodyData['name'])) {
+        
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    setcookie("user_id", $bodyData["id"], time() + (86400 * 30), "/", "localhost", true, false);
+    setcookie("user_name", $bodyData["name"], time() + (86400 * 30), "/","localhost", true, false);
+
+    return true;
+}
+
+function handleBejCookieVissza($method)
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if(isset($_COOKIE["user_id"]) || isset($_COOKIE["user_name"]))
+    {
+        return ['valasz' => 'Nincs bejelentkezvel!', 'status' => 400];
+    }
+
+    return ["id" => $_COOKIE["user_id"], "name" => $_COOKIE["user_name"]];
+}
+
+
 
 /**
  * Kezeli a felhasználói adatok lekérdezését.

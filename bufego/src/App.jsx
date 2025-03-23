@@ -16,10 +16,31 @@ import AdminReviews from "./pages/AdminReviews";
 import Navigation from "./components/UserNavBar";
 import UserBufe from "./pages/UserBufe";
 import OrdersPage from "./pages/Orders";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
+  const [bejelentkezes, setBejelentkezes] = useState([]);
+  const [userProfile, setUserProfile] = useState([]);
+
+  useEffect(()=>{
+    const getUser = async () => {
+      try{
+        const response = axios.get("http://localhost:8000/bejelentkezescookieleker");
+
+        if((await response).status == 200)
+        {
+          setUserProfile((await response).data)
+        }
+      }
+      catch(error)
+      {
+        console.log(error);
+      }
+    }
+  },bejelentkezes)
+
 
   return (
     <BrowserRouter>
@@ -31,7 +52,7 @@ function App() {
             <Route>
               <Route index element={<Landing />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
+              <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} userData={userProfile}/>} />
               <Route path="/home/myorders" element={<OrdersPage />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
