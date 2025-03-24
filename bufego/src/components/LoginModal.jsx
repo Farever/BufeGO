@@ -35,12 +35,15 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`);
-      console.log(response);
+      const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`, { withCredentials: true });
+      console.log(response.data.valasz)
       if (sha512(password) === response.data.valasz[0].passcode) {
         setLoginState(true);
         alert('Sikeres bejelentkezés!');
-        
+        let data = await fetch("http://localhost:8000/sessdata", {
+          credentials : "include"
+        })
+        console.log((await data.json())["valasz"]);
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }

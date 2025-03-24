@@ -8,8 +8,17 @@ use Cloudinary\Configuration\Configuration;
 Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
+header("Access-Control-Allow-Credentials: true");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+
+if(isset($_COOKIE["PHPSESSID"])){
+    session_id($_COOKIE["PHPSESSID"]);
+    session_start();
+}else{
+    session_start();
+}
 
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
@@ -48,7 +57,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
         'bejelentkezescookie' => handleBejelentkezesCookie($method, $bodyData),
-        'bejelentkezescookieleker' => handleBejCookieVissza($method),
+        'sessdata' => handleGetSessData($method),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
@@ -347,6 +356,8 @@ function handleBejelentkezes($method, $data): ?array
     $userData = lekeres($sql);
 
     if (is_array($userData)) {
+        session_id();
+        $_SESSION["user_id"] = $userData[0]["id"];
         return ['valasz' => $userData];
     } else {
         return ['valasz' => 'Nincs ilyen e-mail cím'];
@@ -371,18 +382,18 @@ function handleBejelentkezesCookie($method, $bodyData)
     return true;
 }
 
-function handleBejCookieVissza($method)
+function handleGetSessData($method)
 {
     if ($method !== "GET") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if(isset($_COOKIE["user_id"]) || isset($_COOKIE["user_name"]))
+    if(!isset($_COOKIE["PHPSESSID"]))
     {
         return ['valasz' => 'Nincs bejelentkezvel!', 'status' => 400];
     }
 
-    return ["id" => $_COOKIE["user_id"], "name" => $_COOKIE["user_name"]];
+    return["valasz" => $_SESSION];
 }
 
 
@@ -956,7 +967,7 @@ function cimFeltoltes($zip, $city, $address)
 
     $cim = valtoztatas($query, 'bufego');
 
-    return json_encode(['valasz' => $cim], JSON_UNESCAPED_UNICODE);
+    return $cim;
 }
 
 function iskolaFeltoltes($name)

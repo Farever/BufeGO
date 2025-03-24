@@ -18,7 +18,6 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [schools, setSchools] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [addId, setAddId] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
@@ -124,6 +123,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
     event.preventDefault();
     if (validateForm()) {
       sendAddressAndRegister();
+      onClose();
     }
   };
 
