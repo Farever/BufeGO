@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Settings() {
+    const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
+    const [addressID, setAddressId] = useState(null);
     const [name, setName] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [city, setCity] = useState('');
@@ -12,6 +15,8 @@ export default function Settings() {
 
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [deactivationSuccess, setDeactivationSuccess] = useState(false);
 
     useEffect(() => {
         const getSession = async () => {
@@ -31,7 +36,7 @@ export default function Settings() {
                     throw new Error("Sikertelen munkamenet adat lekérés");
                 }
             } catch (error) {
-                setErrors(prevErrors => ({...prevErrors, session: error.message }));
+                setErrors(prevErrors => ({ ...prevErrors, session: error.message }));
             } finally {
                 setIsLoading(false);
             }
@@ -48,9 +53,8 @@ export default function Settings() {
 
                 let data = resp.data;
 
+                setAddressId(data.valasz[0].address_id);
                 let addressResp = await axios.get(`http://localhost:8000/cimadatok?Id=${data.valasz[0].address_id}`);
-                console.log("User data:", data.valasz);
-                // Módosítás: a tömb első elemét használjuk
                 const userData = data.valasz[0];
                 const addressData = addressResp.data.valasz[0];
                 setName(userData?.name || '');
@@ -60,7 +64,7 @@ export default function Settings() {
                 setSchool(userData?.school_id || '');
 
             } catch (error) {
-                setErrors(prevErrors => ({...prevErrors, userData: error.message }));
+                setErrors(prevErrors => ({ ...prevErrors, userData: error.message }));
             } finally {
                 setIsLoading(false);
             }
@@ -75,7 +79,7 @@ export default function Settings() {
                 }
                 setSchools(response.data.valasz || []);
             } catch (error) {
-                setErrors(prevErrors => ({...prevErrors, schools: error.message }));
+                setErrors(prevErrors => ({ ...prevErrors, schools: error.message }));
             } finally {
                 setIsLoading(false);
             }
@@ -119,23 +123,62 @@ export default function Settings() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSuccessMessage(''); // Töröljük a korábbi sikeres üzenetet
+        setErrors({}); // Töröljük a korábbi hibákat
+
         if (validateForm()) {
-            console.log('Adatok mentése:', {
-                name,
-                zipCode,
-                city,
-                addressLine,
-                school,
-            });
+            setIsLoading(true); // Betöltésjelző bekapcsolása
+
+            try {
+                // Cím módosítása
+                const addressRes = await axios.post('http://localhost:8000/cimmodositas', {
+                    "Id": addressID,
+                    "zip": zipCode,
+                    "city": city,
+                    "address": addressLine
+                });
+
+                // Felhasználói adatok módosítása
+                const userDataRes = await axios.post('http://localhost:8000/felhasznaloadatmodositas', {
+                    "userId": userId,
+                    "name": name,
+                    "school": school
+                });
+
+                // Mindkét kérés sikeres volt?
+                if (addressRes.status === 200 && userDataRes.status === 200) {
+                    setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
+                } else {
+                    throw new Error('Hiba történt a mentés során.');
+                }
+
+            } catch (error) {
+                setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
+            } finally {
+                setIsLoading(false); // Betöltésjelző kikapcsolása
+            }
         }
-        {/*TODO : adatok elmentése adatbázisba*/}
     };
 
-    const handleDeactivateAccount = () => {
-        console.log('Fiók inaktiválása...');
-        {/*TODO : Fiók inaktiválása*/}
+    const handleDeactivateAccount = async () => {
+        setIsLoading(true);
+        setErrors({});
+        try {
+            let resp = await axios.get(`http://localhost:8000/felhasznaloinaktivalas?userId=${userId}`);
+
+            if (resp.status === 200) {
+                setDeactivationSuccess(true);
+                navigate('/logout');
+            } else {
+                throw new Error("Hiba történt a fiók inaktiválása során.");
+            }
+        } catch (error) {
+            setErrors(prevErrors => ({ ...prevErrors, deactivation: error.message }));
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -152,6 +195,19 @@ export default function Settings() {
                             ))}
                         </div>
                     )}
+
+                    {successMessage && (
+                        <div className="alert alert-success">
+                            {successMessage}
+                        </div>
+                    )}
+
+                    {deactivationSuccess && (
+                        <div className="alert alert-info">
+                            A fiók sikeresen inaktiválva lett.
+                        </div>
+                    )}
+
 
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">

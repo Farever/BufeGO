@@ -61,11 +61,13 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
+        'felhasznaloinaktivalas' => handleFelhasznaloInaktivalas($method, $getData),
         'jelszovaltoztat' => handleJelszoValtoztat($method, $bodyData),
         'iskolafeltoltes' => handleIskolaFeltoltes($method, $bodyData),
         'iskolak' => handleIskolak($method),
         'cimfeltoltes' => handleCimFeltoltes($method, $bodyData),
         'cimadatok' => handleCimAdatok($method, $getData),
+        'cimmodositas' => handleCimModositas($method, $bodyData),
         'kinalatlekeres' => handleKinalatLekeres($method, $getData),
         'admin_fo' => handleAdminFo($method, $getData),
         'bufe' => handleBufe($method, $bodyData),
@@ -440,13 +442,25 @@ function handleFelhasznaloAdatmodositas(string $method, ?array $bodyData): ?arra
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($bodyData['email']) || empty($bodyData['userId']) || empty($bodyData['name']) || empty($bodyData['address_id']) || empty($bodyData['phone']) || empty($bodyData['school'])) {
+    if ( empty($bodyData['userId']) || empty($bodyData['name']) || empty($bodyData['school'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => felhasznaloAdatokModositas($bodyData['userId'], $bodyData['email'], $bodyData['name'], $bodyData['address_id'], $bodyData['phone'], $bodyData['school'], NULL, 0)];
+    return ['valasz' => felhasznaloAdatokModositas($bodyData['userId'], $bodyData['name'], $bodyData['school'])];
 }
 
+function handleFelhasznaloInaktivalas(string $method, ?array $data): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if ( empty($data['userId'])) {
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    return ['valasz' => valtoztatas("UPDATE `users` SET `isActive`='0' WHERE `id` = ?", 'i', [$data["userId"]])];
+}
 /**
  * Kezeli a jelszóváltoztatást.
  */
@@ -515,6 +529,19 @@ function handleCimAdatok(string $method, ?array $getData): ?array
     }
 
     return ['valasz' => lekeres("SELECT * FROM `addresses` WHERE `id` = ?", "i", [$getData['Id']])];
+}
+
+function handleCimModositas(string $method, ?array $data): ?array
+{
+    if ($method !== "POST") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($data['Id']) || empty($data['zip']) || empty($data['city']) || empty($data['address'])) {
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    return ['valasz' => valtoztatas("UPDATE `addresses` SET `zip_code`=?,`city`=?,`address`=? WHERE `id` = ?", "issi", [$data['zip'], $data['city'],$data['address'], $data['Id']])];
 }
 
 /**
@@ -948,9 +975,9 @@ function felhasznaloiAdatokLekerese($userId)
     }
 }
 
-function felhasznaloAdatokModositas($userId, $email, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin)
+function felhasznaloAdatokModositas($userId, $name, $school_id)
 {
-    $query = "UPDATE `users` SET `email`='{$email}', `name`='{$name}',`address_id`='{$address_id}',`phone`='{$phone}',`school_id`='{$school_id}' WHERE `id` = {$userId};";
+    $query = "UPDATE `users` SET `name`='{$name}',`school_id`='{$school_id}' WHERE `id` = {$userId};";
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
