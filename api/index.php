@@ -65,6 +65,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'iskolafeltoltes' => handleIskolaFeltoltes($method, $bodyData),
         'iskolak' => handleIskolak($method),
         'cimfeltoltes' => handleCimFeltoltes($method, $bodyData),
+        'cimadatok' => handleCimAdatok($method, $getData),
         'kinalatlekeres' => handleKinalatLekeres($method, $getData),
         'admin_fo' => handleAdminFo($method, $getData),
         'bufe' => handleBufe($method, $bodyData),
@@ -501,6 +502,19 @@ function handleCimFeltoltes(string $method, ?array $bodyData): ?array
     }
 
     return ['valasz' => cimFeltoltes($bodyData['zip'], $bodyData['city'], $bodyData['address'])];
+}
+
+function handleCimAdatok(string $method, ?array $getData): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData['Id'])) {
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    return ['valasz' => lekeres("SELECT * FROM `addresses` WHERE `id` = ?", "i", [$getData['Id']])];
 }
 
 /**
