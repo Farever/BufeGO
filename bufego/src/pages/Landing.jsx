@@ -76,10 +76,10 @@ const Landing = () => {
                 <Col xs={12}>
                     <h2>Iskolák, ahol ott vagyunk</h2>
                 </Col>
-                <Row className='justify-content-around'>
+                <Row>
                     {schoolsData?.map((school, index) => {
                         return (
-                            <Col lg={4} md={6} className="schools-grid mx-auto">
+                            <Col lxs={12} sm={6} md={4} lg={3}>
                                 <SchoolCard key={'schoolsCard' + index} schoolName={school.name} />
                             </Col>
                         )

@@ -61,15 +61,19 @@ const Admin = () => {
       {isLoading && <Loading />}
       {error && <div className="error-message">{error}</div>}
       <Row>
-        {buffets.map((buffet) => (
-          <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
-            <BuffetCard
-              buffet={buffet}
-              isOnAdminPage={true}
-              onModClick={() => handleModClick(buffet.id)} // Javított rész
-            />
-          </Col>
-        ))}
+        {buffets.length > 0 ? (
+          buffets.map((buffet) => (
+            <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
+              <BuffetCard
+                buffet={buffet}
+                isOnAdminPage={true}
+                onModClick={() => handleModClick(buffet.id)}
+              />
+            </Col>
+          ))
+        ) : (
+          <Col xs={12}>Nincs még regisztrált büfé!</Col>
+        )}
       </Row>
     </Container>
   );

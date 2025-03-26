@@ -19,6 +19,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [addId, setAddId] = useState(null);
 
   useEffect(() => {
     const fetchSchools = async () => {
@@ -93,15 +94,16 @@ const RegisterModal = ({ isOpen, onClose }) => {
       const newAddId = addressResponse.data.valasz;
       setAddId(newAddId);
 
+      console.log("Hgr")
       const registerResponse = await axios.put(
         "http://localhost:8000/felhasznaloregisztracio",
         {
-          email,
-          passcode: sha512(password),
-          name: `${lastName} ${firstName}`,
-          address_id: newAddId,
-          phone,
-          school,
+          "email" : email,
+          "passcode": sha512(password),
+          "name": `${lastName} ${firstName}`,
+          "address_id": newAddId,
+          "phone" : phone,
+          "school" : school,
         },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -123,7 +125,6 @@ const RegisterModal = ({ isOpen, onClose }) => {
     event.preventDefault();
     if (validateForm()) {
       sendAddressAndRegister();
-      onClose();
     }
   };
 

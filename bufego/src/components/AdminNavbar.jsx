@@ -12,23 +12,23 @@ const AdminNavbar = () => {
     const showNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
 
     const [buffets, setBuffets] = useState([]);
-  
+
     useEffect(() => {
         const fetchBuffets = async () => {
-          try {
-            const response = await axios.get('http://localhost:8000/admin_fo', {
-              params: { admin_id: "4" },
-            });
-            await setBuffets(response.data.valasz);
-          } catch (err) {
-            console.log(err.message);
-          }
+            try {
+                const response = await axios.get('http://localhost:8000/admin_fo', {
+                    params: { admin_id: "4" },
+                });
+                await setBuffets(response.data.valasz);
+            } catch (err) {
+                console.log(err.message);
+            }
         };
-    
-        fetchBuffets();
-      }, []);
 
-      const handleBufeValasztas = (event) => {
+        fetchBuffets();
+    }, []);
+
+    const handleBufeValasztas = (event) => {
         const bufeId = event.target.value;
         // Itt végezheted el az iskola ID-jával kapcsolatos műveleteket, pl. navigálás
         console.log("Kiválasztott bufe ID:", bufeId);
@@ -63,22 +63,28 @@ const AdminNavbar = () => {
                                 </Nav.Item>
                             </Nav>
                             <Nav className="me-auto">
-                            <select className='form-select' name='bufe' onChange={handleBufeValasztas}>
-                                <option value="">Válassz büfét</option>
-                                {buffets.map(bufe => (
-                                    <option key={bufe.id} value={bufe.id}>
-                                        {bufe.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </Nav>
-                        <Nav>
-                            <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
+                                {buffets && Array.isArray(buffets) && buffets.length > 0 ? (
+                                    <select
+                                        className="form-select"
+                                        name="bufe"
+                                        onChange={handleBufeValasztas}
+                                    >
+                                        <option value="">Válassz büfét</option>
+                                        {buffets.map((bufe) => (
+                                            <option key={bufe.id} value={bufe.id}>
+                                                {bufe.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : null}
+                            </Nav>
+                            <Nav>
+                                <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
+                                    <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
