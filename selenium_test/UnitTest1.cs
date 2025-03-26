@@ -66,6 +66,7 @@ namespace Selenium_Tesztek
         {
             driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:5173");
+            driver.Manage().Window.Size = new System.Drawing.Size(1200, 800);
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -87,13 +88,13 @@ namespace Selenium_Tesztek
         {
             driver.Quit();
         }
-        
+
         [TestMethod]
         public void Navbar_Test()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin");
-            driver.Manage().Window.Size = new System.Drawing.Size(1200, 800);
 
+            Thread.Sleep(1000);
             var orderLink = driver.FindElement(By.Id("nav-orders"));
 
             orderLink.Click();
@@ -140,7 +141,7 @@ namespace Selenium_Tesztek
             int orderIdNumber = int.Parse(orderId.Split(':')[1].Trim());
             string emailAddress = email.Split(':')[1].Trim();
             int statusNumber = int.Parse(status.Split(':')[1].Trim());
-            DateTime orderDate = DateTime.Parse(orderTime.Split(':')[1].Trim()+ orderTime.Split(':')[2].Trim() + orderTime.Split(':')[3].Trim());
+            DateTime orderDate = DateTime.Parse(orderTime.Split(':')[1].Trim() + orderTime.Split(':')[2].Trim() + orderTime.Split(':')[3].Trim());
             int totalAmount = int.Parse(total.Replace("Összesen:", "").Replace("Ft", "").Trim());
 
             Assert.IsTrue(orderIdNumber > 0, "Order ID nem 0");
@@ -150,7 +151,7 @@ namespace Selenium_Tesztek
             Assert.IsTrue(orderDate > DateTime.MinValue, "Valid a rendelés dátuma");
         }
 
-
+        /*
         [TestMethod]
         public void Navbar_Test()
         {
@@ -184,6 +185,7 @@ namespace Selenium_Tesztek
 
             driver.Quit();
         }
+        */
     }
 
     [TestClass]
@@ -214,6 +216,36 @@ namespace Selenium_Tesztek
         [TestCleanup]
         public void Cleanup()
         {
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void Bufek_Lathatok()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/home");
+
+            Thread.Sleep(2000);
+            var container = driver.FindElement(By.ClassName("row"));
+            var cards = container.FindElements(By.XPath("./div"));
+
+            Assert.IsTrue(cards.Count > 0, "A büfé kártyák megjelennek");
+
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void Bufe_Link()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/home");
+
+            Thread.Sleep(2000);
+            var container = driver.FindElement(By.ClassName("row"));
+            var cards = container.FindElements(By.XPath("./div"));
+            var button = cards[0].FindElement(By.XPath("./div/div/button"));
+            button.Click();
+
+            Assert.IsTrue(!driver.Url.Equals("http://localhost:5173/home"), "A büfé kártyák gombjai átdobnak");
+
             driver.Quit();
         }
     }
