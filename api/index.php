@@ -53,7 +53,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
         'kategoriatorles' => handleKategoriaTorles($method, $getData),
         'bufemodositas' => handleBufeModositas($method),
-        'bufefeltoltes' => handleBufeFeltoltes($method, $bodyData),
+        'bufefeltoltes' => handleBufeFeltoltes($method, $_POST),
         'userbufe' => handleUserBufe($method, $getData),
         'bejelentkezes' => handleBejelentkezes($method, $getData),
         'bejelentkezescookie' => handleBejelentkezesCookie($method, $bodyData),
@@ -313,12 +313,24 @@ function handleBufeModositas(string $method)
  */
 function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
 {
-    if ($method !== "PUT") {
+    if ($method !== "POST") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
     if (empty($bodyData['adminUserId']) || empty($bodyData['bufeName']) || empty($bodyData['desc']) || empty($bodyData['phone']) || empty($bodyData['addressId']) || empty($bodyData['schoolId'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    if(isset($_FILES["image"])){
+        $imgName = str_replace(' ', '_', $bodyData["bufeName"]);
+        $file = $_FILES['image'];
+        (new UploadApi())->upload($file["tmp_name"], [
+            'public_id' => $imgName,
+            'quality_analysis' => true,
+            'colors' => true
+        ]);
+
+        return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'], $imgName)];
     }
 
     return ['valasz' => bufeAdatokFeltoles($bodyData['adminUserId'], $bodyData['bufeName'], $bodyData['desc'], $bodyData['phone'], $bodyData['addressId'], $bodyData['schoolId'])];
@@ -708,7 +720,8 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
         (new UploadApi())->upload($file["tmp_name"], [
             'public_id' => $imgName,
             'quality_analysis' => true,
-            'colors' => true
+            'colors' => true,
+            'http_client' => new \GuzzleHttp\Client(['verify' => false])
         ]);
 
         if($response == "Sikertelen művelet!"){
@@ -911,22 +924,30 @@ function valtoztatas($muvelet, $tipus = null, $adatok = null)
     $db = new mysqli('localhost', 'root', '', 'bufego');
 
     if ($db->connect_errno != 0) {
-        return $db->connect_error;
+        error_log("MySQL csatlakozási hiba: " . $db->connect_error);
+        return "Adatbázis hiba!";
     }
 
     if (!is_null($tipus) && !is_null($adatok)) {
         if (strlen($tipus) != count($adatok)) {
-            return 'Nem megfelelő számú adat vagy típús!';
+            return "Nem megfelelő számú adat!";
         }
         $stmt = $db->prepare($muvelet);
-        $stmt->bind_param($tipus, ...$adatok);
-        $stmt->execute();
-    } else {
-        $db->query($muvelet);
-    }
+        if (!$stmt) {
+            error_log("SQL előkészítési hiba: " . $db->error);
+            return "SQL hiba!";
+        }
 
-    if ($db->errno != 0) {
-        return $db->error;
+        $stmt->bind_param($tipus, ...$adatok);
+        if (!$stmt->execute()) {
+            error_log("SQL végrehajtási hiba: " . $stmt->error);
+            return "Sikertelen SQL végrehajtás!";
+        }
+    } else {
+        if (!$db->query($muvelet)) {
+            error_log("SQL lekérdezési hiba: " . $db->error);
+            return "SQL hiba!";
+        }
     }
 
     if ($db->affected_rows == 0) {
@@ -940,14 +961,16 @@ function valtoztatas($muvelet, $tipus = null, $adatok = null)
     return "Sikeres művelet!";
 }
 
+
+
 // Büfé adatok
 
-function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, $schoolId, $payment = false, $avaliable = false)
+function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, $schoolId, $imgName = null, $payment = false, $avaliable = false)
 {
-    $query = "INSERT INTO `places`(`admin_user_id`, `name`, `description`, `phone`, `address_id`, `school_id`, `payment_on_collect_enabled`, `is_avaliable`) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    $query = "INSERT INTO `places`(`admin_user_id`, `name`, `description`, `phone`, `image`, `address_id`, `school_id`, `payment_on_collect_enabled`, `is_avaliable`) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-    $bufe = valtoztatas($query, "isssiiii", [$adminUserId, $bufeName, $desc, $phone, $addressId, $schoolId, $payment, $avaliable]);
+    $bufe = valtoztatas($query, "issssiiii", [$adminUserId, $bufeName, $desc, $phone, $imgName, $addressId, $schoolId, $payment, $avaliable]);
 
     return json_encode(['valasz' => $bufe], JSON_UNESCAPED_UNICODE);
 }

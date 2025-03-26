@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import BuffetCard from '../components/BuffetCard';
 import Loading from '../components/Loading';
+import BuffetAddModal from '../components/AddBuffetModal';
 import axios from 'axios';
 import '../styles/admin.css';
 import BuffetDetailsModal from '../components/BuffetDetailsModal';
@@ -12,6 +13,7 @@ const Admin = () => {
   const [error, setError] = useState(null);
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedBuffet, setSelectedBuffet] = useState(null);
 
   const fetchBuffets = async () => {
@@ -45,6 +47,18 @@ const Admin = () => {
     setIsDetailsModalOpen(true);
   };
 
+  const handleAddBuffet = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const handleBuffetAdded = () => {
+    fetchBuffets();
+  };
+
 
   return (
     <Container>
@@ -53,9 +67,13 @@ const Admin = () => {
         onClose={handleCloseDetailsModal}
         buffet={selectedBuffet}
       />
-      <Row>
+      <BuffetAddModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} onBuffetAdded={handleBuffetAdded} />
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Büféim</h2>
+        </Col>
+        <Col className="text-end">
+          <Button variant="primary" onClick={handleAddBuffet}>+ Új büfé</Button>
         </Col>
       </Row>
       {isLoading && <Loading />}
