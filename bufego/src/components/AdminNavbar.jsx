@@ -17,9 +17,11 @@ const AdminNavbar = () => {
         const fetchBuffets = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/admin_fo', {
-                    params: { admin_id: "4" },
+                    params: { admin_id: "1" },
                 });
-                await setBuffets(response.data.valasz);
+                if(response.status == 200){
+                    await setBuffets(response.data.valasz);
+                }
             } catch (err) {
                 console.log(err.message);
             }
