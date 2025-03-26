@@ -18,6 +18,7 @@ import UserBufe from "./pages/UserBufe";
 import OrdersPage from "./pages/Orders";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Settings from "./pages/Settings";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -60,6 +61,7 @@ function App() {
               <Route path="/admin/products" element={<AdminProducts />} />
               <Route path="/admin/categories" element={<AdminCategories />} />
               <Route path="/admin/reviews" element={<AdminReviews />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={< NoPage />} />
             </Route>
           </Routes>
