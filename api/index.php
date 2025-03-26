@@ -23,7 +23,7 @@ if(isset($_COOKIE["PHPSESSID"])){
 $url = explode('/', $_SERVER['REQUEST_URI']);
 $endpoint = mb_strtolower(explode('?', end($url))[0]);
 $method = $_SERVER["REQUEST_METHOD"];
-$bodyData = ($method === "POST" || $method == "PUT") ? json_decode(file_get_contents('php://input'), true) : null;
+$bodyData = ($method === "POST" || $method == "PUT" || $method == "DELETE") ? json_decode(file_get_contents('php://input'), true) : null;
 $getData = $_GET;
 
 handleEndpoint($endpoint, $method, $bodyData, $getData);
@@ -73,7 +73,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'termek_felv' => handleTermekFelv($method),
         'termekek' => handleTermekek($method, $getData),
         'termek_valt' => handleTermekValt($method, $bodyData),
-        'termek_del' => handleTermekDel($method, $getData),
+        'termek_del' => handleTermekDel($method, $bodyData),
         'rendel' => handleRendel($method, $bodyData),
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
@@ -641,7 +641,7 @@ function handleTermekek(string $method, ?array $getData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id']);
+    $response = lekeres("SELECT id, category_id, image, name, description, allergens, is_avaliable, price FROM products WHERE place_id = " . $getData['place_id'] . " AND deleted=0");
     return ['valasz' => $response];
 }
 
@@ -681,17 +681,17 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
 /**
  * Kezeli a termék törlést.
  */
-function handleTermekDel(string $method, ?array $getData): ?array
+function handleTermekDel(string $method, ?array $bodyData): ?array
 {
     if ($method !== "DELETE") {
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData["id"])) {
+    if (empty($bodyData["id"])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$getData["id"]}");
+    $response = valtoztatas("UPDATE products SET products.deleted=1 WHERE id={$bodyData["id"]}");
     return ['valasz' => $response];
 }
 
