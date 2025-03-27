@@ -3,6 +3,8 @@ import "../styles/OrderBadge.css";
 const OrderBadge = ({status}) => {
   const getBadgeClass = () => {
     switch (status) {
+      case 0:
+        return 'deleted-order';
       case 1:
         return 'new-order';
       case 2:
@@ -20,6 +22,8 @@ const OrderBadge = ({status}) => {
 
   const getBadgeText = () => {
     switch (status) {
+      case 0:
+        return 'Törölt rendelés';
       case 1:
         return 'Új rendelés';
       case 2:

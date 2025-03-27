@@ -40,14 +40,21 @@ const Landing = () => {
 
     useEffect(() => {
         axios.get(`http://localhost:8000/iskolak`)
-            .then(res => {
-                const data = res.data.valasz;
-                setSchoolsData(data);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    }, []);
+          .then(res => {
+            const data = res.data?.valasz;
+      
+            // Ellenőrizzük, hogy `valasz` egy tömb-e
+            if (Array.isArray(data)) {
+              setSchoolsData(data);
+            } else {
+              setSchoolsData([]); // Ha nem tömb, akkor üres tömb
+            }
+          })
+          .catch(error => {
+            console.error("Error fetching data:", error);
+            setSchoolsData([]); // Hiba esetén is üres tömb
+          });
+      }, []);
 
 
     return (

@@ -18,14 +18,24 @@ function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/sajatrendelesek`,
-          { params: { "userId": userId } },
-        );
-        setOrders(response.data.valasz.rendelesek);
+        const response = await axios.get(`http://localhost:8000/sajatrendelesek`, {
+          params: { "userId": userId },
+        });
+    
+        const orders = response.data?.valasz?.rendelesek;
+    
+        // Ellenőrizzük, hogy `rendelesek` egy tömb-e
+        if (Array.isArray(orders)) {
+          setOrders(orders);
+        } else {
+          setOrders([]); // Ha nem tömb, akkor üres tömb
+        }
       } catch (error) {
         console.error("Hiba a rendelések lekérésekor:", error);
+        setOrders([]); // Hiba esetén is üres tömb
       }
     };
+    
 
     fetchOrders();
   }, [userId]); // Újra lekérjük a rendeléseket, ha a userId megváltozik

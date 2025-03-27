@@ -16,16 +16,25 @@ const AdminNavbar = () => {
     useEffect(() => {
         const fetchBuffets = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/admin_fo', {
-                    params: { admin_id: "1" },
-                });
-                if(response.status == 200){
-                    await setBuffets(response.data.valasz);
+              const response = await axios.get('http://localhost:8000/admin_fo', {
+                params: { admin_id: "1" },
+              });
+          
+              if (response.status === 200) {
+                const buffets = response.data?.valasz;
+                
+                // Ellenőrizzük, hogy `valasz` egy tömb-e
+                if (Array.isArray(buffets)) {
+                  setBuffets(buffets);
+                } else {
+                  setBuffets([]); // Ha nem tömb, akkor üres tömb
                 }
+              }
             } catch (err) {
-                console.log(err.message);
+              console.log(err.message);
+              setBuffets([]); // Hiba esetén is üres tömb
             }
-        };
+          };
 
         fetchBuffets();
     }, []);

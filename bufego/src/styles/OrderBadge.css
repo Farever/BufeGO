@@ -5,6 +5,13 @@
     margin-right: 10px;
   }
 
+  .deleted-order{
+    background-color: #DC4C64;
+    color: white !important;
+    font-weight: bold;
+  }
+  
+
 .new-order{
   background-color: #ffc107;
   color: #212529 !important;
@@ -25,7 +32,7 @@
 
 .collected{
   background-color: #008cff;
-  color: #212529 !important;
+  color: white !important;
   font-weight: bold;
 }
 

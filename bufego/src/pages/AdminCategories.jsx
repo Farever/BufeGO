@@ -20,15 +20,26 @@ const Categories = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-        const response = await axios.get("http://localhost:8000/kategoriak", {params : {bufeId : "1"}});
-
-        if(response.status == 200)
-        {
-          let data = await response.data.valasz;
+      const response = await axios.get("http://localhost:8000/kategoriak", {
+        params: { bufeId: "1" }
+      });
+  
+      if (response.status === 200) {
+        const data = response.data.valasz; // Nincs szükség `await`-re
+  
+        // Ellenőrizzük, hogy `data` egy tömb-e
+        if (Array.isArray(data)) {
           setCategories(data);
+        } else {
+          setCategories([]); // Ha nem tömb, akkor üres tömb
         }
+      } else {
+        setError("Hiba történt az adatok lekérése közben.");
+      }
     } catch (error) {
-      setError('Hiba történt az adatok betöltése közben.');
+      console.error(error);
+      setError("Hiba történt az adatok betöltése közben.");
+      setCategories([]); // Hiba esetén is üres tömb
     } finally {
       setIsLoading(false);
     }

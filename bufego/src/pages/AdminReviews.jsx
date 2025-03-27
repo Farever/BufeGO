@@ -10,18 +10,26 @@ const Reviews = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let resp = await fetch('http://localhost:8000/ertekelesek?placeId='+1)
+        let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + 1);
         let data = await resp.json();
-
+    
         console.log(data);
-        setReviews(data.valasz)
+    
+        // Ellenőrizzük, hogy a `valasz` létezik és tömb-e
+        if (Array.isArray(data.valasz)) {
+          setReviews(data.valasz);
+        } else {
+          setReviews([]); // Ha nem tömb, üres tömböt állítunk be
+        }
       } catch (error) {
         setError('Hiba történt az adatok betöltése közben.');
-        console.log(error)
+        console.log(error);
+        setReviews([]); // Hiba esetén is üres tömb
       } finally {
         setIsLoading(false);
       }
     };
+    
 
     fetchData();
   }, []);

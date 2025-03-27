@@ -8,6 +8,7 @@ import '../styles/admin.css';
 import BuffetDetailsModal from '../components/BuffetDetailsModal';
 
 const Admin = () => {
+  const [userId, setUserId] = useState(null);
   const [buffets, setBuffets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,11 +21,18 @@ const Admin = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:8000/admin_fo', {
-        params: { admin_id: "4" },
+      let resp = await fetch("http://localhost:8000/sessdata", {
+        credentials: "include"
       });
-      setBuffets(response.data.valasz);
-      console.log(response.data.valasz);
+      let data = await resp.json();
+      if (data.valasz && data.valasz.user_id) {
+        const response = await axios.get('http://localhost:8000/admin_fo', {
+          params: { admin_id: data.valasz.user_id },
+        });
+        setBuffets(response.data.valasz);
+      } else {
+        throw new Error("Sikertelen munkamenet adat lekérés");
+      }
     } catch (err) {
       setError(err.message);
     } finally {

@@ -15,29 +15,34 @@ const Products = () => {
 
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
-  const handleClose = () => {setShow(false)};
+  const handleClose = () => { setShow(false) };
   const handleShow = (product) => {
     setShow(true);
     setSelected(product);
   };
 
   const fetchProducts = async () => {
-    console.log("asd")
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/termekek?place_id='+place_id);
-
+      const response = await fetch('http://localhost:8000/termekek?place_id=' + place_id);
       let data = await response.json();
-      setProducts(data.valasz);  // Update state with the formatted data
+      
+      // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
+      if (Array.isArray(data.valasz)) {
+        setProducts(data.valasz);
+      } else {
+        setProducts([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
+      }
     } catch (err) {
       setError(err.message);
+      setProducts([]); // Hiba esetén is állítsuk üres tömbre
     } finally {
       setIsLoading(false);
     }
   };
 
-  
+
   useEffect(() => {
     fetchProducts(); // Az első lekérdezés a komponens mountolásakor
 
@@ -52,9 +57,10 @@ const Products = () => {
       {isLoading && <Loading />}
       {error && <div className="error-message">{error}</div>}
       <div className="products-grid">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} handleShow={handleShow}/>
-        ))}
+        {(products.length > 0) ? 
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} handleShow={handleShow} />
+          )) :  (<></>)}
       </div>
       <Editmodal show={show} handleClose={handleClose} product={selected}></Editmodal> {/*A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
       <ProductUploadForm></ProductUploadForm>

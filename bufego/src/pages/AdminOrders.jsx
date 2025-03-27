@@ -29,13 +29,22 @@ const Orders = () => {
       const response = await axios.get('http://localhost:8000/bufe_rendelesek', {
         params: { place_id: "1" },
       });
-      await setOrders(response.data.valasz.rendelesek);
+  
+      // Ellenőrizzük, hogy `valasz.rendelesek` létezik és tömb-e
+      const orders = response.data?.valasz?.rendelesek;
+      if (Array.isArray(orders)) {
+        setOrders(orders);
+      } else {
+        setOrders([]); // Ha nem tömb, akkor üres tömb
+      }
     } catch (err) {
       setError(err.message);
+      setOrders([]); // Hiba esetén is üres tömb
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchOrders();

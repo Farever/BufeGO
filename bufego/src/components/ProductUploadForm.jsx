@@ -19,30 +19,37 @@ const ProductUploadForm = () => {
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost:8000/kategoriak', {
-            params: { 
-                bufeId: 1
-            },
-          });
-    
-          setCategories(response.data.valasz);
+            const response = await axios.get('http://localhost:8000/kategoriak', {
+                params: {
+                    bufeId: 1
+                },
+            });
+
+            // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
+            if (Array.isArray(response.data.valasz)) {
+                setCategories(response.data.valasz);
+            } else {
+                setCategories([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
+            }
         } catch (err) {
-          console.log(err);
-          setError(err.message);
+            console.log(err);
+            setError(err.message);
+            setCategories([]); // Hiba esetén is állítsuk üres tömbre
         } finally {
-          setIsLoading(false);
+            setIsLoading(false);
         }
-      };
+    };
 
-      useEffect(() => {
+
+    useEffect(() => {
         fetchCategories();
-    
-        const intervalId = setInterval(fetchCategories, refreshInterval);
-    
-        return () => clearInterval(intervalId);
-      }, [refreshInterval]);
 
-      const uploadProduct = async() => {
+        const intervalId = setInterval(fetchCategories, refreshInterval);
+
+        return () => clearInterval(intervalId);
+    }, [refreshInterval]);
+
+    const uploadProduct = async () => {
         console.log(category.current.value)
         const formData = new FormData();
         formData.append('place', place_id);
@@ -60,17 +67,15 @@ const ProductUploadForm = () => {
             body: formData
         })
         let data = await response.json();
-        if(response.ok)
-        {
+        if (response.ok) {
             setUploadStatus("success")
             setResponseMessage("Sikeres adatfelvétel");
         }
-        else
-        {
+        else {
             setUploadStatus("danger");
             setResponseMessage(data.valasz);
         }
-        
+
     }
 
 
@@ -86,59 +91,59 @@ const ProductUploadForm = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    return(
+    return (
         <>
             <div className='text-center m-3'>
                 <ActionButton type="add" onClick={handleShow}></ActionButton>
             </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Termék hozzáadása</Modal.Title>
+                    <Modal.Title>Termék hozzáadása</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Termék neve</Form.Label>
-                            <Form.Control type="text" ref={product_name}/>
+                            <Form.Control type="text" ref={product_name} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Kategória</Form.Label>
                             <Form.Select ref={category}>
-                            {
-                                categories.map((category)=>{
-                                    return <option key={category.id} value={category.id}>{category.categroy_name}</option>
-                                })
-                            }
+                                {
+                                    categories.map((category) => {
+                                        return <option key={category.id} value={category.id}>{category.categroy_name}</option>
+                                    })
+                                }
                             </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Kép</Form.Label>
-                            <Form.Control type="file" ref={img}/>
+                            <Form.Control type="file" ref={img} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Leírás</Form.Label>
-                            <Form.Control type="text" ref={product_desc}/>
+                            <Form.Control type="text" ref={product_desc} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Allergének</Form.Label>
-                            <Form.Control type="text" ref={allergens}/>
+                            <Form.Control type="text" ref={allergens} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Check type="checkbox" label="Elérhető" className="checkbox" ref={availability}></Form.Check>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Ár</Form.Label>
-                            <Form.Control type="number" ref={price}/>
+                            <Form.Control type="number" ref={price} />
                         </Form.Group>
                     </Form>
                     <Alert variant={uploadstatus}>{responseMessage}</Alert>
                 </Modal.Body>
                 <Modal.Footer>
-                
-                <ActionButton type="cancel" onClick={handleClose}></ActionButton>
-                <ActionButton type="ok" onClick={() => {
-                    uploadProduct();
-                }}></ActionButton>
+
+                    <ActionButton type="cancel" onClick={handleClose}></ActionButton>
+                    <ActionButton type="ok" onClick={() => {
+                        uploadProduct();
+                    }}></ActionButton>
                 </Modal.Footer>
             </Modal>
         </>

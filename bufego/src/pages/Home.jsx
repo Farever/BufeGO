@@ -16,16 +16,25 @@ const Home = () => {
       setError(null);
       try {
         const response = await axios.get('http://localhost:8000/userbufe', {
-          params: { "school_Id": "1" },
+          params: { school_Id: "1" },
         });
-        await setBuffets(response.data.valasz);
+    
+        const buffets = response.data?.valasz;
+    
+        // Ellenőrizzük, hogy `valasz` egy tömb-e
+        if (Array.isArray(buffets)) {
+          setBuffets(buffets);
+        } else {
+          setBuffets([]); // Ha nem tömb, akkor üres tömb
+        }
       } catch (err) {
         setError(err.message);
+        setBuffets([]); // Hiba esetén is üres tömb
       } finally {
         setIsLoading(false);
       }
-
     };
+    
 
     fetchBuffets();
   }, []);
@@ -34,7 +43,7 @@ const Home = () => {
     <>
       <Container>
         <CarouselComponent />
-        <h2>Közeledben lévő büfék</h2>
+        <h2 className='display-6'>Közeledben lévő büfék</h2>
         {isLoading && <Loading />}
         {error && <div className="error-message">{error}</div>}
         <Row>
