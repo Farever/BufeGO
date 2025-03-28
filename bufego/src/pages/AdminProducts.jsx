@@ -25,7 +25,7 @@ const Products = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/termekek?place_id=' + place_id);
+      const response = await fetch('http://localhost/BufeGO/api/index.php/termekek?place_id=' + place_id);
       let data = await response.json();
       
       // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt

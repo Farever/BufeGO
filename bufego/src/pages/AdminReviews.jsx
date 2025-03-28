@@ -10,7 +10,7 @@ const Reviews = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + 1);
+        let resp = await fetch('http://localhost/BufeGO/api/index.php/ertekelesek?placeId=' + 1);
         let data = await resp.json();
     
         console.log(data);

@@ -29,7 +29,7 @@ function Editmodal({show, handleClose, product})
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost:8000/kategoriak', {
+          const response = await axios.get('http://localhost/BufeGO/api/index.php/kategoriak', {
             params: { 
                 bufeId: 1
             },
@@ -69,7 +69,7 @@ function Editmodal({show, handleClose, product})
         }
 
 
-        let response = await axios.post('http://localhost:8000/termek_valt', formData, {
+        let response = await axios.post('http://localhost/BufeGO/api/index.php/termek_valt', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

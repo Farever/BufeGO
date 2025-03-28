@@ -16,7 +16,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get('http://localhost:8000/currentrating', {
+        const response = await axios.get('http://localhost/BufeGO/api/index.php/currentrating', {
           params: { place_id: buffet.id },
         });
 

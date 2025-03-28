@@ -41,7 +41,7 @@ const PasswordModal = ({ isOpen, onClose }) => {
         setError(null);
         let message;
         try {
-            const response = await fetch(`http://localhost:8000/jelszovaltoztat`,
+            const response = await fetch(`http://localhost/BufeGO/api/index.php/jelszovaltoztat`,
                 {
                     method: 'post',
                     headers: {

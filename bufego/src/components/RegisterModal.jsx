@@ -26,7 +26,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get("http://localhost:8000/iskolak");
+        const response = await axios.get("http://localhost/BufeGO/api/index.php/iskolak");
         setSchools(response.data.valasz);
       } catch (err) {
         setError(err.message || "Hiba történt az iskolák lekérése közben.");
@@ -86,7 +86,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
     setError(null);
     try {
       const addressResponse = await axios.put(
-        "http://localhost:8000/cimfeltoltes",
+        "http://localhost/BufeGO/api/index.php/cimfeltoltes",
         { zip, city, address },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -96,7 +96,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
       console.log("Hgr")
       const registerResponse = await axios.put(
-        "http://localhost:8000/felhasznaloregisztracio",
+        "http://localhost/BufeGO/api/index.php/felhasznaloregisztracio",
         {
           "email" : email,
           "passcode": sha512(password),

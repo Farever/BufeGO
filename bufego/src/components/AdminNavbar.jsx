@@ -16,7 +16,7 @@ const AdminNavbar = () => {
     useEffect(() => {
         const fetchBuffets = async () => {
             try {
-              const response = await axios.get('http://localhost:8000/admin_fo', {
+              const response = await axios.get('http://localhost/BufeGO/api/index.php/admin_fo', {
                 params: { admin_id: "1" },
               });
           

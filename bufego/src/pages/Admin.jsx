@@ -21,12 +21,12 @@ const Admin = () => {
     setIsLoading(true);
     setError(null);
     try {
-      let resp = await fetch("http://localhost:8000/sessdata", {
+      let resp = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
         credentials: "include"
       });
       let data = await resp.json();
       if (data.valasz && data.valasz.user_id) {
-        const response = await axios.get('http://localhost:8000/admin_fo', {
+        const response = await axios.get('http://localhost/BufeGO/api/index.php/admin_fo', {
           params: { admin_id: data.valasz.user_id },
         });
         setBuffets(response.data.valasz);

@@ -15,7 +15,7 @@ function Navigation({cartClickAction}) {
     useEffect(() => {
         const fetchIskolak = async () => {
             try {
-                let resp = await fetch('http://localhost:8000/iskolak');
+                let resp = await fetch('http://localhost/BufeGO/api/index.php/iskolak');
                 let data = await resp.json();
                 setIskolak(data.valasz);
             } catch (error) {

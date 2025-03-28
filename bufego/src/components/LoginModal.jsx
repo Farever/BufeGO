@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
@@ -11,6 +12,7 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState({});
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const errors = {};
@@ -35,15 +37,15 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`, { withCredentials: true });
+      const response = await axios.get(`http://localhost/BufeGO/api/index.php/bejelentkezes?email=${email}`, { withCredentials: true });
       console.log(response.data.valasz)
       if (sha512(password) === response.data.valasz[0].passcode) {
         setLoginState(true);
         alert('Sikeres bejelentkezés!');
-        let data = await fetch("http://localhost:8000/sessdata", {
+        let data = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
           credentials : "include"
         })
-        console.log((await data.json())["valasz"]);
+        navigate('/home');
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }

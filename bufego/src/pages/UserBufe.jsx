@@ -23,7 +23,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
 
         const fetchCategories = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/kategoriak", { params: { bufeId: bufeId } });
+                const response = await axios.get("http://localhost/BufeGO/api/index.php/kategoriak", { params: { bufeId: bufeId } });
 
                 if (response.status === 200) {
                     let data = await response.data.valasz;
@@ -44,7 +44,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
 
         const fetchProduct = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/termekek", { params: { place_id: bufeId } });
+                const response = await axios.get("http://localhost/BufeGO/api/index.php/termekek", { params: { place_id: bufeId } });
 
                 if (response.status === 200) {
                     let data = await response.data.valasz;
@@ -69,7 +69,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
 
     const AddToCart = async (q, pid) => {
         try {
-            const response = await axios.post("http://localhost:8000/kosarba", {
+            const response = await axios.post("http://localhost/BufeGO/api/index.php/kosarba", {
                 "place_id": bufeId,
                 "user_id": 1,
                 "quantity": q,

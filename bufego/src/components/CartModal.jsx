@@ -35,7 +35,7 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
 
     const getCart = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/kosar", {
+            const response = await axios.get("http://localhost/BufeGO/api/index.php/kosar", {
                 params: {
                     user_id: "1", place_id: "1"
                 }
@@ -54,7 +54,7 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
 
     const Rendel = async () => {
         try {
-            const response = await axios.post("http://localhost:8000/rendel",
+            const response = await axios.post("http://localhost/BufeGO/api/index.php/rendel",
                 {
                     "user_id": 1,
                     "place_id": 1,
@@ -79,7 +79,7 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
     const KosarTorol = async () => {
         try
         {   
-            const response = await fetch("http://localhost:8000/kosartorles", {
+            const response = await fetch("http://localhost/BufeGO/api/index.php/kosartorles", {
                 method :"DELETE",
                 headers:
                 {

@@ -19,7 +19,7 @@ const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
   useEffect(() => {
     const fetchSchools = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/iskolak");
+        const response = await axios.get("http://localhost/BufeGO/api/index.php/iskolak");
         setSchools(response.data.valasz);
       } catch (error) {
         console.error("Hiba történt az iskolák lekérése során:", error);
@@ -40,7 +40,7 @@ const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
     e.preventDefault();
     try {
       const addressResponse = await axios.put(
-        "http://localhost:8000/cimfeltoltes",
+        "http://localhost/BufeGO/api/index.php/cimfeltoltes",
         {
           zip: formData.zip,
           city: formData.city,
@@ -63,7 +63,7 @@ const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
         data.append('image', formData.image);
       }
 
-      await axios.post('http://localhost:8000/bufefeltoltes', data, {
+      await axios.post('http://localhost/BufeGO/api/index.php/bufefeltoltes', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

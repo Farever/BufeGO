@@ -39,7 +39,7 @@ const Landing = () => {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/iskolak`)
+        axios.get(`http://localhost/BufeGO/api/index.php/iskolak`)
           .then(res => {
             const data = res.data?.valasz;
       
