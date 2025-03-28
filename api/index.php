@@ -4,8 +4,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
+use Dotenv\Dotenv;
 
-Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
+$cloudinary_url = $_ENV['CLOUDINARY_URL'];
+Configuration::instance($cloudinary_url);
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header("Access-Control-Allow-Credentials: true");
