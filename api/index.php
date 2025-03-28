@@ -6,6 +6,9 @@ use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 use Dotenv\Dotenv;
 
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $cloudinary_url = $_ENV['CLOUDINARY_URL'];
 Configuration::instance($cloudinary_url);
 
