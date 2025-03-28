@@ -52,6 +52,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
         'kategoriatorles' => handleKategoriaTorles($method, $getData),
+        'kategorianev' => handleKategoriaNev($method, $getData),
         'bufemodositas' => handleBufeModositas($method),
         'bufefeltoltes' => handleBufeFeltoltes($method, $_POST),
         'userbufe' => handleUserBufe($method, $getData),
@@ -225,6 +226,18 @@ function handleKategoriak(string $method, array $getData): ?array
     }
 
     return ['valasz' => kategoriakLekerese($getData['bufeId'])];
+}
+
+function handleKategoriaNev(string $method, array $getData): ?array
+{
+    if (empty($getData['id'])) {
+        return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
+    }
+
+    $katnev = lekeres("SELECT categroy_name FROM `categories` WHERE `id` = ".$getData['id']." LIMIT 1");
+
+    //return $katnev;
+    return ['valasz' => $katnev];
 }
 
 /**
@@ -663,7 +676,8 @@ function handleTermekFelv(string $method): ?array
 
     $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
 
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$_POST['is_avaliable']},{$_POST['price']})");
+    $availability = $_POST['is_avaliable'] ? 1 : 0;
+    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
 
     if (isset($_FILES["img"])) {
         $file = $_FILES['img'];

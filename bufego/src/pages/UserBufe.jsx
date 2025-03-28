@@ -101,7 +101,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
                 <Container>
                     <Navbar.Collapse>
                         <Nav className="me-auto">
-                            {categories.filter(c => c.deleted === 0).map((c) =>
+                            {categories.filter(c => parseInt(c.deleted) === 0).map((c) =>
                                 <Nav.Link key={c.id} href={"#" + c.categroy_name}>{c.categroy_name}</Nav.Link>
                             )}
                         </Nav>
@@ -110,7 +110,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
             </Navbar>
 
             <Container>
-                {categories.filter(c => c.deleted === 0).map((c) =>
+                {categories.filter(c => parseInt(c.deleted) === 0).map((c) =>
                     <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products} buttonActions={openOrderModal} />
                 )}
             </Container>

@@ -7,6 +7,7 @@ const ProductCard = ({ product, handleShow }) => {
   const [deleteShow, setDeleteShow] = useState(false);
   const deleteClose = () => {setDeleteShow(false)};
   const deleteOpen = () => {setDeleteShow(true);};
+  const [product_category, setproduct_category] = useState([]);
 
   const deleteProduct = async() => {
     let response = await fetch('http://localhost:8000/termek_del', {
@@ -27,6 +28,14 @@ const ProductCard = ({ product, handleShow }) => {
     }
   }
 
+  const getKategoria = async() => {
+      const response = await axios.get("http://localhost:8000/kategorianev", {
+        "id": product.category_id
+    });
+    let data = await response.data.valasz;
+    console.log(data);
+  }
+
   return (
     <div className="product-card">
       <img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${product.image}`} alt={product.name} className="product-image" />
@@ -34,7 +43,7 @@ const ProductCard = ({ product, handleShow }) => {
         <h5 className="product-name">{product.name}</h5>
         <p className="product-info">Ár: {product.price} Ft</p>
         <p className="product-info">Állapot: {product.status}</p>
-        <p className="product-info">Kategória: {product.category}</p>
+        <p className="product-info">Kategória: {product.category_id}</p>
         <div className="product-actions">
           <Button variant="primary" size="sm" onClick={() => {
               handleShow(product);

@@ -4,7 +4,7 @@ import UserProductCard from "./UserProductCard";
 
 export default function CategoryDiv({catId, catNev, termekek, buttonActions})
 {
-    console.log(termekek);
+    console.log(termekek.filter((p) => p.category_id == catId && p.is_avaliable == "1"));
     return(
         <Row className="border border-warning rounded my-2" id={catNev}>
             <h1 style={{textDecoration: "underline"}}>{catNev}</h1>
