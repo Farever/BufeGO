@@ -17,8 +17,30 @@ function CarouselComponent() {
         <Carousel interval={null} controls={false}>
             <Carousel.Item>
                 <div style={carouselStyle}>
-                    <h2>Mi is az a BüféGO?</h2>
-                    <p>Ha érdekel a szotri, olvasd el a cikket.</p>
+                    <h2>Kerüld el a sort!</h2>
+                    <p>Unod a sorban állást a szünetben? Rendeld meg kedvenced online pár kattintással, és csak vedd át!</p>
+                    <img
+                        className="d-block w-100"
+                        src=""
+                        style={imageStyle}
+                    />
+                </div>
+            </Carousel.Item>
+            <Carousel.Item>
+                <div style={carouselStyle}>
+                    <h2>A Diákok Kedvence!</h2>
+                    <p>Ezt rendelitek a legtöbben! Ne maradj le te sem a pizzaszeletről!</p>
+                    <img
+                        className="d-block w-100"
+                        src=""
+                        style={imageStyle}
+                    />
+                </div>
+            </Carousel.Item>
+            <Carousel.Item>
+                <div style={carouselStyle}>
+                    <h2>Töltődj fel okosan</h2>
+                    <p>Keress energiát adó, egészséges harapnivalókat! Saláták, gyümölcsök, joghurtok várnak.</p>
                     <img
                         className="d-block w-100"
                         src=""
