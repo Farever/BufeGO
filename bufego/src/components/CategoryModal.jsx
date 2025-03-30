@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
 
-export default function CategoryModal({isOpen,type, onClose ,categoryDetails, save, del})
+export default function CategoryModal({isOpen,type, onClose ,categoryDetails, save, del, bufeId})
 {
     const [ujNev, setUjNev] = useState(categoryDetails.categroy_name);
     const [ujHely, setUjHely] = useState(categoryDetails.categroy_name);
@@ -51,7 +51,7 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
             <Modal.Footer>
                 <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
                 {TorleGomb()}
-                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement) : save(1, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement); onClose()}} variant="success">Mentés</Button>
+                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement) : save(bufeId.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement); onClose()}} variant="success">Mentés</Button>
             </Modal.Footer>
         </Modal>
     )

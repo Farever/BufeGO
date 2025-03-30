@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReviewCard from '../components/ReviewCard';
 import Loading from '../components/Loading';
-const Reviews = () => {
+const Reviews = ({bufeId}) => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const Reviews = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + 1);
+        let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + bufeId.id);
         let data = await resp.json();
     
         console.log(data);

@@ -7,7 +7,7 @@ import axios from 'axios';
 import '../styles/admin.css';
 import BuffetDetailsModal from '../components/BuffetDetailsModal';
 
-const Admin = () => {
+const Admin = ({setBufe}) => {
   const [userId, setUserId] = useState(null);
   const [buffets, setBuffets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +92,7 @@ const Admin = () => {
             <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
               <BuffetCard
                 buffet={buffet}
+                setBufe={setBufe}
                 isOnAdminPage={true}
                 onModClick={() => handleModClick(buffet.id)}
               />

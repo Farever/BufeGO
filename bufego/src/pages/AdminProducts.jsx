@@ -6,12 +6,12 @@ import ProductUploadForm from '../components/ProductUploadForm';
 import axios from 'axios';
 import Editmodal from '../components/Editmodal';
 
-const Products = () => {
+const Products = ({bufeId}) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
-  let place_id = 1;
+
 
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -25,7 +25,7 @@ const Products = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/termekek?place_id=' + place_id);
+      const response = await fetch('http://localhost:8000/termekek?place_id=' + bufeId.id);
       let data = await response.json();
       
       // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt

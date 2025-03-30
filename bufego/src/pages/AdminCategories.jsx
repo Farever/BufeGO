@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import CategoryCard from '../components/CategoryCard';
 import CategoryModal from '../components/CategoryModal';
 
-const Categories = () => {
+const Categories = ({bufeId}) => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,6 +14,7 @@ const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
 
   useEffect(() => {
+    console.log(bufeId);
     fetchData();
   }, []);
 
@@ -21,7 +22,7 @@ const Categories = () => {
     setIsLoading(true);
     try {
       const response = await axios.get("http://localhost:8000/kategoriak", {
-        params: { bufeId: "1" }
+        params: { bufeId: bufeId.id }
       });
   
       if (response.status === 200) {
@@ -147,7 +148,7 @@ const Categories = () => {
       </div>
       <hr/>
       <Button type='button' variant='success' onClick={ujButtonClicked}>Új kategória létrehozása</Button>
-      {<CategoryModal type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
+      {<CategoryModal bufeId={bufeId} type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
     </div>
   );
 };

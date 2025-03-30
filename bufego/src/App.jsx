@@ -16,7 +16,7 @@ import AdminReviews from "./pages/AdminReviews";
 import Navigation from "./components/UserNavBar";
 import UserBufe from "./pages/UserBufe";
 import OrdersPage from "./pages/Orders";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Settings from "./pages/Settings";
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom'
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
   const [userProfile, setUserProfile] = useState([]);
+  let adminBufe = useRef([]);
   
   const getUser = async() =>
   {
@@ -42,6 +43,12 @@ function App() {
     }
   }
 
+  const setBufe = (bufe) =>
+  {
+    console.log(bufe);
+    adminBufe = bufe;
+    console.log(adminBufe);
+  }
 
   return (
     <BrowserRouter>
@@ -55,12 +62,12 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/home/bufe/:bufeId" element={<UserBufe userData={userProfile} isCartShown={isCartOpen} cartSet={setCartOpen}  getUser={getUser}/>} />
               <Route path="/home/myorders" element={<OrdersPage />} />
-              <Route path="/admin" element={<Admin userData/>} />
-              <Route path="/admin/orders" element={<AdminOrders getUser={getUser}/>} />
-              <Route path="/admin/statistics" element={<AdminStats getUser={getUser}/>} />
-              <Route path="/admin/products" element={<AdminProducts getUser={getUser}/>} />
-              <Route path="/admin/categories" element={<AdminCategories getUser={getUser}/>} />
-              <Route path="/admin/reviews" element={<AdminReviews getUser={getUser}/>} />
+              <Route path="/admin" element={<Admin setBufe={setBufe} userData/>} />
+              <Route path="/admin/orders" element={<AdminOrders bufeId={adminBufe} getUser={getUser}/>} />
+              <Route path="/admin/statistics" element={<AdminStats bufeId={adminBufe} getUser={getUser}/>} />
+              <Route path="/admin/products" element={<AdminProducts bufeId={adminBufe} getUser={getUser}/>} />
+              <Route path="/admin/categories" element={<AdminCategories bufeId={adminBufe} getUser={getUser}/>} />
+              <Route path="/admin/reviews" element={<AdminReviews bufeId={adminBufe} getUser={getUser}/>} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={< NoPage />} />
             </Route>

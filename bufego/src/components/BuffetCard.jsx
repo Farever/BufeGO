@@ -4,7 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 
-const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick }) => {
+const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -45,6 +45,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick }) => {
     console.log(isOnAdminPage);
     if (isOnAdminPage) {
       console.log("Admin" + buffet.id);
+      setBufe(buffet);
     } else {
       navigate('/home/bufe/' + buffet.id);
     }

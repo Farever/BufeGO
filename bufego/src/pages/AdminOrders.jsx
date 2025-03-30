@@ -6,7 +6,7 @@ import OrderDetailsModal from '../components/OrderDetailsModal';
 import '../styles/admin.css';
 import { data } from 'react-router-dom';
 
-const Orders = () => {
+const Orders = ({bufeId}) => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +27,7 @@ const Orders = () => {
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/bufe_rendelesek', {
-        params: { place_id: "1" },
+        params: { place_id: bufeId.id },
       });
   
       // Ellenőrizzük, hogy `valasz.rendelesek` létezik és tömb-e
