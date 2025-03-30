@@ -7,7 +7,7 @@ import ProductToCartModal from "../components/ProductToCartModal";
 import CartModal from "../components/CartModal";
 import { useParams } from "react-router-dom";
 
-export default function UserBufe({ isCartShown, cartSet }) {
+export default function UserBufe({userData,getUser,isCartShown, cartSet }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -17,6 +17,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
     const [frissits, setFrissits] = useState(false);
 
     const { bufeId } = useParams();
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -63,6 +64,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
             }
         };
 
+        getUser();
         fetchCategories();
         fetchProduct();
     }, []); // BufoId is a dependency
@@ -71,7 +73,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
         try {
             const response = await axios.post("http://localhost:8000/kosarba", {
                 "place_id": bufeId,
-                "user_id": 1,
+                "user_id": userData.user_id,
                 "quantity": q,
                 "product_id": pid
             });
@@ -116,7 +118,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
             </Container>
 
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={() => { setModalShown(false) }} addToCart={AddToCart} />
-            <CartModal isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
+            <CartModal userData={userData} getUser={getUser} bufeId={bufeId} isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
         </>
     );
 }

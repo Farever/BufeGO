@@ -3,14 +3,28 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
+import { useNavigate } from 'react-router-dom'
 
-const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword, setLoggedinUser}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState({});
+  const navigate = useNavigate();
+
+  const navAfterLogin = (userProfile) =>
+  {
+    if(userProfile.is_admin == 1)
+    {
+      navigate("/admin");
+    }
+    else
+    {
+        navigate("/home");
+    }
+  }
 
   const validateForm = () => {
     const errors = {};
@@ -43,7 +57,10 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
         let data = await fetch("http://localhost:8000/sessdata", {
           credentials : "include"
         })
-        console.log((await data.json())["valasz"]);
+        let user = (await data.json())["valasz"];
+        setLoggedinUser(user);
+        navAfterLogin(user);
+        console.log(user);
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }

@@ -19,28 +19,28 @@ import OrdersPage from "./pages/Orders";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Settings from "./pages/Settings";
+import { useNavigate } from 'react-router-dom'
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
-  const [bejelentkezes, setBejelentkezes] = useState([]);
   const [userProfile, setUserProfile] = useState([]);
-
-  useEffect(()=>{
-    const getUser = async () => {
-      try{
-        const response = axios.get("http://localhost:8000/bejelentkezescookieleker");
-
-        if((await response).status == 200)
-        {
-          setUserProfile((await response).data)
-        }
-      }
-      catch(error)
+  
+  const getUser = async() =>
+  {
+    try {
+      let resp = await fetch("http://localhost:8000/sessdata", {
+        credentials: "include"
+      });
+      if(resp.ok)
       {
-        console.log(error);
+        let data = await resp.json()
+        setUserProfile(data.valasz);
       }
+      
+    } catch (error) {
+      console.log(error);
     }
-  },bejelentkezes)
+  }
 
 
   return (
@@ -51,16 +51,16 @@ function App() {
         <div className="container mt-4" style={{ flex: 1 }}>
           <Routes>
             <Route>
-              <Route index element={<Landing />} />
+              <Route index element={<Landing setLoggedinUser={setUserProfile}/>} />
               <Route path="/home" element={<Home />} />
-              <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} userData={userProfile}/>} />
+              <Route path="/home/bufe/:bufeId" element={<UserBufe userData={userProfile} isCartShown={isCartOpen} cartSet={setCartOpen}  getUser={getUser}/>} />
               <Route path="/home/myorders" element={<OrdersPage />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/admin/orders" element={<AdminOrders />} />
-              <Route path="/admin/statistics" element={<AdminStats />} />
-              <Route path="/admin/products" element={<AdminProducts />} />
-              <Route path="/admin/categories" element={<AdminCategories />} />
-              <Route path="/admin/reviews" element={<AdminReviews />} />
+              <Route path="/admin" element={<Admin userData/>} />
+              <Route path="/admin/orders" element={<AdminOrders getUser={getUser}/>} />
+              <Route path="/admin/statistics" element={<AdminStats getUser={getUser}/>} />
+              <Route path="/admin/products" element={<AdminProducts getUser={getUser}/>} />
+              <Route path="/admin/categories" element={<AdminCategories getUser={getUser}/>} />
+              <Route path="/admin/reviews" element={<AdminReviews getUser={getUser}/>} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={< NoPage />} />
             </Route>

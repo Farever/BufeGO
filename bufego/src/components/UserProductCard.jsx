@@ -2,7 +2,6 @@ import { Button, Card } from "react-bootstrap";
 
 export default function UserProductCard({nev, img, ar,isAvaliable, action})
 {
-  console.log(nev);
     return (
         <>
         <Card role="button" className="w-20 h-100 col-sm-6 col-md-4 col-lg-3" onClick={action} style={{minHeight : 100}}>

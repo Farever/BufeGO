@@ -3,10 +3,11 @@ import { Button, Modal } from "react-bootstrap"
 import CartCard from "./CartCard"
 import axios from "axios"
 
-export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
+export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissit }) {
     const [products, setProducts] = useState([])
     const [vegosszeg, setVegosszeg] = useState(null)
 
+    const userData = {};
     function formatHUF(number) {
         const formatter = new Intl.NumberFormat('hu-HU', {
           style: 'currency',
@@ -17,13 +18,33 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
         return formatter.format(number);
       }
 
-
-
+    
 
     useEffect(() => {
+
+        const getUser = async() =>
+            {
+              try {
+                let resp = await fetch("http://localhost:8000/sessdata", {
+                  credentials: "include"
+                });
+                if(resp.ok)
+                {
+                  let data = await resp.json()
+                  console.log(data);
+                  userData = data.valasz;
+                }
+                
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          
+        getUser();
         getCart();
         stopFrissit();
     }, [frissits])
+
 
     useEffect(() => {
         let finalPrice = 0;
@@ -35,12 +56,8 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
 
     const getCart = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/kosar", {
-                params: {
-                    user_id: "1", place_id: "1"
-                }
-            })
-
+            console.log(userData);
+            const response = await fetch(`http://localhost:8000/kosar?place_id=${bufeId}&user_id=${userData.user_id.user_id}`);
             if (response.status == 200) {
                 let data = await response.data.valasz;
                 setProducts(data);
@@ -51,13 +68,14 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
         }
     }
 
-
+    getCart();
+    console.log(userData);
     const Rendel = async () => {
         try {
             const response = await axios.post("http://localhost:8000/rendel",
                 {
-                    "user_id": 1,
-                    "place_id": 1,
+                    "user_id": userData.user_id,
+                    "place_id": bufeId,
                     "status": 1,
                     "price": vegosszeg,
                     "payment_method": 1,
@@ -79,13 +97,14 @@ export default function CartModal({ isShown, onClose, frissits, stopFrissit }) {
     const KosarTorol = async () => {
         try
         {   
+            console.log({"user_id": userData.user_id, "place_id" : bufeId});
             const response = await fetch("http://localhost:8000/kosartorles", {
                 method :"DELETE",
                 headers:
                 {
                     "Content-Type" : "application/json"
                 },
-                body : JSON.stringify({"user_id": 1, "place_id" : 1})
+                body : JSON.stringify({"user_id": userData.user_id, "place_id" : bufeId})
             })
         }
         catch(error)

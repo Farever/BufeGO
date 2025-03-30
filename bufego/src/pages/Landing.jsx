@@ -8,7 +8,7 @@ import '../styles/landing.css';
 import axios from 'axios';
 import PasswordModal from '../components/passwordChange';
 
-const Landing = () => {
+const Landing = ({setLoggedinUser}) => {
     const [schoolsData, setSchoolsData] = useState([]);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -105,7 +105,7 @@ const Landing = () => {
             </Row>
 
             <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal}/>
-            <LoginModal isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} onForgottenPassword={handlePasswordModalOpen} />
+            <LoginModal setLoggedinUser={setLoggedinUser} isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} onForgottenPassword={handlePasswordModalOpen} />
             <RegisterModal isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
         </Container>
     );
