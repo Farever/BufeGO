@@ -740,7 +740,6 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
             'public_id' => $imgName,
             'quality_analysis' => true,
             'colors' => true,
-            'http_client' => new \GuzzleHttp\Client(['verify' => false])
         ]);
 
         if($response == "Sikertelen művelet!"){
