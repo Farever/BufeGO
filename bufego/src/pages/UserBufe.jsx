@@ -109,7 +109,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
                 </Container>
             </Navbar>
 
-            <Container>
+            <Container id="categories_container">
                 {categories.filter(c => parseInt(c.deleted) === 0).map((c) =>
                     <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products} buttonActions={openOrderModal} />
                 )}

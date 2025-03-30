@@ -53,7 +53,7 @@ function Navigation({cartClickAction}) {
                         </Nav>
                         <Nav>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                <NavDropdown.Item as={Link} to="/home/myorders">Rendeléseim</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/home/myorders" id='rendeles-nav'>Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
@@ -74,7 +74,7 @@ function Navigation({cartClickAction}) {
                         <Nav className="me-auto">
                         </Nav>
                         <Nav>
-                            <Navbar.Brand size="1.5em" role="button" onClick={cartClickAction} > <TiShoppingCart size="1.5em" /> </Navbar.Brand>
+                            <Navbar.Brand id='cart_nav' size="1.5em" role="button" onClick={cartClickAction} > <TiShoppingCart size="1.5em" /> </Navbar.Brand>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
                                 <NavDropdown.Item as={Link} to="/orders">Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>

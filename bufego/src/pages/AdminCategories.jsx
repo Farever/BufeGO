@@ -80,19 +80,20 @@ const Categories = () => {
     }
   }
 
-  const newCategory = async (id, nev) => {
+  const newCategory = async (id, nev, hely) => {
     try
     {
       let response = axios.put("http://localhost:8000/kategoriafeltoltes", {
         "bufeId": id,
-        "katName" : nev
+        "katName" : nev,
+        "katHely" : parseInt(hely)
       })
 
       let data = (await response).data;
       alert(data['valasz']);
       fetchData();
       setModalShown(false);
-      location.reload();
+      //location.reload();
     }
     catch(error)
     {

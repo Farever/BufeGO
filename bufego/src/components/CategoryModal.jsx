@@ -51,7 +51,7 @@ export default function CategoryModal({isOpen,type, onClose ,categoryDetails, sa
             <Modal.Footer>
                 <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
                 {TorleGomb()}
-                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement) : save(1, ujNev ?? categoryDetails.categroy_name); onClose()}} variant="success">Mentés</Button>
+                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement) : save(1, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement); onClose()}} variant="success">Mentés</Button>
             </Modal.Footer>
         </Modal>
     )

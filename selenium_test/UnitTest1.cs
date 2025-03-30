@@ -4,6 +4,8 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 
 namespace Selenium_Tesztek
@@ -23,12 +25,12 @@ namespace Selenium_Tesztek
             var email_field = driver.FindElement(By.Id("email"));
             var password_field = driver.FindElement(By.Id("password"));
 
-            email_field.SendKeys("alisha.hintz@example.com");
-            password_field.SendKeys("cgrk");
+            email_field.SendKeys("admin1@bufego.com");
+            password_field.SendKeys("adminasdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
-            //Kell az url-t csekkolni, hogy jó owner vagy user oldalra megy
+            Assert.AreEqual(driver.Url, "http://localhost:5173/admin");
 
             driver.Quit();
         }
@@ -45,12 +47,12 @@ namespace Selenium_Tesztek
             var email_field = driver.FindElement(By.Id("email"));
             var password_field = driver.FindElement(By.Id("password"));
 
-            email_field.SendKeys("fisher.laurel@example.net");
-            password_field.SendKeys("kntv");
+            email_field.SendKeys("peter.kovacs@gmail.com");
+            password_field.SendKeys("asdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
-            //Kell az url-t csekkolni, hogy jó owner vagy user oldalra megy
+            Assert.AreEqual(driver.Url, "http://localhost:5173/home");
 
             driver.Quit();
         }
@@ -65,22 +67,23 @@ namespace Selenium_Tesztek
         public void Adminlogin()
         {
             driver = new ChromeDriver();
+            
             driver.Navigate().GoToUrl("http://localhost:5173");
-            driver.Manage().Window.Size = new System.Drawing.Size(1200, 800);
-
+            driver.Manage().Window.Size = new Size(1200, 800);
+            /*
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
 
             var email_field = driver.FindElement(By.Id("email"));
             var password_field = driver.FindElement(By.Id("password"));
 
-            email_field.SendKeys("alisha.hintz@example.com");
-            password_field.SendKeys("cgrk");
+            email_field.SendKeys("admin1@bufego.com");
+            password_field.SendKeys("adminasdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
             //Kell az url-t csekkolni, hogy jó owner vagy user oldalra megy
-
+            */
         }
 
         [TestCleanup]
@@ -93,8 +96,8 @@ namespace Selenium_Tesztek
         public void Navbar_Test()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin");
-
             Thread.Sleep(1000);
+            
             var orderLink = driver.FindElement(By.Id("nav-orders"));
 
             orderLink.Click();
@@ -126,22 +129,33 @@ namespace Selenium_Tesztek
         [TestMethod]
         public void RendelesTeszt()
         {
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/orders");
+            /*
+            WebDriverWait driverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            driverWait.Until(drv => drv.Url.Contains("admin/orders"));
+            */
+
             //TODO: Kell majd for ciklus át az egészen + valamiért a bekérés nem jó
-            driver.FindElement(By.XPath("//div[class=order-actions]"));
-            driver.FindElement(By.LinkText("Részletek")).Click();
+            //driverWait.Until(drv => drv.FindElement(By.ClassName("modal-body")));
+            Thread.Sleep(1000);
+            driver.FindElement(By.XPath("//div[contains(@class,'order-actions')]/button[contains(text(),'Részletek')]")).Click();
 
-            var modal = driver.FindElement(By.ClassName("modal-body"));
+            
+            var modal = driver.FindElements(By.ClassName("modal-body"));
 
-            var orderId = modal.FindElement(By.XPath(".//p[strong[contains(text(),'Rendelés azonosító')]]")).Text;
-            var email = modal.FindElement(By.XPath(".//p[strong[contains(text(),'Email')]]")).Text;
-            var status = modal.FindElement(By.XPath(".//p[strong[contains(text(),'Státusz')]]")).Text;
-            var orderTime = modal.FindElement(By.XPath(".//p[strong[contains(text(),'Rendelés leadásának ideje')]]")).Text;
-            var total = modal.FindElement(By.XPath(".//p[strong[contains(text(),'Összesen')]]")).Text;
+            var adatok = modal[0].FindElements(By.XPath("./p"));
+            var termeklista = modal[0].FindElement(By.XPath("./ul"));
+
+            var orderId = adatok[0].Text;
+            var email = adatok[1].Text;
+            var status = adatok[2].Text;
+            var orderTime = adatok[3].Text;
+            var total = adatok[4].Text;
 
             int orderIdNumber = int.Parse(orderId.Split(':')[1].Trim());
             string emailAddress = email.Split(':')[1].Trim();
             int statusNumber = int.Parse(status.Split(':')[1].Trim());
-            DateTime orderDate = DateTime.Parse(orderTime.Split(':')[1].Trim() + orderTime.Split(':')[2].Trim() + orderTime.Split(':')[3].Trim());
+            DateTime orderDate = DateTime.Parse(orderTime.Split(':')[1].Trim()+":" +orderTime.Split(':')[2].Trim() +":"+ orderTime.Split(':')[3].Trim());
             int totalAmount = int.Parse(total.Replace("Összesen:", "").Replace("Ft", "").Trim());
 
             Assert.IsTrue(orderIdNumber > 0, "Order ID nem 0");
@@ -151,41 +165,74 @@ namespace Selenium_Tesztek
             Assert.IsTrue(orderDate > DateTime.MinValue, "Valid a rendelés dátuma");
         }
 
-        /*
         [TestMethod]
-        public void Navbar_Test()
+        public void ProductGeneralva()
         {
-            driver.Navigate().GoToUrl("http://localhost:5173/admin");
-            driver.Manage().Window.Size = new System.Drawing.Size(1200, 800);
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/products");
+            Thread.Sleep(1000);
 
-            var orderLink = driver.FindElement(By.Id("nav-orders"));
+            var container = driver.FindElement(By.ClassName("products-grid"));
+            var cards = container.FindElements(By.XPath("./div"));
 
-            orderLink.Click();
-            Assert.AreEqual(driver.Url, "http://localhost:5173/admin/orders");
-
-            driver.Navigate().Back();
-            var statisticsLink = driver.FindElement(By.Id("nav-stats"));
-            statisticsLink.Click();
-            Assert.AreEqual(driver.Url, "http://localhost:5173/admin/statistics");
-
-            driver.Navigate().Back();
-            var productsLink = driver.FindElement(By.Id("nav-products"));
-            productsLink.Click();
-            Assert.AreEqual(driver.Url, "http://localhost:5173/admin/products");
-
-            driver.Navigate().Back();
-            var categoriesLink = driver.FindElement(By.Id("nav-categories"));
-            categoriesLink.Click();
-            Assert.AreEqual(driver.Url, "http://localhost:5173/admin/categories");
-
-            driver.Navigate().Back();
-            var reviewsLink = driver.FindElement(By.Id("nav-reviews"));
-            reviewsLink.Click();
-            Assert.AreEqual(driver.Url, "http://localhost:5173/admin/reviews");
+            Assert.IsTrue(cards.Count != 0);
 
             driver.Quit();
         }
-        */
+
+        [TestMethod]
+        public void ProductTorles()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/products");
+            Thread.Sleep(1000);
+
+            var container = driver.FindElement(By.ClassName("products-grid"));
+            var cards = container.FindElements(By.XPath("./div"));
+            cards[0].FindElement(By.XPath("./div/div/button[contains(@class,'btn-danger')]")).Click();
+
+            Thread.Sleep(1000);
+            var modal_body = driver.FindElement(By.ClassName("modal-body"));
+            modal_body.FindElement(By.XPath("./button[contains(@class,'accept-button')]")).Click();
+            Thread.Sleep(1000);
+            IAlert alert = driver.SwitchTo().Alert();
+
+            Assert.IsTrue(alert.Text == "Sikeres törlés");
+
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void UjKategoria()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/categories");
+            Thread.Sleep(1000);
+
+            var addbutton = driver.FindElement(By.XPath("//button[contains(text(),'Új kategória létrehozása')]"));
+            addbutton.Click();
+
+            var helyinput = driver.FindElement(By.Id("helyInput"));
+            helyinput.SendKeys("1");
+            driver.FindElement(By.XPath("//button[contains(text(),'Mentés')]")).Click();
+            Thread.Sleep(1000);
+            IAlert alert = driver.SwitchTo().Alert();
+
+            Assert.IsTrue(Convert.ToInt32(alert.Text) > 0);
+
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void ReviewTest()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/reviews");
+            Thread.Sleep(1000);
+
+            var container = driver.FindElement(By.ClassName("reviews-grid"));
+            var cards = container.FindElements(By.XPath("./div"));
+
+            Assert.IsTrue(cards.Count != 0);
+
+            driver.Quit();
+        }
     }
 
     [TestClass]
@@ -194,10 +241,11 @@ namespace Selenium_Tesztek
         private IWebDriver driver;
 
         [TestInitialize]
-        public void Adminlogin()
+        public void UserLogin()
         {
             driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:5173");
+            driver.Manage().Window.Size = new Size(1200, 800);
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -206,11 +254,11 @@ namespace Selenium_Tesztek
             var email_field = driver.FindElement(By.Id("email"));
             var password_field = driver.FindElement(By.Id("password"));
 
-            email_field.SendKeys("fisher.laurel@example.net");
-            password_field.SendKeys("kntv");
+            email_field.SendKeys("peter.kovacs@gmail.com");
+            password_field.SendKeys("asdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
-            sign_in_btn.Click();
+            //sign_in_btn.Click();
         }
 
         [TestCleanup]
@@ -245,6 +293,68 @@ namespace Selenium_Tesztek
             button.Click();
 
             Assert.IsTrue(!driver.Url.Equals("http://localhost:5173/home"), "A büfé kártyák gombjai átdobnak");
+
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void Kosarba_felvetel()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/home/bufe/1");
+
+            Thread.Sleep(2000);
+            var container = driver.FindElement(By.Id("categories_container"));
+            var categorydiv = container.FindElements(By.XPath("./div"))[0];
+            categorydiv.FindElement(By.XPath("./div")).Click();
+            Thread.Sleep(1000);
+            var modal = driver.FindElement(By.ClassName("modal-body"));
+            var input = modal.FindElement(By.XPath("./form/input"));
+            input.SendKeys("1");
+            var modalfooter = driver.FindElement(By.ClassName("modal-footer"));
+            modalfooter.FindElement(By.XPath("./button[contains(text(),'Kosárba')]")).Click();
+            Thread.Sleep(1000);
+            driver.SwitchTo().Alert().Accept();
+
+            driver.FindElement(By.Id("cart_nav")).Click();
+            
+            Thread.Sleep(1000);
+            var cart_modal = driver.FindElement(By.ClassName("modal-body"));
+            var products = cart_modal.FindElements(By.XPath("./div"));
+
+            Assert.IsTrue(products.Count > 0, "Felveszi a termékeket a kosárba");
+
+            driver.Quit();
+        }
+
+        [TestMethod]
+        public void Rendeles_teszt_full()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/home/bufe/1");
+
+            Thread.Sleep(2000);
+            var container = driver.FindElement(By.Id("categories_container"));
+            var categorydiv = container.FindElements(By.XPath("./div"))[0];
+            categorydiv.FindElement(By.XPath("./div")).Click();
+            Thread.Sleep(1000);
+            var modal = driver.FindElement(By.ClassName("modal-body"));
+            var input = modal.FindElement(By.XPath("./form/input"));
+            input.SendKeys("1");
+            var modalfooter = driver.FindElement(By.ClassName("modal-footer"));
+            modalfooter.FindElement(By.XPath("./button[contains(text(),'Kosárba')]")).Click();
+            Thread.Sleep(1000);
+            driver.SwitchTo().Alert().Accept();
+
+            driver.FindElement(By.Id("cart_nav")).Click();
+
+            Thread.Sleep(1000);
+            var modal_footer = driver.FindElement(By.ClassName("modal-footer"));
+            var button = modal_footer.FindElement(By.XPath("./button"));
+            button.Click();
+
+            Thread.Sleep(1000);
+            IAlert alert = driver.SwitchTo().Alert();
+
+            Assert.IsTrue(alert.Text == "Rendelését leadtuk!", "A teljes rendelési folyamat jól megy.");
 
             driver.Quit();
         }

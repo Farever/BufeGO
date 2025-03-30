@@ -270,11 +270,11 @@ function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData['bufeId']) || !isset($bodyData['katName'])) {
+    if (!isset($bodyData['bufeId']) || !isset($bodyData['katName']) || !isset($bodyData['katHely'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => kategoriaFeltolt($bodyData['bufeId'], $bodyData['katName'])];
+    return ['valasz' => kategoriaFeltolt($bodyData['bufeId'], $bodyData['katName'], $bodyData['katHely'])];
 }
 
 /**
@@ -1086,11 +1086,11 @@ function kategoriaModosit($katId, $katName, $katHely)
     return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
 }
 
-function kategoriaFeltolt($bufeId, $katName)
+function kategoriaFeltolt($bufeId, $katName, $katHely)
 {
-    $query = "INSERT INTO `categories`(`place_id`, `categroy_name`) VALUES (?,?);";
+    $query = "INSERT INTO `categories`(`place_id`, `categroy_name`, deleted, category_placement) VALUES (?,?,0,?);";
 
-    $kategoriak = valtoztatas($query, 'is', [$bufeId, $katName]);
+    $kategoriak = valtoztatas($query, 'isi', [$bufeId, $katName, $katHely]);
 
     return $kategoriak;
 }
