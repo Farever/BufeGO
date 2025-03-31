@@ -93,6 +93,19 @@ const Orders = () => {
           />
         ))}
       </div>
+      <h2>Korábbi rendelések</h2>
+      {isLoading && <Loading />}
+      {error && <div className="error-message">{error}</div>}
+      <div className="orders-grid">
+        {
+        orders.filter(order => order.status == 4 || order.status == 5 ).map((order) => (
+          <OrderCard
+            key={order.id}
+            order={order}
+            onDetails={handleDetails}
+          />
+        ))}
+      </div>
     </div>
   );
 };

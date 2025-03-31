@@ -44,8 +44,8 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
   const handleClick = () => {
     console.log(isOnAdminPage);
     if (isOnAdminPage) {
-      console.log("Admin" + buffet.id);
       setBufe();
+      navigate('/admin/orders');
     } else {
       navigate('/home/bufe/' + buffet.id);
     }
@@ -71,10 +71,10 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
         {isLoading && <p>Loading ratings...</p>}
         {error && <p>Error: {error}</p>}
 
-        <Button variant="primary" onClick={handleClick} className="button">
-          Megtekintés
+        <Button variant="primary" onClick={handleClick} className="button mx-3">
+          Kiválasztás
         </Button>
-        { isOnAdminPage ? <Button variant="secondary" onClick={onModClick} className="button">Modósítás</Button> : null}
+        { isOnAdminPage ? <Button variant="secondary" onClick={onModClick} className="button mx-3">Modósítás</Button> : null}
       </Card.Body>
     </Card>
   );
