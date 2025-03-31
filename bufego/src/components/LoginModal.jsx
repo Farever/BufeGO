@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../Contexts';
 
-const LoginModal = ({ isOpen, onClose, onForgottenPassword, setLoggedinUser}) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginState, setLoginState] = useState(false);
@@ -13,6 +14,7 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword, setLoggedinUser}) =>
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState({});
   const navigate = useNavigate();
+  const {setUser} = useContext(AuthContext);
 
   const navAfterLogin = (userProfile) =>
   {
@@ -58,7 +60,7 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword, setLoggedinUser}) =>
           credentials : "include"
         })
         let user = (await data.json())["valasz"];
-        setLoggedinUser(user);
+        setUser(user);
         navAfterLogin(user);
         console.log(user);
       } else {

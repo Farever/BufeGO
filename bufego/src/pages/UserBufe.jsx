@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Loading from "../components/Loading";
 import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
@@ -6,8 +6,9 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import ProductToCartModal from "../components/ProductToCartModal";
 import CartModal from "../components/CartModal";
 import { useParams } from "react-router-dom";
+import { AuthContext } from '../Contexts';
 
-export default function UserBufe({userData,getUser,isCartShown, cartSet }) {
+export default function UserBufe({isCartShown, cartSet }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -15,8 +16,8 @@ export default function UserBufe({userData,getUser,isCartShown, cartSet }) {
     const [selectedProduct, setSeletdetProduct] = useState(null);  // Módosítva a kezdeti értéken
     const [modalShown, setModalShown] = useState(false);
     const [frissits, setFrissits] = useState(false);
-
     const { bufeId } = useParams();
+    const {userData} = useContext(AuthContext);
 
 
     useEffect(() => {
@@ -63,8 +64,6 @@ export default function UserBufe({userData,getUser,isCartShown, cartSet }) {
                 setIsLoading(false);
             }
         };
-
-        getUser();
         fetchCategories();
         fetchProduct();
     }, []); // BufoId is a dependency
@@ -118,7 +117,7 @@ export default function UserBufe({userData,getUser,isCartShown, cartSet }) {
             </Container>
 
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={() => { setModalShown(false) }} addToCart={AddToCart} />
-            <CartModal userData={userData} getUser={getUser} bufeId={bufeId} isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
+            <CartModal userData={userData} bufeId={bufeId} isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
         </>
     );
 }
