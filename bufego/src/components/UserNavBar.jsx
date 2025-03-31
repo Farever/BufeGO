@@ -4,11 +4,12 @@ import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Butt
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
+import { useNavigate } from 'react-router-dom'
 
 function Navigation({cartClickAction}) {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
-
+    const navigate = useNavigate();
     const ShowNavbar = location.pathname.startsWith('/home');
     const ShowSchoolSelect = !location.pathname.startsWith('/home/bufe');
 
@@ -34,6 +35,22 @@ function Navigation({cartClickAction}) {
         //navigate(`/iskola/${iskolaId}`);
     };
 
+    const kijelenkezes = async () =>
+    {
+        try {
+            
+            let resp = await fetch('http://localhost:8000/kijelentkezes', {credentials: "include"});
+            
+            if(resp.ok)
+            {
+                navigate("/");
+            }
+
+        } catch (error) {
+            console.error("Hiba az iskolák lekérésekor:", error);
+        }
+    }
+
     if (ShowNavbar && ShowSchoolSelect) {
         return (
             <Navbar bg="light" expand="lg">
@@ -56,7 +73,7 @@ function Navigation({cartClickAction}) {
                                 <NavDropdown.Item as={Link} to="/home/myorders" id='rendeles-nav'>Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                <NavDropdown.Item onClick={kijelenkezes}>Kijelentkezés</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
