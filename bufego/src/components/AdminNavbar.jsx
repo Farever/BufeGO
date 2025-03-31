@@ -4,14 +4,31 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useLocation, Outlet } from 'react-router-dom'; // Importáljuk a useLocation hook-ot
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
+import { useNavigate } from 'react-router-dom'
 
 const AdminNavbar = () => {
     const location = useLocation();
-
+    const navigate = useNavigate();
     // Itt adhatod meg, mely útvonalakon jelenjen meg a Navbar
     const showNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
 
     const [buffets, setBuffets] = useState([]);
+
+    const kijelenkezes = async () =>
+    {
+        try {
+            
+            let resp = await fetch('http://localhost:8000/kijelentkezes', {credentials: "include"});
+            
+            if(resp.ok)
+            {
+                navigate("/");
+            }
+
+        } catch (error) {
+            console.error("Hiba az iskolák lekérésekor:", error);
+        }
+    }
 
     useEffect(() => {
         const fetchBuffets = async () => {
@@ -95,7 +112,7 @@ const AdminNavbar = () => {
                                 <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
                                     <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={kijelenkezes}>Kijelentkezés</NavDropdown.Item>
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>
