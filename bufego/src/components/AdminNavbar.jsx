@@ -36,7 +36,9 @@ const AdminNavbar = () => {
             }
           };
 
-        fetchBuffets();
+        if(showNavbar){
+            fetchBuffets();
+        }
     }, []);
 
     const handleBufeValasztas = (event) => {

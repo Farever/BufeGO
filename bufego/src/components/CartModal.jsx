@@ -3,47 +3,41 @@ import { Button, Modal } from "react-bootstrap"
 import CartCard from "./CartCard"
 import axios from "axios"
 
-export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissit }) {
+export default function CartModal({ bufeId, isShown, onClose, frissits, stopFrissit }) {
     const [products, setProducts] = useState([])
-    const [vegosszeg, setVegosszeg] = useState(null)
-
-    const userData = {};
+    const [vegosszeg, setVegosszeg] = useState(null);
+    const [userData, setUserData] = useState({});
     function formatHUF(number) {
         const formatter = new Intl.NumberFormat('hu-HU', {
-          style: 'currency',
-          currency: 'HUF',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0
+            style: 'currency',
+            currency: 'HUF',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
         });
         return formatter.format(number);
-      }
-
-    
+    }
 
     useEffect(() => {
-
-        const getUser = async() =>
-            {
-              try {
+        const getUser = async () => {
+            try {
                 let resp = await fetch("http://localhost:8000/sessdata", {
-                  credentials: "include"
+                    credentials: "include"
                 });
-                if(resp.ok)
-                {
-                  let data = await resp.json()
-                  console.log(data);
-                  userData = data.valasz;
+                if (resp.ok) {
+                    let data = await resp.json()
+                    setUserData(data.valasz);
                 }
-                
-              } catch (error) {
+
+            } catch (error) {
                 console.log(error);
-              }
             }
-          
-        getUser();
-        getCart();
-        stopFrissit();
-    }, [frissits])
+        }
+
+        if (isShown) {
+            getUser();
+            getCart();
+        }
+    }, [isShown])
 
 
     useEffect(() => {
@@ -56,11 +50,10 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
 
     const getCart = async () => {
         try {
-            console.log(userData);
-            const response = await fetch(`http://localhost:8000/kosar?place_id=${bufeId}&user_id=${userData.user_id.user_id}`);
+            const response = await fetch(`http://localhost:8000/kosar?place_id=${bufeId}&user_id=${userData.user_id}`);
             if (response.status == 200) {
-                let data = await response.data.valasz;
-                setProducts(data);
+                let data = await response.json();
+                setProducts(data.valasz);
             }
         }
         catch (error) {
@@ -68,8 +61,7 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
         }
     }
 
-    getCart();
-    console.log(userData);
+
     const Rendel = async () => {
         try {
             const response = await axios.post("http://localhost:8000/rendel",
@@ -95,25 +87,21 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
     }
 
     const KosarTorol = async () => {
-        try
-        {   
-            console.log({"user_id": userData.user_id, "place_id" : bufeId});
+        try {
             const response = await fetch("http://localhost:8000/kosartorles", {
-                method :"DELETE",
+                method: "DELETE",
                 headers:
                 {
-                    "Content-Type" : "application/json"
+                    "Content-Type": "application/json"
                 },
-                body : JSON.stringify({"user_id": userData.user_id, "place_id" : bufeId})
+                body: JSON.stringify({ "user_id": userData.user_id, "place_id": bufeId })
             })
         }
-        catch(error)
-        {
+        catch (error) {
             console.log(error);
         }
     }
-    if(products != "Nincsenek találatok!")
-    {
+    if (products != "Nincsenek találatok!") {
         return (
             <Modal show={isShown} onHide={onClose}>
                 <Modal.Header>
@@ -121,10 +109,10 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
                 </Modal.Header>
                 <Modal.Body>
                     {
-                    products.map((p, index) => (
-                        <CartCard key={index + "termek"} product={p} frissit={getCart} />
-                    ))
-                }
+                        products.map((p, index) => (
+                            <CartCard key={index + "termek"} product={p} frissit={getCart} />
+                        ))
+                    }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" onClick={Rendel}>Rendel</Button>
@@ -133,17 +121,16 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
             </Modal>
         )
     }
-    else
-    {
-        return(
+    else {
+        return (
             <Modal show={isShown} onHide={onClose}>
                 <Modal.Header>
                     <p>Büfé kosara</p>
                 </Modal.Header>
                 <Modal.Body>
                     {
-                    <p>A kosara üres!</p>
-                }
+                        <p>A kosara üres!</p>
+                    }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" disabled>Rendel</Button>
@@ -152,5 +139,5 @@ export default function CartModal({bufeId,isShown, onClose, frissits, stopFrissi
             </Modal>
         )
     }
-    
+
 }

@@ -29,7 +29,12 @@ const Admin = ({setBufe}) => {
         const response = await axios.get('http://localhost:8000/admin_fo', {
           params: { admin_id: data.valasz.user_id },
         });
-        setBuffets(response.data.valasz);
+        if(Array.isArray(response.data.valasz)){
+          setBuffets(response.data.valasz);
+        }else{
+          setBuffets([]);
+        }
+        
       } else {
         throw new Error("Sikertelen munkamenet adat lekérés");
       }

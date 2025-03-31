@@ -63,7 +63,7 @@ function App() {
               <Route path="/home/bufe/:bufeId" element={<UserBufe userData={userProfile} isCartShown={isCartOpen} cartSet={setCartOpen}  getUser={getUser}/>} />
               <Route path="/home/myorders" element={<OrdersPage />} />
               <Route path="/admin" element={<Admin setBufe={setBufe} userData/>} />
-              <Route path="/admin/orders" element={<AdminOrders bufeId={adminBufe} getUser={getUser}/>} />
+              <Route path="/admin/orders" element={<AdminOrders bufeId={adminBufe.current} getUser={getUser}/>} />
               <Route path="/admin/statistics" element={<AdminStats bufeId={adminBufe} getUser={getUser}/>} />
               <Route path="/admin/products" element={<AdminProducts bufeId={adminBufe} getUser={getUser}/>} />
               <Route path="/admin/categories" element={<AdminCategories bufeId={adminBufe} getUser={getUser}/>} />
