@@ -4,8 +4,9 @@ import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Butt
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
+import { LinkContainer } from 'react-router-bootstrap';
 
-function Navigation({cartClickAction}) {
+function Navigation({ cartClickAction }) {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
 
@@ -38,7 +39,9 @@ function Navigation({cartClickAction}) {
         return (
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <Navbar.Brand as={Link} to="/home">BüféGO</Navbar.Brand>
+                    <LinkContainer to="/home">
+                        <Navbar.Brand as={Link} to="/home">BüféGO</Navbar.Brand>
+                    </LinkContainer>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
@@ -53,10 +56,16 @@ function Navigation({cartClickAction}) {
                         </Nav>
                         <Nav>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                <NavDropdown.Item as={Link} to="/home/myorders" id='rendeles-nav'>Rendeléseim</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                <LinkContainer to="/home/myorders">
+                                    <NavDropdown.Item id='rendeles-nav'>Rendeléseim</NavDropdown.Item>
+                                </LinkContainer>
+                                <LinkContainer to="/settings">
+                                    <NavDropdown.Item>Beállítások</NavDropdown.Item>
+                                </LinkContainer>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                <LinkContainer to="/logout">
+                                    <NavDropdown.Item>Kijelentkezés</NavDropdown.Item>
+                                </LinkContainer>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
@@ -64,7 +73,7 @@ function Navigation({cartClickAction}) {
             </Navbar>
         );
     }
-    if(ShowNavbar && !ShowSchoolSelect){
+    if (ShowNavbar && !ShowSchoolSelect) {
         return (
             <Navbar bg="light" expand="lg">
                 <Container>
@@ -76,10 +85,16 @@ function Navigation({cartClickAction}) {
                         <Nav>
                             <Navbar.Brand id='cart_nav' size="1.5em" role="button" onClick={cartClickAction} > <TiShoppingCart size="1.5em" /> </Navbar.Brand>
                             <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                <NavDropdown.Item as={Link} to="/home/myorders">Rendeléseim</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                <LinkContainer to="/home/myorders">
+                                    <NavDropdown.Item id='rendeles-nav'>Rendeléseim</NavDropdown.Item>
+                                </LinkContainer>
+                                <LinkContainer to="/settings">
+                                    <NavDropdown.Item>Beállítások</NavDropdown.Item>
+                                </LinkContainer>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                <LinkContainer to="/logout">
+                                    <NavDropdown.Item>Kijelentkezés</NavDropdown.Item>
+                                </LinkContainer>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

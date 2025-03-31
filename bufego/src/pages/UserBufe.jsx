@@ -103,7 +103,15 @@ export default function UserBufe({isCartShown, cartSet }) {
                     <Navbar.Collapse>
                         <Nav className="me-auto">
                             {categories.filter(c => parseInt(c.deleted) === 0).map((c) =>
-                                <Nav.Link key={c.id} href={"#" + c.categroy_name}>{c.categroy_name}</Nav.Link>
+                                <Nav.Link 
+                                key={c.id} 
+                                onClick={(e) => {
+                                    e.preventDefault(); // Megakadályozza az alapértelmezett viselkedést
+                                    document.getElementById(c.categroy_name)?.scrollIntoView({ behavior: "smooth" });
+                                }}
+                            >
+                                {c.categroy_name}
+                            </Nav.Link>
                             )}
                         </Nav>
                     </Navbar.Collapse>

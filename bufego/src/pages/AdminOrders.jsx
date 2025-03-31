@@ -4,7 +4,6 @@ import Loading from '../components/Loading';
 import axios from 'axios';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 import '../styles/admin.css';
-import { data } from 'react-router-dom';
 import { AdminBufeContext } from '../Contexts';
 
 const Orders = () => {

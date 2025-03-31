@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
-import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../Contexts';
 
 const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {

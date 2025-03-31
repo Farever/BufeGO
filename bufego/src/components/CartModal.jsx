@@ -20,7 +20,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
     useEffect(() => {
         const getUser = async () => {
             try {
-                let resp = await fetch("http://localhost:8000/sessdata", {
+                let resp = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
                     credentials: "include"
                 });
                 if (resp.ok) {

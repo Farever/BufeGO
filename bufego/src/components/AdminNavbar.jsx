@@ -16,27 +16,27 @@ const AdminNavbar = () => {
     useEffect(() => {
         const fetchBuffets = async () => {
             try {
-              const response = await axios.get('http://localhost/BufeGO/api/index.php/admin_fo', {
-                params: { admin_id: "1" },
-              });
-          
-              if (response.status === 200) {
-                const buffets = response.data?.valasz;
-                
-                // Ellenőrizzük, hogy `valasz` egy tömb-e
-                if (Array.isArray(buffets)) {
-                  setBuffets(buffets);
-                } else {
-                  setBuffets([]); // Ha nem tömb, akkor üres tömb
-                }
-              }
-            } catch (err) {
-              console.log(err.message);
-              setBuffets([]); // Hiba esetén is üres tömb
-            }
-          };
+                const response = await axios.get('http://localhost/BufeGO/api/index.php/admin_fo', {
+                    params: { admin_id: "1" },
+                });
 
-        if(showNavbar){
+                if (response.status === 200) {
+                    const buffets = response.data?.valasz;
+
+                    // Ellenőrizzük, hogy `valasz` egy tömb-e
+                    if (Array.isArray(buffets)) {
+                        setBuffets(buffets);
+                    } else {
+                        setBuffets([]); // Ha nem tömb, akkor üres tömb
+                    }
+                }
+            } catch (err) {
+                console.log(err.message);
+                setBuffets([]); // Hiba esetén is üres tömb
+            }
+        };
+
+        if (showNavbar) {
             fetchBuffets();
         }
     }, []);
@@ -55,24 +55,36 @@ const AdminNavbar = () => {
             <>
                 <Navbar bg="light" expand="lg" style={{ visibility: showNavbar ? 'visible' : 'hidden' }}>
                     <Container>
-                        <Navbar.Brand href="/admin">BüféGO</Navbar.Brand>
+                        <LinkContainer to="/admin">
+                            <Navbar.Brand href="/admin">BüféGO</Navbar.Brand>
+                        </LinkContainer>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
+                                    <LinkContainer to="/admin/orders">
+                                        <Nav.Link id='nav-orders'>Rendelések</Nav.Link>
+                                    </LinkContainer>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
+                                    <LinkContainer to="/admin/statistics">
+                                        <Nav.Link id='nav-stats'>Statisztika</Nav.Link>
+                                    </LinkContainer>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/products' id='nav-products'>Termékek</Nav.Link>
+                                    <LinkContainer to="/admin/products">
+                                        <Nav.Link id='nav-products'>Termékek</Nav.Link>
+                                    </LinkContainer>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href='/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
+                                    <LinkContainer to="/admin/categories">
+                                        <Nav.Link id='nav-categories'>Kategóriák</Nav.Link>
+                                    </LinkContainer>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link href="/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
+                                    <LinkContainer to="/admin/reviews">
+                                        <Nav.Link id='nav-reviews'>Értékelések</Nav.Link>
+                                    </LinkContainer>
                                 </Nav.Item>
                             </Nav>
                             <Nav className="me-auto">
@@ -93,9 +105,13 @@ const AdminNavbar = () => {
                             </Nav>
                             <Nav>
                                 <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
-                                    <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
+                                    <LinkContainer to="/settings">
+                                        <NavDropdown.Item>Beállítások</NavDropdown.Item>
+                                    </LinkContainer>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                    <LinkContainer to="/logout">
+                                        <NavDropdown.Item>Kijelentkezés</NavDropdown.Item>
+                                    </LinkContainer>
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>

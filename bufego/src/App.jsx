@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import AdminNavbar from './components/AdminNavbar';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
@@ -29,7 +29,7 @@ function App() {
   return (
     <AuthProvider>
       <AdminProvider>
-        <BrowserRouter>
+        <Router>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <AdminNavbar />
             <Navigation cartClickAction={() => { setCartOpen(true) }} />
@@ -72,7 +72,7 @@ function App() {
             </div>
             <Footer />
           </div>
-        </BrowserRouter>
+        </Router>
       </AdminProvider>
     </AuthProvider>
   )
