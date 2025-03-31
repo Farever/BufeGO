@@ -14,7 +14,7 @@ namespace BufeGO_Frontend_Teszt
     public class LoginTests
     {
         [TestMethod]
-        public void BejelentkezésTest_Owner()
+        public void BejelentkezésTest_Tulaj()
         {
             IWebDriver driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:5173");
@@ -39,7 +39,7 @@ namespace BufeGO_Frontend_Teszt
         }
 
         [TestMethod]
-        public void BejelentkezésTest_User()
+        public void BejelentkezésTest_Felhasznalo()
         {
             IWebDriver driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:5173");
@@ -90,6 +90,7 @@ namespace BufeGO_Frontend_Teszt
             Thread.Sleep(1000);
             driver.SwitchTo().Alert().Accept();
             Thread.Sleep(1000);
+            driver.FindElements(By.XPath("//button[contains(text(),'Kiválasztás')]"))[0].Click();
         }
 
         [TestCleanup]
@@ -99,7 +100,7 @@ namespace BufeGO_Frontend_Teszt
         }
 
         [TestMethod]
-        public void Navbar_Test()
+        public void Navbar_Teszt()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin");
             Thread.Sleep(1000);
@@ -133,7 +134,7 @@ namespace BufeGO_Frontend_Teszt
         }
 
         [TestMethod]
-        public void RendelesTeszt()
+        public void RendelesGeneralva()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin/orders");
             /*
@@ -227,7 +228,7 @@ namespace BufeGO_Frontend_Teszt
         }
 
         [TestMethod]
-        public void ReviewTest()
+        public void ErtekelesTeszt()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin/reviews");
             Thread.Sleep(1000);
