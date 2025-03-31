@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
 import axios from 'axios';
 import Editmodal from '../components/Editmodal';
+import { AdminBufeContext } from '../Contexts';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
-  let place_id = 1;
+  const {adminBufe} = useContext(AdminBufeContext);
+
 
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -25,7 +27,7 @@ const Products = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost/BufeGO/api/index.php/termekek?place_id=' + place_id);
+      const response = await fetch('http://localhost/BufeGO/api/index.php/termekek?place_id=' + adminBufe.id);
       let data = await response.json();
       
       // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
@@ -49,7 +51,7 @@ const Products = () => {
     const intervalId = setInterval(fetchProducts, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+  }, [adminBufe]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
     <div>

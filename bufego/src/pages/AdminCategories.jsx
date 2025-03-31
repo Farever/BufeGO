@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import CategoryCard from '../components/CategoryCard';
 import CategoryModal from '../components/CategoryModal';
+import { AdminBufeContext } from '../Contexts';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -12,16 +13,17 @@ const Categories = () => {
   const [modalShown, setModalShown] = useState(false);
   const [modalType, setModalType] = useState("mod");
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const {adminBufe} = useContext(AdminBufeContext);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [adminBufe]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get("http://localhost/BufeGO/api/index.php/kategoriak", {
-        params: { bufeId: "1" }
+        params: { bufeId: adminBufe.id }
       });
   
       if (response.status === 200) {
@@ -80,19 +82,20 @@ const Categories = () => {
     }
   }
 
-  const newCategory = async (id, nev) => {
+  const newCategory = async (id, nev, hely) => {
     try
     {
       let response = axios.put("http://localhost/BufeGO/api/index.php/kategoriafeltoltes", {
         "bufeId": id,
-        "katName" : nev
+        "katName" : nev,
+        "katHely" : parseInt(hely)
       })
 
       let data = (await response).data;
       alert(data['valasz']);
       fetchData();
       setModalShown(false);
-      location.reload();
+      //location.reload();
     }
     catch(error)
     {
@@ -146,7 +149,7 @@ const Categories = () => {
       </div>
       <hr/>
       <Button type='button' variant='success' onClick={ujButtonClicked}>Új kategória létrehozása</Button>
-      {<CategoryModal type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
+      {<CategoryModal bufeId={adminBufe.id} type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
     </div>
   );
 };

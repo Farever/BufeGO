@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ReviewCard from '../components/ReviewCard';
 import Loading from '../components/Loading';
+import { AdminBufeContext } from '../Contexts';
+
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const {adminBufe} = useContext(AdminBufeContext);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let resp = await fetch('http://localhost/BufeGO/api/index.php/ertekelesek?placeId=' + 1);
+        let resp = await fetch('http://localhost/BufeGO/api/index.php/ertekelesek?placeId=' + adminBufe.id);
         let data = await resp.json();
     
         console.log(data);
@@ -32,7 +35,7 @@ const Reviews = () => {
     
 
     fetchData();
-  }, []);
+  }, [adminBufe]);
 
   return (
     <div>

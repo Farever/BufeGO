@@ -9,7 +9,7 @@ const monthNames = [
 ];
 const year = 2025;
 
-function MonthlyIncomeChart() {
+function MonthlyIncomeChart({bufeId}) {
   const [ratings, setRatings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -21,7 +21,7 @@ function MonthlyIncomeChart() {
     setError(null);
     try {
       const response = await axios.get('http://localhost/BufeGO/api/index.php/stat_monthly_income', {
-        params: { place_id: "1", year:year},
+        params: { place_id: bufeId, year:year},
       });
 
       const formattedRatings = response.data.valasz.map(item => ({

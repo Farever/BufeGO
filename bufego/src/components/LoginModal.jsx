@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { sha512 } from 'js-sha512';
 import axios from "axios";
 import '../styles/LoginModal.css';
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../Contexts';
 
-const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginState, setLoginState] = useState(false);
@@ -13,6 +15,19 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState({});
   const navigate = useNavigate();
+  const {setUser} = useContext(AuthContext);
+
+  const navAfterLogin = (userProfile) =>
+  {
+    if(userProfile.is_admin == 1)
+    {
+      navigate("/admin");
+    }
+    else
+    {
+        navigate("/home");
+    }
+  }
 
   const validateForm = () => {
     const errors = {};
@@ -45,7 +60,10 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
         let data = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
           credentials : "include"
         })
-        navigate('/home');
+        let user = (await data.json())["valasz"];
+        setUser(user);
+        navAfterLogin(user);
+        console.log(user);
       } else {
         alert('Sikertelen bejelentkezés! Próbálja újra!');
       }

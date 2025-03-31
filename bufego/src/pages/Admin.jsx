@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import BuffetCard from '../components/BuffetCard';
 import Loading from '../components/Loading';
@@ -6,6 +6,7 @@ import BuffetAddModal from '../components/AddBuffetModal';
 import axios from 'axios';
 import '../styles/admin.css';
 import BuffetDetailsModal from '../components/BuffetDetailsModal';
+import { AdminBufeContext } from '../Contexts';
 
 const Admin = () => {
   const [userId, setUserId] = useState(null);
@@ -16,6 +17,8 @@ const Admin = () => {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedBuffet, setSelectedBuffet] = useState(null);
+
+  const  {adminBufe, setBufe} = useContext(AdminBufeContext);
 
   const fetchBuffets = async () => {
     setIsLoading(true);
@@ -29,7 +32,12 @@ const Admin = () => {
         const response = await axios.get('http://localhost/BufeGO/api/index.php/admin_fo', {
           params: { admin_id: data.valasz.user_id },
         });
-        setBuffets(response.data.valasz);
+        if(Array.isArray(response.data.valasz)){
+          setBuffets(response.data.valasz);
+        }else{
+          setBuffets([]);
+        }
+        
       } else {
         throw new Error("Sikertelen munkamenet adat lekérés");
       }
@@ -92,6 +100,7 @@ const Admin = () => {
             <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
               <BuffetCard
                 buffet={buffet}
+                setBufe={() => setBufe(buffet)}
                 isOnAdminPage={true}
                 onModClick={() => handleModClick(buffet.id)}
               />

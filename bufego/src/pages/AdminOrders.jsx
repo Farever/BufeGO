@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import OrderCard from '../components/OrderCard';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 import '../styles/admin.css';
 import { data } from 'react-router-dom';
+import { AdminBufeContext } from '../Contexts';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,6 +16,7 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  const {adminBufe} = useContext(AdminBufeContext);
 
   const handleCloseDetailsModal = () => {
     fetchOrders();
@@ -27,7 +29,7 @@ const Orders = () => {
     setError(null);
     try {
       const response = await axios.get('http://localhost/BufeGO/api/index.php/bufe_rendelesek', {
-        params: { place_id: "1" },
+        params: { place_id: adminBufe.id }
       });
   
       // Ellenőrizzük, hogy `valasz.rendelesek` létezik és tömb-e
@@ -51,7 +53,7 @@ const Orders = () => {
     const intervalId = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]);
+  }, [adminBufe.id]);
 
   const handleDetails = (orderId) => {
     setSelectedOrder(orders.filter(order => order.id == orderId));
@@ -84,6 +86,19 @@ const Orders = () => {
       <div className="orders-grid">
         {
         orders.filter(order => order.status == 2 || order.status == 3 ).map((order) => (
+          <OrderCard
+            key={order.id}
+            order={order}
+            onDetails={handleDetails}
+          />
+        ))}
+      </div>
+      <h2>Korábbi rendelések</h2>
+      {isLoading && <Loading />}
+      {error && <div className="error-message">{error}</div>}
+      <div className="orders-grid">
+        {
+        orders.filter(order => order.status == 4 || order.status == 5 ).map((order) => (
           <OrderCard
             key={order.id}
             order={order}

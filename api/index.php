@@ -4,8 +4,13 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
+use Dotenv\Dotenv;
 
-Configuration::instance('cloudinary://289199581986461:U8LGEe_Le_lEALtasJA1sii9FdI@duerxasjk?secure=true');
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$cloudinary_url = $_ENV['CLOUDINARY_URL'];
+Configuration::instance($cloudinary_url);
 
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header("Access-Control-Allow-Credentials: true");
@@ -82,8 +87,8 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
-        'kosartargytorles' => handleKosarTargyTorles($method, $getData),
-        'kosartorles' => handleKosarTorles($method, $getData),
+        'kosartargytorles' => handleKosarTargyTorles($method, $bodyData),
+        'kosartorles' => handleKosarTorles($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
         'ertekelesek' => handleErtekelesek($method, $getData),
         default => ['valasz' => 'Hibás url', 'status' => 400],
@@ -265,11 +270,11 @@ function handleKategoriaFeltoltes(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($bodyData['bufeId']) || !isset($bodyData['katName'])) {
+    if (!isset($bodyData['bufeId']) || !isset($bodyData['katName']) || !isset($bodyData['katHely'])) {
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    return ['valasz' => kategoriaFeltolt($bodyData['bufeId'], $bodyData['katName'])];
+    return ['valasz' => kategoriaFeltolt($bodyData['bufeId'], $bodyData['katName'], $bodyData['katHely'])];
 }
 
 /**
@@ -380,12 +385,13 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $sql = "SELECT `id`,`passcode`, `name` FROM `users` WHERE `email` = '{$data['email']}' AND `isActive` = 1";
+    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner FROM `users` WHERE `email` = '{$data['email']}' AND `isActive` = 1";
     $userData = lekeres($sql);
 
     if (is_array($userData)) {
         session_id();
         $_SESSION["user_id"] = $userData[0]["id"];
+        $_SESSION["is_admin"] = $userData[0]["is_place_owner"];
         return ['valasz' => $userData];
     } else {
         return ['valasz' => 'Nincs ilyen e-mail cím'];
@@ -418,7 +424,7 @@ function handleGetSessData($method)
 
     if(!isset($_COOKIE["PHPSESSID"]))
     {
-        return ['valasz' => 'Nincs bejelentkezvel!', 'status' => 400];
+        return ['valasz' => 'Nincs bejelentkezve!', 'status' => 400];
     }
 
     return["valasz" => $_SESSION];
@@ -735,7 +741,6 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
             'public_id' => $imgName,
             'quality_analysis' => true,
             'colors' => true,
-            'http_client' => new \GuzzleHttp\Client(['verify' => false])
         ]);
 
         if($response == "Sikertelen művelet!"){
@@ -1081,11 +1086,11 @@ function kategoriaModosit($katId, $katName, $katHely)
     return json_encode($kategoriak, JSON_UNESCAPED_UNICODE);
 }
 
-function kategoriaFeltolt($bufeId, $katName)
+function kategoriaFeltolt($bufeId, $katName, $katHely)
 {
-    $query = "INSERT INTO `categories`(`place_id`, `categroy_name`) VALUES (?,?);";
+    $query = "INSERT INTO `categories`(`place_id`, `categroy_name`, deleted, category_placement) VALUES (?,?,0,?);";
 
-    $kategoriak = valtoztatas($query, 'is', [$bufeId, $katName]);
+    $kategoriak = valtoztatas($query, 'isi', [$bufeId, $katName, $katHely]);
 
     return $kategoriak;
 }

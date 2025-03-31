@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Loading from "../components/Loading";
 import axios from 'axios';
 import CategoryDiv from "../components/CategoryDiv";
@@ -6,8 +6,9 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import ProductToCartModal from "../components/ProductToCartModal";
 import CartModal from "../components/CartModal";
 import { useParams } from "react-router-dom";
+import { AuthContext } from '../Contexts';
 
-export default function UserBufe({ isCartShown, cartSet }) {
+export default function UserBufe({isCartShown, cartSet }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -15,8 +16,9 @@ export default function UserBufe({ isCartShown, cartSet }) {
     const [selectedProduct, setSeletdetProduct] = useState(null);  // Módosítva a kezdeti értéken
     const [modalShown, setModalShown] = useState(false);
     const [frissits, setFrissits] = useState(false);
-
     const { bufeId } = useParams();
+    const {userData} = useContext(AuthContext);
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -62,7 +64,6 @@ export default function UserBufe({ isCartShown, cartSet }) {
                 setIsLoading(false);
             }
         };
-
         fetchCategories();
         fetchProduct();
     }, []); // BufoId is a dependency
@@ -71,7 +72,7 @@ export default function UserBufe({ isCartShown, cartSet }) {
         try {
             const response = await axios.post("http://localhost/BufeGO/api/index.php/kosarba", {
                 "place_id": bufeId,
-                "user_id": 1,
+                "user_id": userData.user_id,
                 "quantity": q,
                 "product_id": pid
             });
@@ -109,14 +110,14 @@ export default function UserBufe({ isCartShown, cartSet }) {
                 </Container>
             </Navbar>
 
-            <Container>
+            <Container id="categories_container">
                 {categories.filter(c => parseInt(c.deleted) === 0).map((c) =>
                     <CategoryDiv key={c.id} catId={c.id} catNev={c.categroy_name} termekek={products} buttonActions={openOrderModal} />
                 )}
             </Container>
 
             <ProductToCartModal isOpen={modalShown} product={selectedProduct} onClose={() => { setModalShown(false) }} addToCart={AddToCart} />
-            <CartModal isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
+            <CartModal userData={userData} bufeId={bufeId} isShown={isCartShown} onClose={() => { cartSet(false) }} stopFrissit={() => { setFrissits(false) }} frissits={frissits} />
         </>
     );
 }

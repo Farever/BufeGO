@@ -6,7 +6,7 @@ import "../styles/Stats.css"
 
 
 //propsba dobjam majd be a place id-t
-function MonthlyIncomeChart() {
+function MonthlyIncomeChart({bufeId}) {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
