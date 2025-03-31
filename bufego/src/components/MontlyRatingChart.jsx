@@ -11,7 +11,7 @@ const monthNames = [
 const year = 2025;
 
 
-function MonthlyRatingChart() {
+function MonthlyRatingChart({bufeId}) {
   const [ratings, setRatings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -23,7 +23,7 @@ function MonthlyRatingChart() {
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/getmonthlyrating', {
-        params: { place_id: "1", year:year},
+        params: { place_id: bufeId, year:year},
       });
 
       const formattedRatings = response.data.valasz.map(item => ({

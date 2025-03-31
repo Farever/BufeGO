@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import BuffetCard from '../components/BuffetCard';
 import Loading from '../components/Loading';
@@ -6,8 +6,9 @@ import BuffetAddModal from '../components/AddBuffetModal';
 import axios from 'axios';
 import '../styles/admin.css';
 import BuffetDetailsModal from '../components/BuffetDetailsModal';
+import { AdminBufeContext } from '../Contexts';
 
-const Admin = ({setBufe}) => {
+const Admin = () => {
   const [userId, setUserId] = useState(null);
   const [buffets, setBuffets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,8 @@ const Admin = ({setBufe}) => {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedBuffet, setSelectedBuffet] = useState(null);
+
+  const  {adminBufe, setBufe} = useContext(AdminBufeContext);
 
   const fetchBuffets = async () => {
     setIsLoading(true);
@@ -97,7 +100,7 @@ const Admin = ({setBufe}) => {
             <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
               <BuffetCard
                 buffet={buffet}
-                setBufe={setBufe}
+                setBufe={() => setBufe(buffet)}
                 isOnAdminPage={true}
                 onModClick={() => handleModClick(buffet.id)}
               />

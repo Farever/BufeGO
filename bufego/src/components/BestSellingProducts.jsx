@@ -3,7 +3,7 @@ import axios from 'axios';
 import "../styles/Stats.css"
 import { Card, Col } from 'react-bootstrap';
 
-function BestSellingProducts()
+function BestSellingProducts({bufeId})
 {
     const d = new Date();
     
@@ -20,7 +20,7 @@ function BestSellingProducts()
         try {
           const response = await axios.get('http://localhost:8000/legjobbanfogyo', {
             params: { 
-                place_id: 1,
+                place_id: bufeId,
                 year: d.getFullYear(),
                 month: 1
             },

@@ -6,7 +6,7 @@ import "../styles/Stats.css"
 
 
 //propsba dobjam majd be a place id-t
-function MonthlyIncomeChart() {
+function MonthlyIncomeChart({bufeId}) {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -18,7 +18,7 @@ function MonthlyIncomeChart() {
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/currentrating', {
-        params: { place_id: "1" },
+        params: { place_id: bufeId },
       });
 
       const formattedRatings = response.data.valasz.map(item => ({

@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import CategoryCard from '../components/CategoryCard';
 import CategoryModal from '../components/CategoryModal';
+import { AdminBufeContext } from '../Contexts';
 
-const Categories = ({bufeId}) => {
+const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalShown, setModalShown] = useState(false);
   const [modalType, setModalType] = useState("mod");
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const {adminBufe} = useContext(AdminBufeContext);
 
   useEffect(() => {
-    console.log(bufeId);
     fetchData();
-  }, []);
+  }, [adminBufe]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get("http://localhost:8000/kategoriak", {
-        params: { bufeId: bufeId.id }
+        params: { bufeId: adminBufe.id }
       });
   
       if (response.status === 200) {
@@ -148,7 +149,7 @@ const Categories = ({bufeId}) => {
       </div>
       <hr/>
       <Button type='button' variant='success' onClick={ujButtonClicked}>Új kategória létrehozása</Button>
-      {<CategoryModal bufeId={bufeId} type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
+      {<CategoryModal bufeId={adminBufe.id} type={modalType} isOpen={modalShown} categoryDetails={selectedCategory} save={modalType =="mod" ? updateCategory : newCategory} del={deleteButtonPropmt} onClose={()=> {setModalShown(false); fetchData()}}/>}
     </div>
   );
 };

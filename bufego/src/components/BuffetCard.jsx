@@ -45,7 +45,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
     console.log(isOnAdminPage);
     if (isOnAdminPage) {
       console.log("Admin" + buffet.id);
-      setBufe(buffet);
+      setBufe();
     } else {
       navigate('/home/bufe/' + buffet.id);
     }
