@@ -18,7 +18,7 @@ function MonthlyIncomeChart({bufeId}) {
     setError(null);
     try {
       const response = await axios.get('http://localhost/BufeGO/api/index.php/currentrating', {
-        params: { place_id: "1" },
+        params: { place_id: bufeId },
       });
 
       const formattedRatings = response.data.valasz.map(item => ({
