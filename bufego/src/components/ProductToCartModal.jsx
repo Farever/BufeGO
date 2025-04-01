@@ -30,8 +30,8 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
                 <Modal.Title>{product.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <img src={product.image} alt={product.name} title={product.name}></img>
-                <p>{price} Ft</p>
+                <img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${product.image}`} alt={product.name} title={product.name} style={{maxWidth: '100%'}}></img>
+                <h2 style={{textAlign: "center"}}>{price} Ft</h2>
                 <Form>
                     <FormLabel>Mennyiség:</FormLabel>
                     <input type="number" min={1} max={99} onChange={getQuantity} />

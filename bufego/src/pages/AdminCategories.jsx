@@ -86,7 +86,7 @@ const Categories = () => {
     try
     {
       let response = axios.put("http://localhost:8000/kategoriafeltoltes", {
-        "bufeId": id,
+        "bufeId": adminBufe.id,
         "katName" : nev,
         "katHely" : parseInt(hely)
       })

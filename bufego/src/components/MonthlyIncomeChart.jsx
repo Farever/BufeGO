@@ -69,7 +69,7 @@ function MonthlyIncomeChart({bufeId}) {
           }]}
           series={[{ dataKey: 'average_income' }]}
           height={300}
-          margin={{ left: 53, right: 30, top: 30, bottom: 30 }}
+          margin={{ left: 100, right: 30, top: 30, bottom: 30 }}
           grid={{ vertical: true, horizontal: true }}
           />
       </Card.Body>
