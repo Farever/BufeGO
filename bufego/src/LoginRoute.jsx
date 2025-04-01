@@ -5,7 +5,7 @@ import { AuthContext } from './Contexts';
 const LoginRoute = ({children }) => {
   const {userData} = useContext(AuthContext);
 
-  if (!userData) {
+  if (Object.keys(userData).length === 0) {
     alert("Jelentkezz be!");
     return <Navigate to="/" replace />;
   }

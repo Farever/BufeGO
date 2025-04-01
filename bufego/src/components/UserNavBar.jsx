@@ -1,20 +1,22 @@
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Button } from 'react-bootstrap';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
-import { LinkContainer } from 'react-router-bootstrap';
+import { AuthContext } from '../Contexts';
 
 function Navigation({ cartClickAction }) {
     const location = useLocation();
-
     const ShowNavbar = location.pathname.startsWith('/home');
     const ShowSchoolSelect = !location.pathname.startsWith('/home/bufe');
+    const { setUser } = useContext(AuthContext);
 
     const Kijelentkezes = async () => {
         try {
             let resp = await fetch('http://localhost/api/index.php/kijelentkezes', { credentials: "include" });
             if (resp.ok) {
                 sessionStorage.removeItem("userData");
+                setUser({});
                 window.location.href = "/#/";
             }
         } catch (error) {

@@ -6,7 +6,7 @@ const AdminRoute = ({requireBuffet, children }) => {
   const {userData} = useContext(AuthContext);
   const {adminBufe} = useContext(AdminBufeContext)
 
-  if (!userData) {
+  if (Object.keys(userData).length === 0) {
     alert("Az oldal eléréséhez jelentkezz be!");
     return <Navigate to="/" replace />;
   }

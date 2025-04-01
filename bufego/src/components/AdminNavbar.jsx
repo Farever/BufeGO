@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useLocation, Outlet } from 'react-router-dom'; // Importáljuk a useLocation hook-ot
-import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
+import { AuthContext } from '../Contexts';
 
 const AdminNavbar = () => {
     const location = useLocation();
-    // Itt adhatod meg, mely útvonalakon jelenjen meg a Navbar
     const showNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
+    const { setUser } = useContext(AuthContext);
 
     const Kijelentkezes = async () => {
         try {
@@ -16,6 +15,7 @@ const AdminNavbar = () => {
             if (resp.ok) {
                 sessionStorage.removeItem("userData");
                 sessionStorage.removeItem("adminBufe")
+                setUser({});
                 window.location.href = "/#/";
             }
         } catch (error) {

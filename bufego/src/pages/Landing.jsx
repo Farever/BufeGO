@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AuthButton from '../components/AuthButton';
 import SchoolCard from '../components/SchoolCard';
 import LoginModal from '../components/LoginModal';
 import RegisterModal from '../components/RegisterModal';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
 import '../styles/landing.css';
 import axios from 'axios';
 import PasswordModal from '../components/passwordChange';
+import { AuthContext } from '../Contexts';
 
-const Landing = ({setLoggedinUser}) => {
+const Landing = ({ setLoggedinUser }) => {
     const [schoolsData, setSchoolsData] = useState([]);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+    const { userData } = useContext(AuthContext);
 
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
@@ -38,23 +41,28 @@ const Landing = ({setLoggedinUser}) => {
         setIsRegisterModalOpen(false);
     };
 
+    const handleToHome = () => {
+        window.location.href = "/#/home";
+        console.log(userData)
+    };
+
     useEffect(() => {
         axios.get(`http://localhost/api/index.php/iskolak`)
-          .then(res => {
-            const data = res.data?.valasz;
-      
-            // Ellenőrizzük, hogy `valasz` egy tömb-e
-            if (Array.isArray(data)) {
-              setSchoolsData(data);
-            } else {
-              setSchoolsData([]); // Ha nem tömb, akkor üres tömb
-            }
-          })
-          .catch(error => {
-            console.error("Error fetching data:", error);
-            setSchoolsData([]); // Hiba esetén is üres tömb
-          });
-      }, []);
+            .then(res => {
+                const data = res.data?.valasz;
+
+                // Ellenőrizzük, hogy `valasz` egy tömb-e
+                if (Array.isArray(data)) {
+                    setSchoolsData(data);
+                } else {
+                    setSchoolsData([]); // Ha nem tömb, akkor üres tömb
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                setSchoolsData([]); // Hiba esetén is üres tömb
+            });
+    }, []);
 
 
     return (
@@ -63,10 +71,15 @@ const Landing = ({setLoggedinUser}) => {
                 <Col xs={12} md={6} className="logo">
                     BüféGO
                 </Col>
-                <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
-                    <AuthButton type="login" onClick={handleLoginClick} />
-                    <AuthButton type="register" onClick={handleRegisterClick} />
-                </Col>
+                {Object.keys(userData).length === 0 ?
+                    <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
+                        <AuthButton type="login" onClick={handleLoginClick} />
+                        <AuthButton type="register" onClick={handleRegisterClick} />
+                    </Col> :
+                    <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
+                        <Button variant='primary' onClick={handleToHome}>Tovább a főoldalra</Button>
+                    </Col>
+                }
             </Row>
 
             <Row className="hero">
@@ -104,7 +117,7 @@ const Landing = ({setLoggedinUser}) => {
                 </Col>
             </Row>
 
-            <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal}/>
+            <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal} />
             <LoginModal setLoggedinUser={setLoggedinUser} isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} onForgottenPassword={handlePasswordModalOpen} />
             <RegisterModal isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
         </Container>

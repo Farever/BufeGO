@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Container, Card, Button, Modal, Table } from 'react-bootstrap';
 import axios from 'axios';
 import OrderBadge from '../components/OrderBadge';
 import '../styles/myorders.css';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
+import { AuthContext } from '../Contexts';
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -13,7 +14,8 @@ function OrdersPage() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [rating, setRating] = useState(0); // Alapértelmezett érték 0-ra állítva
   const [comment, setComment] = useState("");
-  const userId = 1; // Példa felhasználói ID - cseréld le a tényleges felhasználói azonosítóra
+  const { userData } = useContext(AuthContext);
+  const userId = userData.user_id; // Példa felhasználói ID - cseréld le a tényleges felhasználói azonosítóra
 
   useEffect(() => {
     const fetchOrders = async () => {
