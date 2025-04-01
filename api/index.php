@@ -64,6 +64,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'bejelentkezes' => handleBejelentkezes($method, $getData),
         'bejelentkezescookie' => handleBejelentkezesCookie($method, $bodyData),
         'sessdata' => handleGetSessData($method),
+        'kijelentkezes' => handleKijelentkezes($method),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
@@ -430,7 +431,27 @@ function handleGetSessData($method)
     return["valasz" => $_SESSION];
 }
 
+function handleKijelentkezes($method)
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+    if(!isset($_COOKIE["PHPSESSID"]))
+    {
+        return ['valasz' => 'Nincs bejelentkezve!', 'status' => 400];
+    }
+    setcookie("PHPSESSID", "" , 0, "/");
+    $_SESSION["user_id"] = 0;
+    $_SESSION["is_admin"] = 0;
+    session_destroy();
 
+    if(!empty($_SESSION["user_id"]) || !empty($_SESSION["is_admin"]))
+    {
+        return ['valasz' => 'Valami hiba történt', 'status' => 400];
+    }
+    
+    return ["valasz" => "Kijelentkezve", "status" => 200];
+}
 
 /**
  * Kezeli a felhasználói adatok lekérdezését.
@@ -822,7 +843,7 @@ function handleKosar(string $method, ?array $getData)
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = lekeres("SELECT cart.id as 'cid', cart.quantity, products.id, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = 1 AND cart.place_id = 1;");
+    $response = lekeres("SELECT cart.id as 'cid', cart.quantity, products.id, products.name, products.price FROM `cart` INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = {$getData["user_id"]} AND cart.place_id = {$getData["place_id"]};");
     return ['valasz' => $response];
 }
 
