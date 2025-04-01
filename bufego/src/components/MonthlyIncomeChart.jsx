@@ -20,7 +20,7 @@ function MonthlyIncomeChart({bufeId}) {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/BufeGO/api/index.php/stat_monthly_income', {
+      const response = await axios.get('http://localhost/api/index.php/stat_monthly_income', {
         params: { place_id: bufeId, year:year},
       });
 

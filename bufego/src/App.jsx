@@ -22,6 +22,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Settings from "./pages/Settings";
 import { useNavigate } from 'react-router-dom'
+import LoginRoute from "./LoginRoute";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -30,48 +31,50 @@ function App() {
     <AuthProvider>
       <AdminProvider>
         <Router>
-          <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <AdminNavbar />
-            <Navigation cartClickAction={() => { setCartOpen(true) }} />
-            <div className="container mt-4" style={{ flex: 1 }}>
-              <Routes>
-                <Route>
-                  <Route index element={<Landing />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
-                  <Route path="/home/myorders" element={<OrdersPage />} />
-                  <Route path="/admin" element={
-                    <AdminRoute>
-                      <Admin />
-                    </AdminRoute>
-                  } />
-                  <Route path="/admin/orders" element={
-                    <AdminRoute requireBuffet={true}>
-                      <AdminOrders />
-                    </AdminRoute>} />
-                  <Route path="/admin/statistics" element={
-                    <AdminRoute requireBuffet={true}>
-                      <AdminStats />
-                    </AdminRoute>} />
-                  <Route path="/admin/products" element={
-                    <AdminRoute requireBuffet={true}>
-                      <AdminProducts />
-                    </AdminRoute>} />
-                  <Route path="/admin/categories" element={
-                    <AdminRoute requireBuffet={true}>
-                      <AdminCategories />
-                    </AdminRoute>} />
-                  <Route path="/admin/reviews" element={
-                    <AdminRoute requireBuffet={true}>
-                      <AdminReviews />
-                    </AdminRoute>} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="*" element={< NoPage />} />
-                </Route>
-              </Routes>
-            </div>
-            <Footer />
-          </div>
+          <Routes>
+            <Route path="*" element={
+              <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                <Navigation cartClickAction={() => setCartOpen(true)} />
+                <AdminNavbar />
+                <div className="container mt-4" style={{ flex: 1 }}>
+                  <Routes>
+                    <Route index element={<LoginRoute><Landing /></LoginRoute>} />
+                    <Route path="/home" element={<LoginRoute><Home /></LoginRoute>} />
+                    <Route path="/home/bufe/:bufeId" element={<LoginRoute><UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} /></LoginRoute>} />
+                    <Route path="/home/myorders" element={<LoginRoute><OrdersPage /></LoginRoute>} />
+                    <Route path="/admin" element={
+                      <AdminRoute>
+                        <Admin />
+                      </AdminRoute>
+                    } />
+                    <Route path="/admin/orders" element={
+                      <AdminRoute requireBuffet={true}>
+                        <AdminOrders />
+                      </AdminRoute>} />
+                    <Route path="/admin/statistics" element={
+                      <AdminRoute requireBuffet={true}>
+                        <AdminStats />
+                      </AdminRoute>} />
+                    <Route path="/admin/products" element={
+                      <AdminRoute requireBuffet={true}>
+                        <AdminProducts />
+                      </AdminRoute>} />
+                    <Route path="/admin/categories" element={
+                      <AdminRoute requireBuffet={true}>
+                        <AdminCategories />
+                      </AdminRoute>} />
+                    <Route path="/admin/reviews" element={
+                      <AdminRoute requireBuffet={true}>
+                        <AdminReviews />
+                      </AdminRoute>} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="*" element={< NoPage />} />
+                  </Routes>
+                </div>
+                <Footer />
+              </div>
+            } />
+          </Routes>
         </Router>
       </AdminProvider>
     </AuthProvider>

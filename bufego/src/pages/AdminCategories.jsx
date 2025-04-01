@@ -22,7 +22,7 @@ const Categories = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost/BufeGO/api/index.php/kategoriak", {
+      const response = await axios.get("http://localhost/api/index.php/kategoriak", {
         params: { bufeId: adminBufe.id }
       });
   
@@ -65,7 +65,7 @@ const Categories = () => {
     console.log(hely);
     try
     {
-      let response = axios.post("http://localhost/BufeGO/api/index.php/kategoriamodositas", {
+      let response = axios.post("http://localhost/api/index.php/kategoriamodositas", {
         "katId": parseInt(id),
         "katName" : nev,
         "katHely" : parseInt(hely)
@@ -85,7 +85,7 @@ const Categories = () => {
   const newCategory = async (id, nev, hely) => {
     try
     {
-      let response = axios.put("http://localhost/BufeGO/api/index.php/kategoriafeltoltes", {
+      let response = axios.put("http://localhost/api/index.php/kategoriafeltoltes", {
         "bufeId": id,
         "katName" : nev,
         "katHely" : parseInt(hely)
@@ -117,7 +117,7 @@ const Categories = () => {
   {
     try
     {
-      let response = axios.delete("http://localhost/BufeGO/api/index.php/kategoriatorles", {
+      let response = axios.delete("http://localhost/api/index.php/kategoriatorles", {
        params : {"katId" : id}
       })
 

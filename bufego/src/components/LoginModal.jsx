@@ -51,12 +51,12 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost/BufeGO/api/index.php/bejelentkezes?email=${email}`, { withCredentials: true });
+      const response = await axios.get(`http://localhost/api/index.php/bejelentkezes?email=${email}`, { withCredentials: true });
       console.log(response.data.valasz)
       if (sha512(password) === response.data.valasz[0].passcode) {
         setLoginState(true);
         alert('Sikeres bejelentkezés!');
-        let data = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
+        let data = await fetch("http://localhost/api/index.php/sessdata", {
           credentials : "include"
         })
         let user = (await data.json())["valasz"];

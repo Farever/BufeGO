@@ -22,7 +22,7 @@ export default function Settings() {
         const getSession = async () => {
             setIsLoading(true);
             try {
-                let resp = await fetch("http://localhost/BufeGO/api/index.php/sessdata", {
+                let resp = await fetch("http://localhost/api/index.php/sessdata", {
                     credentials: "include"
                 });
                 if (!resp.ok) {
@@ -45,7 +45,7 @@ export default function Settings() {
         const fetchUserData = async (userID) => {
             setIsLoading(true);
             try {
-                let resp = await axios.get(`http://localhost/BufeGO/api/index.php/felhasznaloadatok?userId=${userID}`);
+                let resp = await axios.get(`http://localhost/api/index.php/felhasznaloadatok?userId=${userID}`);
 
                 if (!resp) {
                     throw new Error(`HTTP error! status: ${resp.status}`);
@@ -54,7 +54,7 @@ export default function Settings() {
                 let data = resp.data;
 
                 setAddressId(data.valasz[0].address_id);
-                let addressResp = await axios.get(`http://localhost/BufeGO/api/index.php/cimadatok?Id=${data.valasz[0].address_id}`);
+                let addressResp = await axios.get(`http://localhost/api/index.php/cimadatok?Id=${data.valasz[0].address_id}`);
                 const userData = data.valasz[0];
                 const addressData = addressResp.data.valasz[0];
                 setName(userData?.name || '');
@@ -73,7 +73,7 @@ export default function Settings() {
         const fetchSchools = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get("http://localhost/BufeGO/api/index.php/iskolak");
+                const response = await axios.get("http://localhost/api/index.php/iskolak");
                 if (!response) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -133,7 +133,7 @@ export default function Settings() {
 
             try {
                 // Cím módosítása
-                const addressRes = await axios.post('http://localhost/BufeGO/api/index.php/cimmodositas', {
+                const addressRes = await axios.post('http://localhost/api/index.php/cimmodositas', {
                     "Id": addressID,
                     "zip": zipCode,
                     "city": city,
@@ -141,7 +141,7 @@ export default function Settings() {
                 });
 
                 // Felhasználói adatok módosítása
-                const userDataRes = await axios.post('http://localhost/BufeGO/api/index.php/felhasznaloadatmodositas', {
+                const userDataRes = await axios.post('http://localhost/api/index.php/felhasznaloadatmodositas', {
                     "userId": userId,
                     "name": name,
                     "school": school
@@ -166,7 +166,7 @@ export default function Settings() {
         setIsLoading(true);
         setErrors({});
         try {
-            let resp = await axios.get(`http://localhost/BufeGO/api/index.php/felhasznaloinaktivalas?userId=${userId}`);
+            let resp = await axios.get(`http://localhost/api/index.php/felhasznaloinaktivalas?userId=${userId}`);
 
             if (resp.status === 200) {
                 setDeactivationSuccess(true);

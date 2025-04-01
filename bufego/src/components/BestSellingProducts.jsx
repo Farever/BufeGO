@@ -18,7 +18,7 @@ function BestSellingProducts({bufeId})
         setIsLoading(true);
         setError(null);
         try {
-          const response = await axios.get('http://localhost/BufeGO/api/index.php/legjobbanfogyo', {
+          const response = await axios.get('http://localhost/api/index.php/legjobbanfogyo', {
             params: { 
                 place_id: bufeId,
                 year: d.getFullYear(),

@@ -17,7 +17,7 @@ export default function CartCard({product, frissit})
     const deleteItem = async () => {
         try
         {
-            const response = await fetch("http://localhost/BufeGO/api/index.php/kosartargytorles", {
+            const response = await fetch("http://localhost/api/index.php/kosartargytorles", {
                 method :"DELETE",
                 headers:
                 {

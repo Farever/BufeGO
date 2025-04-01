@@ -7,15 +7,17 @@ const AdminRoute = ({requireBuffet, children }) => {
   const {adminBufe} = useContext(AdminBufeContext)
 
   if (!userData) {
+    alert("Az oldal eléréséhez jelentkezz be!");
     return <Navigate to="/" replace />;
   }
 
   if (userData.is_admin != 1) {
-    return <Navigate to="/" replace />; //Vagy egy "Nincs jogosultságod" oldalra
+    alert("Nincs jogusultságod ehhez az oldalhoz!");
+    return <Navigate to="/home" replace />; //Vagy egy "Nincs jogosultságod" oldalra
   }
 
   if(requireBuffet && adminBufe == null){
-      console.log(adminBufe);
+      alert("Ehhez az oldalhoz büfét kell választanod!")
       return <Navigate to="/admin" replace />;
   }
 

@@ -15,7 +15,7 @@ const Home = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get('http://localhost/BufeGO/api/index.php/userbufe', {
+        const response = await axios.get('http://localhost/api/index.php/userbufe', {
           params: { school_Id: "1" },
         });
     
