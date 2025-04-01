@@ -1,0 +1,13 @@
+.btn-orange{
+    background-color: #e69138 !important;
+    color: white;
+    border: none !important;
+  }
+
+  .btn-orange:hover{
+    background-color: #cc7a00;
+  }
+
+  .btn-orange:active{
+    --bs-btn-active-bg: #cc7a00;
+  }

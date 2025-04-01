@@ -1,0 +1,89 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+  }
+
+  .header {
+    background-color: #f5b761;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .hero {
+    background-color: #f5b761;
+    color: #fff;
+    padding: 50px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .hero-content {
+    text-align: left;
+  }
+  
+  .hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  .hero-image {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .hero-image img{
+    width: 200px;
+  }
+  .schools {
+    padding: 20px;
+  }
+  
+  .schools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .call-to-action {
+    padding: 20px;
+  }
+  
+  .cta-box {
+    background-color: #f5d9b5;
+    border: 2px solid #e69138;
+    border-radius: 5px;
+    padding: 20px;
+    margin: auto;
+    max-width: 600px;
+  }
+  
+  .cta-box p {
+    margin-bottom: 20px;
+  }
+  
+  .cta-button {
+    background-color: #e69138;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+  }

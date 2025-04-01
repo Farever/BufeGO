@@ -1,0 +1,43 @@
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+
+  .deleted-order{
+    background-color: #DC4C64;
+    color: white !important;
+    font-weight: bold;
+  }
+  
+
+.new-order{
+  background-color: #ffc107;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.in-progress{
+  background-color: #06e5f5;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.ready{
+  background-color: #00ff37;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.collected{
+  background-color: #008cff;
+  color: white !important;
+  font-weight: bold;
+}
+
+.rated{
+  background-color: #f5b761;
+  color: #212529 !important;
+  font-weight: bold;
+}
