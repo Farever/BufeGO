@@ -38,7 +38,7 @@ function App() {
                 <AdminNavbar />
                 <div className="container mt-4" style={{ flex: 1 }}>
                   <Routes>
-                    <Route index element={<LoginRoute><Landing /></LoginRoute>} />
+                    <Route index element={<Landing />} />
                     <Route path="/home" element={<LoginRoute><Home /></LoginRoute>} />
                     <Route path="/home/bufe/:bufeId" element={<LoginRoute><UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} /></LoginRoute>} />
                     <Route path="/home/myorders" element={<LoginRoute><OrdersPage /></LoginRoute>} />

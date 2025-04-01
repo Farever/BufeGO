@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../Contexts';
+
 
 export default function Settings() {
     const navigate = useNavigate();
@@ -17,6 +19,21 @@ export default function Settings() {
     const [isLoading, setIsLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [deactivationSuccess, setDeactivationSuccess] = useState(false);
+    const { setUser } = useContext(AuthContext);
+
+    const Kijelentkezes = async () => {
+        try {
+            let resp = await fetch('http://localhost/api/index.php/kijelentkezes', { credentials: "include" });
+            if (resp.ok) {
+                sessionStorage.removeItem("userData");
+                sessionStorage.removeItem("adminBufe");
+                setUser({});
+                window.location.href = "/#/";
+            }
+        } catch (error) {
+            console.error("Hiba az iskolák lekérésekor:", error);
+        }
+    }
 
     useEffect(() => {
         const getSession = async () => {
@@ -170,7 +187,7 @@ export default function Settings() {
 
             if (resp.status === 200) {
                 setDeactivationSuccess(true);
-                navigate('/logout');
+                Kijelentkezes();
             } else {
                 throw new Error("Hiba történt a fiók inaktiválása során.");
             }
@@ -180,6 +197,10 @@ export default function Settings() {
             setIsLoading(false);
         }
     };
+
+    const handleCancle = () => {
+        navigate(-1);
+    }
 
     return (
         <div className="container">
@@ -280,6 +301,10 @@ export default function Settings() {
 
                         <button type="submit" className="btn btn-primary">
                             Mentés
+                        </button>
+
+                        <button type="button" className="btn btn-warning" onClick={handleCancle}>
+                            Mégse
                         </button>
                     </form>
 
