@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useContext } from "react"
 import { Button, Modal } from "react-bootstrap"
 import CartCard from "./CartCard"
 import axios from "axios"
+import { AuthContext } from '../Contexts';
 
 export default function CartModal({ bufeId, isShown, onClose, frissits, stopFrissit }) {
     const [products, setProducts] = useState([])
     const [vegosszeg, setVegosszeg] = useState(null);
-    const [userData, setUserData] = useState({});
+    const {userData} = useContext(AuthContext);
     function formatHUF(number) {
         const formatter = new Intl.NumberFormat('hu-HU', {
             style: 'currency',
@@ -18,27 +19,11 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
     }
 
     useEffect(() => {
-        const getUser = async () => {
-            try {
-                let resp = await fetch("http://localhost:8000/sessdata", {
-                    credentials: "include"
-                });
-                if (resp.ok) {
-                    let data = await resp.json()
-                    setUserData(data.valasz);
-                }
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
         if (isShown) {
-            getUser();
+            console.log(userData)
             getCart();
         }
     }, [isShown])
-
 
     useEffect(() => {
         let finalPrice = 0;
