@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Button } from 'react-bootstrap';
-import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom'
