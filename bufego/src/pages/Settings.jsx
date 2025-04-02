@@ -19,7 +19,7 @@ export default function Settings() {
     const [isLoading, setIsLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [deactivationSuccess, setDeactivationSuccess] = useState(false);
-    const { setUser } = useContext(AuthContext);
+    const { userData, setUser } = useContext(AuthContext);
 
     const Kijelentkezes = async () => {
         try {
@@ -167,6 +167,11 @@ export default function Settings() {
                 // Mindkét kérés sikeres volt?
                 if (addressRes.status === 200 && userDataRes.status === 200) {
                     setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
+                    setUser({
+                        "user_id" : userData.user_id,
+                        "is_admin" : userData.is_admin,
+                        "school_id" : school
+                    })
                 } else {
                     throw new Error('Hiba történt a mentés során.');
                 }
