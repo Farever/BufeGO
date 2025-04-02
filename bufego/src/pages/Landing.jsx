@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AuthButton from '../components/AuthButton';
 import SchoolCard from '../components/SchoolCard';
-import LoginModal from '../components/loginModal';
+import LoginModal from '../components/LoginModal';
 import RegisterModal from '../components/RegisterModal';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../styles/landing.css';

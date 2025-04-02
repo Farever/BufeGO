@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../Contexts';
 
 export default function Settings() {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Settings() {
     const [isLoading, setIsLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [deactivationSuccess, setDeactivationSuccess] = useState(false);
+    const {userData, setUser} = useContext(AuthContext)
 
     useEffect(() => {
         const getSession = async () => {
@@ -150,10 +152,14 @@ export default function Settings() {
                 // Mindkét kérés sikeres volt?
                 if (addressRes.status === 200 && userDataRes.status === 200) {
                     setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
+                    setUser({
+                        "user_id" : userId,
+                        "is_admin" : userData.is_admin,
+                        "school_id" : school
+                    })
                 } else {
                     throw new Error('Hiba történt a mentés során.');
                 }
-
             } catch (error) {
                 setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
             } finally {

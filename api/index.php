@@ -386,13 +386,14 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner FROM `users` WHERE `email` = '{$data['email']}'";
+    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner, school_id FROM `users` WHERE `email` = '{$data['email']}'";
     $userData = lekeres($sql);
 
     if (is_array($userData)) {
         session_id();
         $_SESSION["user_id"] = $userData[0]["id"];
         $_SESSION["is_admin"] = $userData[0]["is_place_owner"];
+        $_SESSION["school_id"] = $userData[0]["school_id"];
         return ['valasz' => $userData];
     } else {
         return ['valasz' => 'Nincs ilyen e-mail cím'];

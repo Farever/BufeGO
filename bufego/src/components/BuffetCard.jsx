@@ -53,7 +53,7 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
 
   return (
     <Card className="buffet-card">
-      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${buffet.image}`} />
+      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,w_300,h_300,f_auto,q_auto/${buffet.image}`} />
       <Card.Body>
         <Card.Title>
           {buffet.name} - {buffet.school}
