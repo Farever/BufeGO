@@ -27,7 +27,7 @@ const Orders = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost/api/index.php/bufe_rendelesek', {
+      const response = await axios.get('./api/index.php/bufe_rendelesek', {
         params: { place_id: adminBufe.id }
       });
   

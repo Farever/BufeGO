@@ -11,7 +11,7 @@ const ProductCard = ({ product, handleShow }) => {
   const [product_category, setproduct_category] = useState([]);
 
   const deleteProduct = async() => {
-    let response = await fetch('http://localhost/api/index.php/termek_del', {
+    let response = await fetch('./api/index.php/termek_del', {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -30,7 +30,7 @@ const ProductCard = ({ product, handleShow }) => {
   }
 
   const getKategoria = async() => {
-      const response = await axios.get("http://localhost/api/index.php/kategorianev?id=" + product.category_id);
+      const response = await axios.get("./api/index.php/kategorianev?id=" + product.category_id);
     let data = await response.data.valasz[0].categroy_name;
     setproduct_category(data);
   }

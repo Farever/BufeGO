@@ -13,7 +13,7 @@ const Reviews = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let resp = await fetch('http://localhost/api/index.php/ertekelesek?placeId=' + adminBufe.id);
+        let resp = await fetch('./api/index.php/ertekelesek?placeId=' + adminBufe.id);
         let data = await resp.json();
     
         console.log(data);

@@ -54,7 +54,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.post('http://localhost/api/index.php/bufe_rendelesstatusz', {
+      await axios.post('./api/index.php/bufe_rendelesstatusz', {
         rendeles_id: orderId,
         status: newStatus,
       });

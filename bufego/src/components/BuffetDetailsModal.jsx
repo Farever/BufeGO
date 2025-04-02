@@ -41,7 +41,7 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
           formData.append('img', buffet.cover_image);
       }
 
-      const response = await axios.post(`http://localhost/api/index.php/bufemodositas`, formData, {
+      const response = await axios.post(`./api/index.php/bufemodositas`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data' // Fontos a képküldéshez
         }

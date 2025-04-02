@@ -20,7 +20,7 @@ function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost/api/index.php/sajatrendelesek`, {
+        const response = await axios.get(`./api/index.php/sajatrendelesek`, {
           params: { "userId": userId },
         });
     
@@ -75,7 +75,7 @@ function OrdersPage() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.post('http://localhost/api/index.php/bufe_rendelesstatusz', {
+      await axios.post('./api/index.php/bufe_rendelesstatusz', {
         rendeles_id: orderId,
         status: newStatus,
       });
@@ -87,7 +87,7 @@ function OrdersPage() {
 
   const handleSubmitRating = async () => {
     try {
-      let resp = await axios.post('http://localhost/api/index.php/rating', {
+      let resp = await axios.post('./api/index.php/rating', {
         "user_id": selectedOrder.user_id,
         "place_id": selectedOrder.place_id,
         "order_id" : selectedOrder.id,

@@ -35,7 +35,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
 
     const getCart = async () => {
         try {
-            const response = await fetch(`http://localhost/api/index.php/kosar?place_id=${bufeId}&user_id=${userData.user_id}`);
+            const response = await fetch(`./api/index.php/kosar?place_id=${bufeId}&user_id=${userData.user_id}`);
             if (response.status == 200) {
                 let data = await response.json();
                 setProducts(data.valasz);
@@ -49,7 +49,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
 
     const Rendel = async () => {
         try {
-            const response = await axios.post("http://localhost/api/index.php/rendel",
+            const response = await axios.post("./api/index.php/rendel",
                 {
                     "user_id": userData.user_id,
                     "place_id": bufeId,
@@ -73,7 +73,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
 
     const KosarTorol = async () => {
         try {
-            const response = await fetch("http://localhost/api/index.php/kosartorles", {
+            const response = await fetch("./api/index.php/kosartorles", {
                 method: "DELETE",
                 headers:
                 {

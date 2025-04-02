@@ -13,7 +13,7 @@ function Navigation({ cartClickAction }) {
 
     const Kijelentkezes = async () => {
         try {
-            let resp = await fetch('http://localhost/api/index.php/kijelentkezes', { credentials: "include" });
+            let resp = await fetch('./api/index.php/kijelentkezes', { credentials: "include" });
             if (resp.ok) {
                 sessionStorage.removeItem("userData");
                 setUser({});

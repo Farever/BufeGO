@@ -47,7 +47,7 @@ const Landing = ({ setLoggedinUser }) => {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost/api/index.php/iskolak`)
+        axios.get(`./api/index.php/iskolak`)
             .then(res => {
                 const data = res.data?.valasz;
 

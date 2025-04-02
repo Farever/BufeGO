@@ -24,12 +24,12 @@ const Admin = () => {
     setIsLoading(true);
     setError(null);
     try {
-      let resp = await fetch("http://localhost/api/index.php/sessdata", {
+      let resp = await fetch("./api/index.php/sessdata", {
         credentials: "include"
       });
       let data = await resp.json();
       if (data.valasz && data.valasz.user_id) {
-        const response = await axios.get('http://localhost/api/index.php/admin_fo', {
+        const response = await axios.get('./api/index.php/admin_fo', {
           params: { admin_id: data.valasz.user_id },
         });
         if(Array.isArray(response.data.valasz)){
