@@ -179,7 +179,8 @@ export default function Settings() {
             } catch (error) {
                 setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
             } finally {
-                setIsLoading(false); // Betöltésjelző kikapcsolása
+                setIsLoading(false);
+                navigate(-1);
             }
         }
     };
