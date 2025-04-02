@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../Contexts';
@@ -175,7 +176,6 @@ export default function Settings() {
                 } else {
                     throw new Error('Hiba történt a mentés során.');
                 }
-
             } catch (error) {
                 setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
             } finally {

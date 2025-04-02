@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import BuffetCard from "../components/BuffetCard";
 import CarouselComponent from "../components/Carousel";
 import { Container, Row, Col } from 'react-bootstrap';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import { AuthContext } from '../Contexts';
 
 const Home = () => {
   const [buffets, setBuffets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const {userData} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchBuffets = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get('http://localhost/api/index.php/userbufe', {
-          params: { school_Id: "1" },
+        const response = await axios.get('http://localhost:8000/userbufe', {
+          params: { school_Id: userData.school_id },
         });
     
         const buffets = response.data?.valasz;

@@ -5,7 +5,7 @@ export default function UserProductCard({nev, img, ar,isAvaliable, action})
     return (
         <>
         <Card role="button" className="w-20 h-100 col-sm-6 col-md-4 col-lg-3" onClick={action} style={{minHeight : 100, margin: 15}}>
-            <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${img}`} alt={nev} title={nev} />
+            <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${img}`} alt={nev} title={nev} />
             <Card.Body>
               <Card.Title>{nev}</Card.Title>
               <Card.Text>
