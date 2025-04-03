@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
+import { AuthContext } from '../Contexts';
 
 const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
   });
   const [addressId, setAddressId] = useState(null);
   const [schools, setSchools] = useState([]);
+  const {userData} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchSchools = async () => {
@@ -53,7 +55,7 @@ const BuffetAddModal = ({ isOpen, onClose, onBuffetAdded }) => {
       setAddressId(newAddressId);
       
       const data = new FormData();
-      data.append('adminUserId', "4");
+      data.append('adminUserId', userData.user_id);
       data.append('bufeName', formData.bufeName);
       data.append('desc', formData.desc);
       data.append('phone', formData.phone);
