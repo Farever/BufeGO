@@ -24,7 +24,6 @@ const Orders = () => {
   };
 
   const fetchOrders = async () => {
-    setIsLoading(true);
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/bufe_rendelesek', {

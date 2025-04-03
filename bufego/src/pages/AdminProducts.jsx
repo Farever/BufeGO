@@ -1,9 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
-import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
-import axios from 'axios';
 import Editmodal from '../components/Editmodal';
 import { AdminBufeContext } from '../Contexts';
 
@@ -24,7 +22,6 @@ const Products = () => {
   };
 
   const fetchProducts = async () => {
-    setIsLoading(true);
     setError(null);
     try {
       const response = await fetch('http://localhost:8000/termekek?place_id=' + adminBufe.id);
