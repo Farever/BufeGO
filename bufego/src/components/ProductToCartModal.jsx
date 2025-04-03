@@ -3,7 +3,7 @@ import { Button, Form, FormLabel, Modal } from "react-bootstrap";
 
 export default function ProductToCartModal({ product, addToCart, isOpen, onClose }) {
     const [price, setPrice] = useState(0);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
 
     // Az useEffect biztosítja, hogy ne történjen meg a beállítás, ha a product még nem elérhető
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
                 <h2 style={{textAlign: "center"}}>{price} Ft</h2>
                 <Form>
                     <FormLabel>Mennyiség:</FormLabel>
-                    <input type="number" min={1} max={99} onChange={getQuantity} />
+                    <input type="number" min={1} max={99} onChange={getQuantity} value={quantity} />
                 </Form>
             </Modal.Body>
             <Modal.Footer>
