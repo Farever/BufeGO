@@ -22,7 +22,6 @@ const Products = () => {
   };
 
   const fetchProducts = async () => {
-    setIsLoading(true);
     setError(null);
     try {
       const response = await fetch('http://localhost:8000/termekek?place_id=' + adminBufe.id);
