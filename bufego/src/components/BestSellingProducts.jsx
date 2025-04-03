@@ -22,7 +22,7 @@ function BestSellingProducts({bufeId})
             params: { 
                 place_id: bufeId,
                 year: d.getFullYear(),
-                month: 1
+                month: d.getMonth()+1
             },
           });
           if(response.data.valasz == "Nincsenek találatok!")
