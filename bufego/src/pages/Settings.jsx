@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../Contexts';
 
+
 export default function Settings() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
@@ -18,13 +19,27 @@ export default function Settings() {
     const [isLoading, setIsLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [deactivationSuccess, setDeactivationSuccess] = useState(false);
-    const {userData, setUser} = useContext(AuthContext)
+    const { userData, setUser } = useContext(AuthContext);
+
+    const Kijelentkezes = async () => {
+        try {
+            let resp = await fetch('http://localhost:8000//kijelentkezes', { credentials: "include" });
+            if (resp.ok) {
+                sessionStorage.removeItem("userData");
+                sessionStorage.removeItem("adminBufe");
+                setUser({});
+                window.location.href = "/#/";
+            }
+        } catch (error) {
+            console.error("Hiba az iskolák lekérésekor:", error);
+        }
+    }
 
     useEffect(() => {
         const getSession = async () => {
             setIsLoading(true);
             try {
-                let resp = await fetch("http://localhost:8000/sessdata", {
+                let resp = await fetch("http://localhost:8000//sessdata", {
                     credentials: "include"
                 });
                 if (!resp.ok) {
@@ -47,7 +62,7 @@ export default function Settings() {
         const fetchUserData = async (userID) => {
             setIsLoading(true);
             try {
-                let resp = await axios.get(`http://localhost:8000/felhasznaloadatok?userId=${userID}`);
+                let resp = await axios.get(`http://localhost:8000//felhasznaloadatok?userId=${userID}`);
 
                 if (!resp) {
                     throw new Error(`HTTP error! status: ${resp.status}`);
@@ -56,7 +71,7 @@ export default function Settings() {
                 let data = resp.data;
 
                 setAddressId(data.valasz[0].address_id);
-                let addressResp = await axios.get(`http://localhost:8000/cimadatok?Id=${data.valasz[0].address_id}`);
+                let addressResp = await axios.get(`http://localhost:8000//cimadatok?Id=${data.valasz[0].address_id}`);
                 const userData = data.valasz[0];
                 const addressData = addressResp.data.valasz[0];
                 setName(userData?.name || '');
@@ -75,7 +90,7 @@ export default function Settings() {
         const fetchSchools = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get("http://localhost:8000/iskolak");
+                const response = await axios.get("http://localhost:8000//iskolak");
                 if (!response) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -135,7 +150,7 @@ export default function Settings() {
 
             try {
                 // Cím módosítása
-                const addressRes = await axios.post('http://localhost:8000/cimmodositas', {
+                const addressRes = await axios.post('http://localhost:8000//cimmodositas', {
                     "Id": addressID,
                     "zip": zipCode,
                     "city": city,
@@ -143,7 +158,7 @@ export default function Settings() {
                 });
 
                 // Felhasználói adatok módosítása
-                const userDataRes = await axios.post('http://localhost:8000/felhasznaloadatmodositas', {
+                const userDataRes = await axios.post('http://localhost:8000//felhasznaloadatmodositas', {
                     "userId": userId,
                     "name": name,
                     "school": school
@@ -153,7 +168,7 @@ export default function Settings() {
                 if (addressRes.status === 200 && userDataRes.status === 200) {
                     setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
                     setUser({
-                        "user_id" : userId,
+                        "user_id" : userData.user_id,
                         "is_admin" : userData.is_admin,
                         "school_id" : school
                     })
@@ -163,7 +178,13 @@ export default function Settings() {
             } catch (error) {
                 setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
             } finally {
-                setIsLoading(false); // Betöltésjelző kikapcsolása
+                setIsLoading(false);
+                setTimeout(
+                    () => {
+                        navigate(-1);
+                    },500
+                )
+
             }
         }
     };
@@ -172,11 +193,11 @@ export default function Settings() {
         setIsLoading(true);
         setErrors({});
         try {
-            let resp = await axios.get(`http://localhost:8000/felhasznaloinaktivalas?userId=${userId}`);
+            let resp = await axios.get(`http://localhost:8000//felhasznaloinaktivalas?userId=${userId}`);
 
             if (resp.status === 200) {
                 setDeactivationSuccess(true);
-                navigate('/logout');
+                Kijelentkezes();
             } else {
                 throw new Error("Hiba történt a fiók inaktiválása során.");
             }
@@ -186,6 +207,10 @@ export default function Settings() {
             setIsLoading(false);
         }
     };
+
+    const handleCancle = () => {
+        navigate(-1);
+    }
 
     return (
         <div className="container">
@@ -284,14 +309,18 @@ export default function Settings() {
                             {errors.school && <div className="text-danger">{errors.school}</div>}
                         </div>
 
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary mx-3">
                             Mentés
+                        </button>
+
+                        <button type="button" className="btn btn-warning mx-3" onClick={handleCancle}>
+                            Mégse
                         </button>
                     </form>
 
                     <button
                         onClick={handleDeactivateAccount}
-                        className="btn btn-danger mt-3"
+                        className="btn btn-danger m-3"
                     >
                         Fiók inaktiválása
                     </button>

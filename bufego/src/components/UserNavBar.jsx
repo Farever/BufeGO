@@ -95,7 +95,7 @@ function Navigation({cartClickAction}) {
                                 <NavDropdown.Item as={Link} to="/home/myorders">Rendeléseim</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/settings">Beállítások</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to="/logout">Kijelentkezés</NavDropdown.Item>
+                                <NavDropdown.Item onClick={kijelenkezes}>Kijelentkezés</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

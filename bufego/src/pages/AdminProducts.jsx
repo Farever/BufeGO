@@ -1,9 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
-import ActionButton from '../components/ActionButton';
 import ProductUploadForm from '../components/ProductUploadForm';
-import axios from 'axios';
 import Editmodal from '../components/Editmodal';
 import { AdminBufeContext } from '../Contexts';
 
