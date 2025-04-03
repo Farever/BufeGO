@@ -155,7 +155,7 @@ function OrdersPage() {
                       <td>{product.name}</td>
                       <td>{product.price}</td>
                       <td>{product.quantity}</td>
-                      <td><img src={product.image} alt={product.name} style={{ width: '50px', height: '50px' }} /></td>
+                      <td><img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_50,w_50,f_auto,q_auto/${product.image}`} alt={product.name} style={{ width: '50px', height: '50px' }} /></td>
                     </tr>
                   ))}
                 </tbody>
