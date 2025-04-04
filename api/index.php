@@ -53,6 +53,8 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'currentrating' => handleCurrentRating($method, $getData),
         'getmonthlyrating' => handleGetMonthlyRating($method, $getData),
         'peak_time' => handlePeakTime($method, $getData),
+        'eveklekerorders' => handleEvLekerOrders($method, $getData),
+        'eveklekerratings' => handleEvLekerRatings($method, $getData),
         'kategoriak' => handleKategoriak($method, $getData),
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
@@ -197,7 +199,7 @@ function handleGetMonthlyRating(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " AND YEAR(ratings.date) = " . $getData["year"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY ratings.date");
+    $response = lekeres("SELECT MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " AND YEAR(ratings.date) = " . $getData["year"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date), ratings.date ORDER BY ratings.date");
     return ['valasz' => $response];
 }
 
@@ -215,6 +217,34 @@ function handlePeakTime(string $method, array $getData): ?array
     }
 
     $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM orders WHERE orders.place_id=" . $getData["place_id"] . " GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC");
+    return ['valasz' => $response];
+}
+
+function handleEvLekerOrders(string $method, array $getData): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData["place_id"])) {
+        return ['valasz' => 'Hiányos bemenet', 'status' => 400];
+    }
+
+    $response = lekeres("SELECT DISTINCT YEAR(orders.orderd_at) as 'ev' FROM orders WHERE orders.place_id = {$getData['place_id']};");
+    return ['valasz' => $response];
+}
+
+function handleEvLekerRatings(string $method, array $getData): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData["place_id"])) {
+        return ['valasz' => 'Hiányos bemenet', 'status' => 400];
+    }
+
+    $response = lekeres("SELECT DISTINCT YEAR(ratings.date) as 'ev' FROM ratings WHERE ratings.place_id = {$getData['place_id']};");
     return ['valasz' => $response];
 }
 
