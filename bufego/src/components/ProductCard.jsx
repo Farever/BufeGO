@@ -40,26 +40,26 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
 
   if (forStat) {
     return (
-      <div className="product-card">
-        <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image" />
-        <div className="product-details">
+      <div className="product-card card">
+        <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image card-img-top" />
+        <div className="product-details card-body">
           <h5 className="product-name">{product.name}</h5>
-          <p className="product-info">Ár: {product.price} Ft</p>
-          <p className="product-info">Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}</p>
-          <p className="product-info">Kategória: {product_category}</p>
+          <p className="product-info card-text">Ár: {product.price} Ft</p>
+          <p className="product-info card-text">Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}</p>
+          <p className="product-info card-text">Kategória: {product_category}</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="product-card">
-      <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image" />
+    <div className="product-card card">
+      <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image card-img-top" />
       <div className="product-details">
         <h5 className="product-name">{product.name}</h5>
-        <p className="product-info">Ár: {product.price} Ft</p>
-        <p className="product-info">Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}</p>
-        <p className="product-info">Kategória: {product_category}</p>
+        <p className="product-info card-text">Ár: {product.price} Ft</p>
+        <p className="product-info card-text">Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}</p>
+        <p className="product-info card-text">Kategória: {product_category}</p>
         <div className="product-actions">
           <Button variant="primary" size="sm" onClick={() => {
             handleShow(product);
