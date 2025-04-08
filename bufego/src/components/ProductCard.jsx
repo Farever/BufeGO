@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from "react";
-import { Modal, Button, Alert } from "react-bootstrap"
+import { Modal, Button, Alert, Card, CardImg } from "react-bootstrap"
 import ActionButton from "./ActionButton";
 import axios from 'axios';
 
@@ -40,7 +40,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
 
   if (forStat) {
     return (
-      <div className="product-card card">
+      <Card className="product-card">
         <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image card-img-top" />
         <div className="product-details card-body">
           <h5 className="product-name">{product.name}</h5>
@@ -48,13 +48,13 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
           <p className="product-info card-text">Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}</p>
           <p className="product-info card-text">Kategória: {product_category}</p>
         </div>
-      </div>
+      </Card>
     )
   }
 
   return (
-    <div className="product-card card">
-      <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image card-img-top" />
+    <Card className="product-card">
+      <CardImg src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} className="product-image" />
       <div className="product-details">
         <h5 className="product-name">{product.name}</h5>
         <p className="product-info card-text">Ár: {product.price} Ft</p>
@@ -85,7 +85,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
         </div>
 
       </div>
-    </div>
+    </Card>
   );
 };
 
