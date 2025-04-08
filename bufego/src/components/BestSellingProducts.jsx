@@ -12,7 +12,7 @@ function BestSellingProducts({ bufeId }) {
   const [error, setError] = useState(null);
   const [years, setYears] = useState(null);
   const selectedyear = useRef(0);
-  const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  const refreshInterval = 5000;
 
 
   const fetchProducts = async () => {
@@ -56,25 +56,25 @@ function BestSellingProducts({ bufeId }) {
   };
 
   useEffect(() => {
-    fetchProducts(); // Az első lekérdezés a komponens mountolásakor
+    fetchProducts();
     fetchYears();
 
-    const intervalId = setInterval(()=>{fetchProducts(); fetchYears()}, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(()=>{fetchProducts(); fetchYears()}, refreshInterval);
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+    return () => clearInterval(intervalId);
+  }, [refreshInterval]);
 
   if(years != null)
   {
     return (
       <>
-        <select onChange={fetchProducts} ref={selectedyear}>
+        <select style={{maxWidth: 300, margin: 'auto'}} onChange={fetchProducts} ref={selectedyear}>
           <option value={0}>Válasszon ki egy évet</option>
           {years.map((i) => (
           <option key={i.ev} value={i.ev}>{i.ev}</option>
           ))}
         </select>
-        <div className="products-grid mt-5">
+        <div className="products-grid mt-3">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} forStat={true} />
           ))}

@@ -5,27 +5,21 @@ import { Card } from 'react-bootstrap';
 import "../styles/Stats.css"
 
 
-//propsba dobjam majd be a place id-t
-function CurrentRatingCard({bufeId}) {
-  const [rating, setRating] = useState(0);
+function PeakTime({bufeId}) {
+  const [peaktime, setPeakTime] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [orders, setOrders] = useState(null);
   const [error, setError] = useState(null);
   const refreshInterval = 5000;
 
-  const fetchRatings = async () => {
+  const fetchPeaktime = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:8000/currentrating', {
+      const response = await axios.get('http://localhost:8000/peak_time', {
         params: { place_id: bufeId },
       });
 
-      const formattedRatings = response.data.valasz.map(item => ({
-        current_rating: Number(item.current_rating),       // Convert 'honap' to a number
-      }));
-
-      setRating(formattedRatings[0].current_rating);
+      setPeakTime(response.data.valasz[0])
     } catch (err) {
       setError(err.message);
     } finally {
@@ -34,9 +28,9 @@ function CurrentRatingCard({bufeId}) {
   };
 
   useEffect(() => {
-    fetchRatings();
+    fetchPeaktime();
 
-    const intervalId = setInterval(fetchRatings, refreshInterval);
+    const intervalId = setInterval(fetchPeaktime, refreshInterval);
 
     return () => clearInterval(intervalId);
   }, [refreshInterval]);
@@ -45,11 +39,11 @@ function CurrentRatingCard({bufeId}) {
     <div className="col-sm-12 col-md-12">
       <Card className='rating text-center w-50'>
         <Card.Title>
-          Jelenlegi értékelés
+          Legforgalmasabb időszak
         </Card.Title>
         <Card.Body>
           <Card.Text>
-            <Rating className='rating' name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
+            {peaktime.ora} óra
           </Card.Text>
         </Card.Body>
       </Card>
@@ -57,4 +51,4 @@ function CurrentRatingCard({bufeId}) {
   );
 }
 
-export default CurrentRatingCard;
+export default PeakTime;

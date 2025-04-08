@@ -136,11 +136,9 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    // Biztonságosabb paraméterkezelés a SQL injection elkerülése érdekében
     $year = intval($getData["year"]);
     $placeId = intval($getData["place_id"]);
 
-    // SQL injection elleni védelem + pontosabb lekérdezés a legtöbbet eladott termékre
     $query = "SELECT products.*, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg'
               FROM orderedproducts
               INNER JOIN orders ON orderedproducts.order_id = orders.id
@@ -155,11 +153,10 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
 
     $response = lekeres($query, "si", $params);
 
-    // Ha nincs találat, üres tömböt adjunk vissza
     if (empty($response)) {
         return ['valasz' => []];
     }
-    // Tömbbe csomagolás, ha a lekeres függvény nem tömböt ad vissza, hanem egyetlen sort.
+
     if (!is_array($response)) {
         $response = [$response];
     }
@@ -214,7 +211,7 @@ function handlePeakTime(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM orders WHERE orders.place_id=" . $getData["place_id"] . " GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC");
+    $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM orders WHERE orders.place_id=" . $getData["place_id"] . " GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC LIMIT 1");
     return ['valasz' => $response];
 }
 

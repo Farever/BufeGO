@@ -15,7 +15,7 @@ function MonthlyIncomeChart({bufeId}) {
   const [error, setError] = useState(null);
   const [years, setYears] = useState([]);
   const selectedyear = useRef(0);
-  const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  const refreshInterval = 5000;
 
   const fetchRatings = async () => {
     if(selectedyear.current.value != 0)
@@ -28,11 +28,11 @@ function MonthlyIncomeChart({bufeId}) {
         });
 
         const formattedRatings = response.data.valasz.map(item => ({
-          honap: Number(item.honap),       // Convert 'honap' to a number
-          average_income: Number(item.average_income)  // Convert 'average_income' to a number
+          honap: Number(item.honap),
+          average_income: Number(item.average_income)
         }));
 
-        setRatings(formattedRatings);  // Update state with the formatted data
+        setRatings(formattedRatings);
       } catch (err) {
         setError(err.message);
       } finally {
