@@ -132,13 +132,12 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData["year"]) || empty($getData["month"]) || empty($getData["place_id"])) {
+    if (empty($getData["year"]) || empty($getData["place_id"])) {
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
     // Biztonságosabb paraméterkezelés a SQL injection elkerülése érdekében
     $year = intval($getData["year"]);
-    $month = intval($getData["month"]);
     $placeId = intval($getData["place_id"]);
 
     // SQL injection elleni védelem + pontosabb lekérdezés a legtöbbet eladott termékre
@@ -147,15 +146,14 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
               INNER JOIN orders ON orderedproducts.order_id = orders.id
               INNER JOIN products ON orderedproducts.product_id = products.id
               WHERE YEAR(orders.orderd_at) = ?
-              AND MONTH(orders.orderd_at) = ?
               AND orders.place_id = ?
               GROUP BY orderedproducts.product_id
               ORDER BY vasarolt_mennyiseg DESC
               LIMIT 3";
 
-    $params = [$year, $month, $placeId,];
+    $params = [$year, $placeId,];
 
-    $response = lekeres($query, "ssi", $params);
+    $response = lekeres($query, "si", $params);
 
     // Ha nincs találat, üres tömböt adjunk vissza
     if (empty($response)) {
