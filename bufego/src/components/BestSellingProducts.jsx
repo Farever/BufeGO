@@ -29,7 +29,7 @@ function BestSellingProducts({ bufeId }) {
         return (<h1>Nincsenek találatok</h1>)
       }
 
-      setProducts(response.data.valasz);  // Update state with the formatted data
+      setProducts(response.data.valasz);
     } catch (err) {
       console.log(err);
       setError(err.message);
