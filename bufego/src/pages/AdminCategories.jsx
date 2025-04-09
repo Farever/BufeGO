@@ -92,7 +92,6 @@ const Categories = () => {
       })
 
       let data = (await response).data;
-      alert(data['valasz']);
       fetchData();
       setModalShown(false);
       //location.reload();

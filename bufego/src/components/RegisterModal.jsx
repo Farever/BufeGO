@@ -21,6 +21,29 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [addId, setAddId] = useState(null);
 
+  const clearFormFields = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setSchool(""); // Visszaállítjuk az alapértelmezett "Válassz iskolát" opcióra
+    setAddress("");
+    setZip("");
+    setCity("");
+    setPhone("");
+    setError(null); // Hibaüzenetet is töröljük
+    setSuccessMessage(null); // Sikerüzenetet is töröljük
+    setAddId(null); // Esetlegesen létrejött addId-t is töröljük
+    // Az isLoading valószínűleg magától resetelődik a finally blokkban,
+    // de biztos ami biztos alapon itt is lehetne: setIsLoading(false);
+  };
+
+  const handleClose = () => {
+    clearFormFields(); // Mezők ürítése
+    onClose(); // Eredeti bezáró logika (prop hívása)
+  };
+
   useEffect(() => {
     const fetchSchools = async () => {
       setIsLoading(true);
@@ -111,10 +134,13 @@ const RegisterModal = ({ isOpen, onClose }) => {
       if (registerResponse.data && registerResponse.data.valasz) {
         setSuccessMessage("Sikeres regisztráció!");
         setError(null);
+        handleClose();
       } else {
+        setSuccessMessage("");
         setError(registerResponse.data.valasz || "Hiba a regisztráció során!");
       }
     } catch (err) {
+      setSuccessMessage("");
       setError(err.message || "Hiba a regisztráció során!");
     } finally {
       setIsLoading(false);
@@ -129,7 +155,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal show={isOpen} onHide={onClose} centered>
+    <Modal show={isOpen} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Regisztráció</Modal.Title>
       </Modal.Header>
