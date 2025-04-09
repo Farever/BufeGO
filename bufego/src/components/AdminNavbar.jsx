@@ -5,7 +5,7 @@ import { Link, useLocation, Outlet } from 'react-router-dom'; // Importáljuk a 
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { useNavigate } from 'react-router-dom'
-import { AdminBufeContext,AuthContext } from '../Contexts';
+import { AdminBufeContext, AuthContext } from '../Contexts';
 import { useContext } from 'react';
 
 const AdminNavbar = () => {
@@ -17,7 +17,15 @@ const AdminNavbar = () => {
     const [buffets, setBuffets] = useState([]);
     const { userData } = useContext(AuthContext);
     const { adminBufe, setBufe } = useContext(AdminBufeContext);
-    const [bufeId, setBufeId] = useState(adminBufe.id);
+    const [bufeId, setBufeId] = useState(
+        () => {
+            if (adminBufe === null) {
+                return '';
+            } else {
+                return adminBufe.id
+            }
+        }
+    );
 
     const kijelenkezes = async () => {
         try {
@@ -37,7 +45,7 @@ const AdminNavbar = () => {
         const fetchBuffets = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/admin_fo', {
-                    params: { admin_id: userData.user_id},
+                    params: { admin_id: userData.user_id },
                 });
 
                 if (response.status === 200) {
@@ -57,8 +65,17 @@ const AdminNavbar = () => {
 
         if (showNavbar) {
             fetchBuffets();
+            setBufeId(
+                () => {
+                    if (adminBufe === null) {
+                        return '';
+                    } else {
+                        return adminBufe.id
+                    }
+                }
+            )
         }
-    }, []);
+    }, [adminBufe]);
 
     const handleBufeValasztas = (event) => {
         const ujBufeId = event.target.value;
@@ -96,18 +113,20 @@ const AdminNavbar = () => {
                                 </Nav.Item>
                             </Nav>
                             <Nav className="me-auto">
-                                <select
-                                    className="form-select"
-                                    name="bufe"
-                                    value={bufeId || ''}
-                                    onChange={handleBufeValasztas}
-                                >
-                                    {buffets.map((bufe) => (
-                                        <option key={bufe.id} value={bufe.id}>
-                                            {bufe.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                {(bufeId > 0 ?
+                                    <select
+                                        className="form-select"
+                                        name="bufe"
+                                        value={bufeId || ''}
+                                        onChange={handleBufeValasztas}
+                                    >
+                                        {buffets.map((bufe) => (
+                                            <option key={bufe.id} value={bufe.id}>
+                                                {bufe.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    : null)}
                             </Nav>
                             <Nav>
                                 <NavDropdown title={<FaUserCircle size="1.5em" />} align="end">
