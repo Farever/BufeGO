@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Container, NavDropdown, NavItem, NavLink, NavbarText, Button } from 'react-bootstrap';
 import { FaUserCircle } from 'react-icons/fa'; // Profil ikon
 import { TiShoppingCart } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../Contexts';
 
-function Navigation({cartClickAction}) {
+function Navigation({ cartClickAction }) {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
     const navigate = useNavigate();
     const ShowNavbar = location.pathname.startsWith('/home');
     const ShowSchoolSelect = !location.pathname.startsWith('/home/bufe');
+    const { userData, setUser } = useContext(AuthContext);
+    const [school, setSchool] = useState(userData.school_id);
 
     useEffect(() => {
         const fetchIskolak = async () => {
@@ -28,20 +31,21 @@ function Navigation({cartClickAction}) {
 
     const handleIskolaValasztas = (event) => {
         const iskolaId = event.target.value;
-        // Itt végezheted el az iskola ID-jával kapcsolatos műveleteket, pl. navigálás
-        console.log("Kiválasztott iskola ID:", iskolaId);
-        //például:
-        //navigate(`/iskola/${iskolaId}`);
+        setSchool(iskolaId);
+        setUser({
+            "user_id": userData.user_id,
+            "is_admin": userData.is_admin,
+            "school_id": iskolaId
+        })
+        window.location.reload();
     };
 
-    const kijelenkezes = async () =>
-    {
+    const kijelenkezes = async () => {
         try {
-            
-            let resp = await fetch('http://localhost:8000/kijelentkezes', {credentials: "include"});
-            
-            if(resp.ok)
-            {
+
+            let resp = await fetch('http://localhost:8000/kijelentkezes', { credentials: "include" });
+
+            if (resp.ok) {
                 navigate("/");
             }
 
@@ -58,8 +62,7 @@ function Navigation({cartClickAction}) {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <select className='form-select' name='iskola' onChange={handleIskolaValasztas}>
-                                <option value="">Válassz iskolát</option>
+                            <select className='form-select' name='iskola' onChange={handleIskolaValasztas} value={school || ''}>
                                 {iskolak.map(iskola => (
                                     <option key={iskola.id} value={iskola.id}>
                                         {iskola.name}
@@ -80,7 +83,7 @@ function Navigation({cartClickAction}) {
             </Navbar>
         );
     }
-    if(ShowNavbar && !ShowSchoolSelect){
+    if (ShowNavbar && !ShowSchoolSelect) {
         return (
             <Navbar bg="light" expand="lg">
                 <Container>

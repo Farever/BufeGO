@@ -39,7 +39,7 @@ const Home = () => {
     
 
     fetchBuffets();
-  }, []);
+  }, [userData.school_Id]);
 
   return (
     <>
