@@ -3,6 +3,11 @@ body{
   margin-right: 2%;
 }
 
+section h3 {
+  font-size: 1.25rem;
+  color: #333;
+}
+
 .orders-grid, .products-grid, .reviews-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
