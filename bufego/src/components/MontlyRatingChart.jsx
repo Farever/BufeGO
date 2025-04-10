@@ -20,7 +20,7 @@ function MonthlyRatingChart({bufeId}) {
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
 
   const fetchRatings = async () => {
-    if(selectedyear.current.value != 0)
+    if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
     {
       setIsLoading(true);
       setError(null);

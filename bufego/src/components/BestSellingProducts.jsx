@@ -18,23 +18,27 @@ function BestSellingProducts({ bufeId }) {
   const fetchProducts = async () => {
     setIsLoading(true);
     setError(null);
-    try {
-      const response = await axios.get('http://localhost:8000/legjobbanfogyo', {
-        params: {
-          place_id: bufeId,
-          year: selectedyear.current.value
-        },
-      });
-      if (response.data.valasz == "Nincsenek találatok!") {
-        return (<h1>Nincsenek találatok</h1>)
+    if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
+    {
+      console.log(selectedyear.current.value)
+      try {
+        const response = await axios.get('http://localhost:8000/legjobbanfogyo', {
+          params: {
+            place_id: bufeId,
+            year: selectedyear.current.value
+          },
+        });
+        if (response.data.valasz == "Nincsenek találatok!") {
+          return (<h1>Nincsenek találatok</h1>)
+        }
+  
+        setProducts(response.data.valasz);
+      } catch (err) {
+        console.log(err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
-
-      setProducts(response.data.valasz);
-    } catch (err) {
-      console.log(err);
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -70,9 +74,10 @@ function BestSellingProducts({ bufeId }) {
       <>
         <select style={{maxWidth: 300, margin: 'auto'}} onChange={fetchProducts} ref={selectedyear}>
           <option value={0}>Válasszon ki egy évet</option>
-          {years.map((i) => (
+          {Array.isArray(years) && years.length > 0 && (
+            years.map((i) => (
           <option key={i.ev} value={i.ev}>{i.ev}</option>
-          ))}
+          )))}
         </select>
         <div className="products-grid mt-3">
           {products.map((product) => (
