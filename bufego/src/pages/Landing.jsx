@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AuthButton from '../components/AuthButton';
 import SchoolCard from '../components/SchoolCard';
 import LoginModal from '../components/LoginModal';
@@ -7,12 +7,26 @@ import { Container, Row, Col } from 'react-bootstrap';
 import '../styles/landing.css';
 import axios from 'axios';
 import PasswordModal from '../components/passwordChange';
+import { AuthContext } from '../Contexts';
+import { useNavigate } from 'react-router-dom';
 
-const Landing = ({setLoggedinUser}) => {
+const Landing = ({ setLoggedinUser }) => {
     const [schoolsData, setSchoolsData] = useState([]);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+    const { userData } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (Object.keys(userData).length > 0) {
+            if (userData.is_admin == 1) {
+                navigate("/admin");
+            } else {
+                navigate("/home");
+            }
+        }
+    }, [])
 
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
@@ -40,21 +54,21 @@ const Landing = ({setLoggedinUser}) => {
 
     useEffect(() => {
         axios.get(`http://localhost:8000/iskolak`)
-          .then(res => {
-            const data = res.data?.valasz;
-      
-            // Ellenőrizzük, hogy `valasz` egy tömb-e
-            if (Array.isArray(data)) {
-              setSchoolsData(data);
-            } else {
-              setSchoolsData([]); // Ha nem tömb, akkor üres tömb
-            }
-          })
-          .catch(error => {
-            console.error("Error fetching data:", error);
-            setSchoolsData([]); // Hiba esetén is üres tömb
-          });
-      }, []);
+            .then(res => {
+                const data = res.data?.valasz;
+
+                // Ellenőrizzük, hogy `valasz` egy tömb-e
+                if (Array.isArray(data)) {
+                    setSchoolsData(data);
+                } else {
+                    setSchoolsData([]); // Ha nem tömb, akkor üres tömb
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                setSchoolsData([]); // Hiba esetén is üres tömb
+            });
+    }, []);
 
 
     return (
@@ -104,7 +118,7 @@ const Landing = ({setLoggedinUser}) => {
                 </Col>
             </Row>
 
-            <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal}/>
+            <PasswordModal isOpen={isPasswordModalOpen} onClose={handleClosePasswordModal} />
             <LoginModal setLoggedinUser={setLoggedinUser} isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} onForgottenPassword={handlePasswordModalOpen} />
             <RegisterModal isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
         </Container>

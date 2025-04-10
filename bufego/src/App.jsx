@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Admin from './pages/Admin';
 import NoPage from "./pages/NoPage";
 import AdminRoute from "./AdminRoute";
+import LoginRoute from "./LoginRoute";
 import { AdminProvider, AuthContext, AuthProvider } from "./Contexts";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,9 +38,9 @@ function App() {
               <Routes>
                 <Route>
                   <Route index element={<Landing />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/home/bufe/:bufeId" element={<UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} />} />
-                  <Route path="/home/myorders" element={<OrdersPage />} />
+                  <Route path="/home" element={<LoginRoute><Home /></LoginRoute>} />
+                  <Route path="/home/bufe/:bufeId" element={<LoginRoute><UserBufe isCartShown={isCartOpen} cartSet={setCartOpen} /></LoginRoute>} />
+                  <Route path="/home/myorders" element={<LoginRoute><OrdersPage /></LoginRoute>} />
                   <Route path="/admin" element={
                     <AdminRoute>
                       <Admin />

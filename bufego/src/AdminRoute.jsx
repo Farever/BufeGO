@@ -15,7 +15,6 @@ const AdminRoute = ({requireBuffet, children }) => {
   }
 
   if(requireBuffet && adminBufe == null){
-      console.log(adminBufe);
       return <Navigate to="/admin" replace />;
   }
 

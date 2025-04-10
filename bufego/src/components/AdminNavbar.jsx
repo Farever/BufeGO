@@ -15,7 +15,7 @@ const AdminNavbar = () => {
     const showNavbar = ['/admin', '/admin/orders', '/admin/statistics', '/admin/products', '/admin/categories', '/admin/reviews'].includes(location.pathname);
 
     const [buffets, setBuffets] = useState([]);
-    const { userData } = useContext(AuthContext);
+    const { userData, setUser } = useContext(AuthContext);
     const { adminBufe, setBufe } = useContext(AdminBufeContext);
     const [bufeId, setBufeId] = useState(
         () => {
@@ -29,10 +29,13 @@ const AdminNavbar = () => {
 
     const kijelenkezes = async () => {
         try {
-
             let resp = await fetch('http://localhost:8000/kijelentkezes', { credentials: "include" });
 
             if (resp.ok) {
+                sessionStorage.removeItem("userData");
+                sessionStorage.removeItem("adminBufe");
+                setUser({});
+                setBufe(null);
                 navigate("/");
             }
 
@@ -96,21 +99,26 @@ const AdminNavbar = () => {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
-                                <Nav.Item>
-                                    <Nav.Link href='/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href='/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href='/admin/products' id='nav-products'>Termékek</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href='/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href="/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
-                                </Nav.Item>
+                                {
+                                    adminBufe != null ? (
+                                        <>
+                                            <Nav.Item>
+                                                <Nav.Link href='/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link href='/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link href='/admin/products' id='nav-products'>Termékek</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link href='/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link href="/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
+                                            </Nav.Item>
+                                        </>)
+                                        : (null)}
                             </Nav>
                             <Nav className="me-auto">
                                 {(bufeId > 0 ?
