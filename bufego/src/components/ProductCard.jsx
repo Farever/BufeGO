@@ -6,6 +6,8 @@ import axios from 'axios';
 
 const ProductCard = ({ product, handleShow = null, forStat = false }) => {
   const [deleteShow, setDeleteShow] = useState(false);
+  const [deletestatus, setDeleteStatus] = useState("");
+  const [responseMessage, setResponseMessage] = useState(null);
   const deleteClose = () => { setDeleteShow(false) };
   const deleteOpen = () => { setDeleteShow(true); };
   const [product_category, setproduct_category] = useState([]);
@@ -20,10 +22,12 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
     })
     if (!response.ok) {
       console.log(response);
-      alert("Hiba a törlés során");
+      setDeleteStatus("success");
+      setResponseMessage("Hiba a törlés során")
     }
     else {
-      alert("Sikeres törlés");
+      setDeleteStatus("success");
+      setResponseMessage("Sikeres törlés")
     }
   }
 
@@ -75,6 +79,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
             <Modal.Header closeButton>
               <Modal.Title>Biztosan törölni szeretné?</Modal.Title>
             </Modal.Header>
+            {responseMessage && <Alert variant={deletestatus}>{responseMessage}</Alert>}
             <Modal.Body>
               <ActionButton type="cancel" onClick={deleteClose}></ActionButton>
               <ActionButton type="ok" onClick={() => {
