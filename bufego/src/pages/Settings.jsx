@@ -28,6 +28,7 @@ export default function Settings() {
                 sessionStorage.removeItem("userData");
                 sessionStorage.removeItem("adminBufe");
                 setUser({});
+                setBufe(null);
                 window.location.href = "/#/";
             }
         } catch (error) {

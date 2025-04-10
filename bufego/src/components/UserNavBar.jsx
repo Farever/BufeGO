@@ -46,6 +46,8 @@ function Navigation({ cartClickAction }) {
             let resp = await fetch('http://localhost:8000/kijelentkezes', { credentials: "include" });
 
             if (resp.ok) {
+                sessionStorage.removeItem("userData");
+                setUser({});
                 navigate("/");
             }
 

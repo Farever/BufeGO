@@ -416,7 +416,7 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner, school_id FROM `users` WHERE `email` = '{$data['email']}'";
+    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner, school_id FROM `users` WHERE `email` = '{$data['email']}' AND isActive = 1";
     $userData = lekeres($sql);
 
     if (is_array($userData)) {

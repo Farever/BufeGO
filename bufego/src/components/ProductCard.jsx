@@ -6,9 +6,11 @@ import '../styles/Stats.css'; // itt van a design
 
 const ProductCard = ({ product, handleShow = null, forStat = false }) => {
   const [deleteShow, setDeleteShow] = useState(false);
-  const deleteClose = () => setDeleteShow(false);
-  const deleteOpen = () => setDeleteShow(true);
-  const [product_category, setProductCategory] = useState("");
+  const [deletestatus, setDeleteStatus] = useState("");
+  const [responseMessage, setResponseMessage] = useState(null);
+  const deleteClose = () => { setDeleteShow(false) };
+  const deleteOpen = () => { setDeleteShow(true); };
+  const [product_category, setproduct_category] = useState([]);
 
   const deleteProduct = async () => {
     const response = await fetch('http://localhost:8000/termek_del', {
@@ -19,9 +21,13 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
       body: JSON.stringify({ id: parseInt(product.id) })
     });
     if (!response.ok) {
-      alert("Hiba a törlés során");
-    } else {
-      alert("Sikeres törlés");
+      console.log(response);
+      setDeleteStatus("success");
+      setResponseMessage("Hiba a törlés során")
+    }
+    else {
+      setDeleteStatus("success");
+      setResponseMessage("Sikeres törlés")
     }
   };
 
@@ -64,7 +70,8 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
               <Modal.Header closeButton>
                 <Modal.Title>Biztosan törölni szeretné?</Modal.Title>
               </Modal.Header>
-              <Modal.Body className="text-center">
+              {responseMessage && <Alert variant={deletestatus}>{responseMessage}</Alert>}
+            <Modal.Body className="text-center">
                 <ActionButton type="cancel" onClick={deleteClose} />
                 <ActionButton type="ok" onClick={deleteProduct} />
               </Modal.Body>

@@ -25,25 +25,28 @@ function MonthlyIncomeChart({bufeId}) {
     }, [years]);
 
   const fetchRatings = async () => {
-    if(selectedyear.current.value != 0)
+    if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
     {
       setIsLoading(true);
       setError(null);
-      try {
-        const response = await axios.get('http://localhost:8000/stat_monthly_income', {
-          params: { place_id: bufeId, year:selectedyear.current.value},
-        });
-
-        const formattedRatings = response.data.valasz.map(item => ({
-          honap: Number(item.honap),
-          average_income: Number(item.average_income)
-        }));
-
-        setRatings(formattedRatings);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+      if(selectedyear.current.value != null)
+      {
+        try {
+          const response = await axios.get('http://localhost:8000/stat_monthly_income', {
+            params: { place_id: bufeId, year:selectedyear.current.value},
+          });
+  
+          const formattedRatings = response.data.valasz.map(item => ({
+            honap: Number(item.honap),
+            average_income: Number(item.average_income)
+          }));
+  
+          setRatings(formattedRatings);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
     }
   };
@@ -55,7 +58,6 @@ function MonthlyIncomeChart({bufeId}) {
       const response = await axios.get('http://localhost:8000/eveklekerorders', {
         params: { place_id: bufeId},
       });
-      console.log(response.data.valasz);
       setYears(response.data.valasz)
 
     } catch (err) {
@@ -76,41 +78,42 @@ function MonthlyIncomeChart({bufeId}) {
 
   return (
     <div className="col-sm-12 col-md-6">
-      
-      {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>
-        <Card.Body>
+      <Card.Body>
         {error && <div className="text-danger">Hiba: {error}</div>}
-          <h1>Havi bevétel</h1>
-          <>Statisztika éve: 
-            <select onChange={fetchRatings} ref={selectedyear}>
-              <option value={0}>Válasszon ki egy évet</option>
-              {years.map((i) => (
-              <option key={i.ev} value={i.ev}>{i.ev}</option>
-              ))}
-            </select>
-          </> 
-          <LineChart
-          dataset={ratings}
+        <h1>Havi bevétel</h1>
+        <>Statisztika éve:
           
-          xAxis={[{
-            dataKey: 'honap',
-            min: 1,
-            max: 12,
-            valueCount: 12,
-            tickMinStep: 1,
-            valueFormatter: (value) => monthNames[Math.round(value) - 1]
-          }]}
-          yAxis={[{
-            min: 0
-          }]}
-          series={[{ dataKey: 'average_income' }]}
-          height={300}
-          margin={{ left: 100, right: 30, top: 30, bottom: 30 }}
-          grid={{ vertical: true, horizontal: true }}
-          />
-      </Card.Body>
-    </Card>
+          <select onChange={fetchRatings} ref={selectedyear}>
+            <option value={0}>Válasszon ki egy évet</option>
+            {Array.isArray(years) && years.length > 0 && (
+            years.map((i) => (
+            <option key={i.ev} value={i.ev}>{i.ev}</option>
+            ))
+          )}
+          </select>
+        </> 
+        <LineChart
+        dataset={ratings}
+        
+        xAxis={[{
+          dataKey: 'honap',
+          min: 1,
+          max: 12,
+          valueCount: 12,
+          tickMinStep: 1,
+          valueFormatter: (value) => monthNames[Math.round(value) - 1]
+        }]}
+        yAxis={[{
+          min: 0
+        }]}
+        series={[{ dataKey: 'average_income' }]}
+        height={300}
+        margin={{ left: 100, right: 30, top: 30, bottom: 30 }}
+        grid={{ vertical: true, horizontal: true }}
+        />
+    </Card.Body>
+  </Card>
     </div>
   );
 }

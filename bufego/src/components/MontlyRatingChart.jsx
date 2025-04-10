@@ -27,7 +27,8 @@ function MonthlyRatingChart({ bufeId }) {
   }, [years]);
 
   const fetchRatings = async () => {
-    if (selectedyear.current.value != 0) {
+    if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
+    {
       setIsLoading(true);
       setError(null);
       try {
@@ -56,7 +57,6 @@ function MonthlyRatingChart({ bufeId }) {
       const response = await axios.get('http://localhost:8000/eveklekerratings', {
         params: { place_id: bufeId },
       });
-      console.log(response.data.valasz);
       setYears(response.data.valasz)
 
     } catch (err) {
@@ -86,9 +86,10 @@ function MonthlyRatingChart({ bufeId }) {
           <>Statisztika éve:
             <select onChange={fetchRatings} ref={selectedyear}>
               <option value={0}>Válasszon ki egy évet</option>
-              {years.map((i) => (
-                <option key={i.ev} value={i.ev}>{i.ev}</option>
-              ))}
+              {Array.isArray(years) && years.length > 0 && (
+                years.map((i) => (
+                  <option key={i.ev} value={i.ev}>{i.ev}</option>
+              )))}
             </select>
           </>
           <LineChart
