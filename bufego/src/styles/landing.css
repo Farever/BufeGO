@@ -7,6 +7,11 @@ body {
     text-align: center;
   }
 
+  .title{
+    color: white !important;
+    text-align: left !important;
+  }
+
   .header {
     background-color: #f5b761;
     color: #fff;

@@ -16,10 +16,10 @@ function StatisticsPage()
         <>
             <h1 className='mx-2'>Statisztika</h1>
             <Row>
-                <Col>
+                <Col md={6} sm={12}>
                     <CurrentRatingCard bufeId={adminBufe.id}></CurrentRatingCard>
                 </Col>
-                <Col>
+                <Col md={6} sm={12}>
                     <PeakTime bufeId={adminBufe.id}></PeakTime>
                 </Col>
             </Row>

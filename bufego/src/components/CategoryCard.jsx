@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Card, Button, Form } from "react-bootstrap";
-import "../styles/admin.css"
-import ActionButton from "./ActionButton";
+import React from "react";
+import { Button } from "react-bootstrap";
 
-export default function CategoryCard({id, nev, reszletek})
-{
-    return(
-        <>
-            <Card className="order-card">
-                <Card.Body className="card-body">
-                    <h5 className="card-title">{nev}</h5>
-                    <Button className="btn btn-orange" onClick={reszletek}> Szerkeztés </Button>
-                </Card.Body>
-            </Card>
-        </>
-    )
+export default function CategoryCard({ id, nev, reszletek }) {
+  return (
+    <div className="bg-white shadow-md rounded-2xl p-4 flex flex-col justify-between gap-4 transition hover:shadow-lg">
+      <h5 className="text-lg font-semibold">{nev}</h5>
+      <Button variant="warning" onClick={reszletek} className="text-white">
+        Szerkesztés
+      </Button>
+    </div>
+  );
 }

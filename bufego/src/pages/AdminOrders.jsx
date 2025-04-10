@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import OrderCard from '../components/OrderCard';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import Section from '../components/Section';
+import OrderGrid from '../components/OrderGrid';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 import '../styles/admin.css';
 import { AdminBufeContext } from '../Contexts';
@@ -15,7 +17,7 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
-  const {adminBufe} = useContext(AdminBufeContext);
+  const { adminBufe } = useContext(AdminBufeContext);
 
   const handleCloseDetailsModal = () => {
     fetchOrders();
@@ -29,7 +31,7 @@ const Orders = () => {
       const response = await axios.get('http://localhost:8000/bufe_rendelesek', {
         params: { place_id: adminBufe.id }
       });
-  
+
       // Ellenőrizzük, hogy `valasz.rendelesek` létezik és tömb-e
       const orders = response.data?.valasz?.rendelesek;
       if (Array.isArray(orders)) {
@@ -44,7 +46,7 @@ const Orders = () => {
       setIsLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     fetchOrders();
@@ -59,51 +61,30 @@ const Orders = () => {
   };
 
   return (
-    <div>
+    <div className="container py-4">
       <OrderDetailsModal
         isOpen={isDetailsModalOpen}
         onClose={handleCloseDetailsModal}
         order={selectedOrder}
       />
-      <h2>Beérkező rendelések</h2>
+
       {isLoading && <Loading />}
-      {error && <div className="error-message">{error}</div>}
-      <div className="orders-grid">
-        {
-          orders.filter((order) => order.status == 1).map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            onDetails={handleDetails}
-          />
-        ))}
-      </div>
-      <h2>Aktív rendelések</h2>
-      {isLoading && <Loading />}
-      {error && <div className="error-message">{error}</div>}
-      <div className="orders-grid">
-        {
-        orders.filter(order => order.status == 2 || order.status == 3 ).map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            onDetails={handleDetails}
-          />
-        ))}
-      </div>
-      <h2>Korábbi rendelések</h2>
-      {isLoading && <Loading />}
-      {error && <div className="error-message">{error}</div>}
-      <div className="orders-grid">
-        {
-        orders.filter(order => order.status == 4 || order.status == 5 ).map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            onDetails={handleDetails}
-          />
-        ))}
-      </div>
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {/* Beérkező */}
+      <Section title="Beérkező rendelések">
+        <OrderGrid orders={orders} status={"1"} onDetails={handleDetails} />
+      </Section>
+
+      {/* Aktív */}
+      <Section title="Aktív rendelések">
+        <OrderGrid orders={orders} status={"23"} onDetails={handleDetails} />
+      </Section>
+
+      {/* Lezárt */}
+      <Section title="Korábbi rendelések">
+        <OrderGrid orders={orders} status={"45"} onDetails={handleDetails} />
+      </Section>
     </div>
   );
 };

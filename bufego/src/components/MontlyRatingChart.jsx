@@ -10,7 +10,7 @@ const monthNames = [
 ];
 
 
-function MonthlyRatingChart({bufeId}) {
+function MonthlyRatingChart({ bufeId }) {
   const [ratings, setRatings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -19,6 +19,13 @@ function MonthlyRatingChart({bufeId}) {
   const selectedyear = useRef(0);
   const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
 
+  useEffect(() => {
+    if (years?.length > 0 && selectedyear.current.value == 0) {
+      selectedyear.current.value = years[0].ev;
+      fetchRatings();
+    }
+  }, [years]);
+
   const fetchRatings = async () => {
     if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
     {
@@ -26,7 +33,7 @@ function MonthlyRatingChart({bufeId}) {
       setError(null);
       try {
         const response = await axios.get('http://localhost:8000/getmonthlyrating', {
-          params: { place_id: bufeId, year:selectedyear.current.value},
+          params: { place_id: bufeId, year: selectedyear.current.value },
         });
 
         const formattedRatings = response.data.valasz.map(item => ({
@@ -48,7 +55,7 @@ function MonthlyRatingChart({bufeId}) {
     setError(null);
     try {
       const response = await axios.get('http://localhost:8000/eveklekerratings', {
-        params: { place_id: bufeId},
+        params: { place_id: bufeId },
       });
       setYears(response.data.valasz)
 
@@ -63,19 +70,20 @@ function MonthlyRatingChart({bufeId}) {
     fetchRatings(); // Az első lekérdezés a komponens mountolásakor
     fetchYears();
 
-    const intervalId = setInterval(()=>{fetchRatings(); fetchYears()}, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(() => { fetchRatings(); fetchYears() }, refreshInterval); // Lekérdezés a beállított időközönként
 
     return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
   }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
     <div className="col-sm-12 col-md-6">
-      
+
       {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>
         <Card.Body>
+          {error && <div className="text-danger">Hiba: {error}</div>}
           <h1>Havi értékelések</h1>
-          <>Statisztika éve: 
+          <>Statisztika éve:
             <select onChange={fetchRatings} ref={selectedyear}>
               <option value={0}>Válasszon ki egy évet</option>
               {Array.isArray(years) && years.length > 0 && (
@@ -83,26 +91,26 @@ function MonthlyRatingChart({bufeId}) {
                   <option key={i.ev} value={i.ev}>{i.ev}</option>
               )))}
             </select>
-          </> 
+          </>
           <LineChart
-          dataset={ratings}
-          
-          xAxis={[{
-            dataKey: 'honap',
-            min: 1,
-            max: 12,
-            valueCount: 12,
-            tickMinStep: 1,
-            valueFormatter: (value) => monthNames[Math.round(value) - 1]
-          }]}
-          yAxis={[{
-            min: 0,
-            max: 10
-          }]}
-          series={[{ dataKey: 'atlagrating' }]}
-          height={300}
-          margin={{ left: 30, right: 30, top: 30, bottom: 30 }}
-          grid={{ vertical: true, horizontal: true }}
+            dataset={ratings}
+
+            xAxis={[{
+              dataKey: 'honap',
+              min: 1,
+              max: 12,
+              valueCount: 12,
+              tickMinStep: 1,
+              valueFormatter: (value) => monthNames[Math.round(value) - 1]
+            }]}
+            yAxis={[{
+              min: 0,
+              max: 10
+            }]}
+            series={[{ dataKey: 'atlagrating' }]}
+            height={300}
+            margin={{ left: 30, right: 30, top: 30, bottom: 30 }}
+            grid={{ vertical: true, horizontal: true }}
           />
         </Card.Body>
       </Card>

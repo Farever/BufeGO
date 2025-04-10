@@ -5,7 +5,7 @@ import { Card } from 'react-bootstrap';
 import "../styles/Stats.css"
 
 
-function PeakTime({bufeId}) {
+function PeakTime({ bufeId }) {
   const [peaktime, setPeakTime] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -43,7 +43,11 @@ function PeakTime({bufeId}) {
         </Card.Title>
         <Card.Body>
           <Card.Text>
-            {peaktime.ora} óra
+            {error ? (
+              <div className="text-danger">Hiba: {error}</div>
+            ) : (
+              `${peaktime.ora} óra`
+            )}
           </Card.Text>
         </Card.Body>
       </Card>

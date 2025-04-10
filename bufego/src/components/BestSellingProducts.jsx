@@ -14,6 +14,13 @@ function BestSellingProducts({ bufeId }) {
   const selectedyear = useRef(0);
   const refreshInterval = 5000;
 
+  useEffect(() => {
+    if (years?.length > 0 && selectedyear.current.value == 0) {
+      selectedyear.current.value = years[0].ev;
+      fetchProducts();
+    }
+  }, [years]);
+
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -71,13 +78,16 @@ function BestSellingProducts({ bufeId }) {
   {
     return (
       <>
-        <select style={{maxWidth: 300, margin: 'auto'}} onChange={fetchProducts} ref={selectedyear}>
+        {error && <div className="text-danger">Hiba: {error}</div>}
+    
+        <select style={{ maxWidth: 300, margin: 'auto' }} onChange={fetchProducts} ref={selectedyear}>
           <option value={0}>Válasszon ki egy évet</option>
           {Array.isArray(years) && years.length > 0 && (
             years.map((i) => (
           <option key={i.ev} value={i.ev}>{i.ev}</option>
           )))}
         </select>
+    
         <div className="products-grid mt-3">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} forStat={true} />
@@ -88,7 +98,7 @@ function BestSellingProducts({ bufeId }) {
   }
   else
   {
-    return(<>Loading...</>)
+    return(<>Betöltés...</>)
   }
 }
 

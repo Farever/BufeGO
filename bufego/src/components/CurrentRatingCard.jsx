@@ -6,7 +6,7 @@ import "../styles/Stats.css"
 
 
 //propsba dobjam majd be a place id-t
-function CurrentRatingCard({bufeId}) {
+function CurrentRatingCard({ bufeId }) {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -49,7 +49,17 @@ function CurrentRatingCard({bufeId}) {
         </Card.Title>
         <Card.Body>
           <Card.Text>
-            <Rating className='rating' name="read-only" value={Math.round(rating * 2) / 2} precision={0.5} readOnly />
+            {error ? (
+              <div className="text-danger">Hiba: {error}</div>
+            ) : (
+              <Rating
+                className="rating"
+                name="read-only"
+                value={Math.round(rating * 2) / 2}
+                precision={0.5}
+                readOnly
+              />
+            )}
           </Card.Text>
         </Card.Body>
       </Card>

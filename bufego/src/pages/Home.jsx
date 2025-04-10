@@ -50,7 +50,7 @@ const Home = () => {
         {error && <div className="error-message">{error}</div>}
         <Row>
           {buffets.map((buffet) => (
-            <Col key={buffet.id} xs={12} sm={6} md={4} lg={3}>
+            <Col key={buffet.id} xs={12} sm={6} md={4} lg={3} className='d-flex align-items-stretch'>
               <BuffetCard buffet={buffet} />
             </Col>
           ))}

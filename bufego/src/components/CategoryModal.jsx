@@ -1,58 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
+export default function CategoryModal({ isOpen, type, onClose, categoryDetails, save, del, bufeId }) {
+  const [ujNev, setUjNev] = useState("");
+  const [ujHely, setUjHely] = useState("");
 
-export default function CategoryModal({isOpen,type, onClose ,categoryDetails, save, del, bufeId})
-{
-    const [ujNev, setUjNev] = useState(categoryDetails.categroy_name);
-    const [ujHely, setUjHely] = useState(categoryDetails.categroy_name);
+  useEffect(() => {
+    setUjNev(categoryDetails?.categroy_name || "");
+    setUjHely(categoryDetails?.category_placement || "");
+  }, [categoryDetails]);
 
-    console.log(ujHely, ujNev);
+  if (!isOpen) return null;
 
-    function GetUjNev(event)
-    {
-        setUjNev(event.target.value)
-    }
+  return (
+    <Modal show={isOpen} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {type === "mod" ? `${categoryDetails?.categroy_name} részletei` : "Új kategória"}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form className="flex flex-col gap-3">
+          <Form.Group controlId="NevInput">
+            <Form.Label>Kategória neve</Form.Label>
+            <Form.Control
+              type="text"
+              value={ujNev}
+              onChange={(e) => setUjNev(e.target.value)}
+              placeholder="Add meg a kategória nevét"
+            />
+          </Form.Group>
 
-    function GetUjHely(event)
-    {
-        setUjHely(event.target.value)
-    }
-
-    function TorleGomb()
-    {
-        if(type == "mod")
-        {
-            return(
-                <>
-                <Button type="button" onClick={()=>del(categoryDetails.id)} variant="danger">Törlés</Button>
-                </>
-            )
-        }
-        else
-         return(<></>)
-    }
-
-    if(!isOpen) return null;
-
-    return(
-        <Modal show={isOpen} onHide={onClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>{categoryDetails.categroy_name} {type == "mod" ? "részletei" : ""}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <label>Kategória neve:</label>
-                    <input type="text" id="NevInput" defaultValue={categoryDetails.categroy_name} onFocus={GetUjNev} onChange={GetUjNev}/>
-                    <label>Kategória helye:</label>
-                    <input type="number" id="helyInput" defaultValue={categoryDetails.category_placement} onFocus={GetUjHely} onChange={GetUjHely}/>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button style={{float: "left", textAlign: "left", alignSelf : screenLeft}} className="flex-row" type="button" onClick={onClose} variant="secondary">Mégse</Button>
-                {TorleGomb()}
-                <Button type="button" onClick={()=>{type == "mod"? save(categoryDetails.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement) : save(bufeId.id, ujNev ?? categoryDetails.categroy_name, ujHely ?? categoryDetails.category_placement); onClose()}} variant="success">Mentés</Button>
-            </Modal.Footer>
-        </Modal>
-    )
+          <Form.Group controlId="HelyInput">
+            <Form.Label>Kategória helye</Form.Label>
+            <Form.Control
+              type="number"
+              value={ujHely}
+              onChange={(e) => setUjHely(e.target.value)}
+              placeholder="Pl. 1"
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer className="flex justify-between">
+        <Button variant="secondary" onClick={onClose}>
+          Mégse
+        </Button>
+        {type === "mod" && (
+          <Button variant="danger" onClick={() => del(categoryDetails?.id)}>
+            Törlés
+          </Button>
+        )}
+        <Button
+          variant="success"
+          onClick={() => {
+            const idOrBufe = type === "mod" ? categoryDetails.id : bufeId.id;
+            save(idOrBufe, ujNev, ujHely);
+            onClose();
+          }}
+        >
+          Mentés
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }

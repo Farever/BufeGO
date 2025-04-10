@@ -85,11 +85,11 @@ const Landing = ({ setLoggedinUser }) => {
 
             <Row className="hero">
                 <Col xs={12} md={6} className="hero-content">
-                    <h1>Nagy a sor a büfénél?</h1>
+                    <h1 className='title'>Nagy a sor a büfénél?</h1>
                     <p>Nézd meg a te sulidban ott vagyunk-e már</p>
                 </Col>
                 <Col xs={12} md={6} className="hero-image text-center">
-                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup_lhxmbu" alt="Coffee cup" className="img-fluid" />
+                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup" alt="Coffee cup" className="img-fluid" />
                 </Col>
             </Row>
 

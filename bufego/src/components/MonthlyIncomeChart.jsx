@@ -17,6 +17,13 @@ function MonthlyIncomeChart({bufeId}) {
   const selectedyear = useRef(0);
   const refreshInterval = 5000;
 
+  useEffect(() => {
+      if (years?.length > 0 && selectedyear.current.value == 0) {
+        selectedyear.current.value = years[0].ev;
+        fetchRatings();
+      }
+    }, [years]);
+
   const fetchRatings = async () => {
     if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
     {
@@ -73,6 +80,7 @@ function MonthlyIncomeChart({bufeId}) {
     <div className="col-sm-12 col-md-6">
       <Card className='chart'>
       <Card.Body>
+        {error && <div className="text-danger">Hiba: {error}</div>}
         <h1>Havi bevétel</h1>
         <>Statisztika éve:
           
