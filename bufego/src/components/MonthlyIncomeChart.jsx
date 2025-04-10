@@ -51,7 +51,6 @@ function MonthlyIncomeChart({bufeId}) {
       const response = await axios.get('http://localhost:8000/eveklekerorders', {
         params: { place_id: bufeId},
       });
-      console.log(response.data.valasz);
       setYears(response.data.valasz)
 
     } catch (err) {
