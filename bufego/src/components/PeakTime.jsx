@@ -43,9 +43,7 @@ function PeakTime({ bufeId }) {
         </Card.Title>
         <Card.Body>
           <Card.Text>
-            {isLoading ? (
-              <div>Betöltés...</div>
-            ) : error ? (
+            {error ? (
               <div className="text-danger">Hiba: {error}</div>
             ) : (
               `${peaktime.ora} óra`

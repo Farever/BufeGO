@@ -80,7 +80,6 @@ function MonthlyIncomeChart({bufeId}) {
       {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>
         <Card.Body>
-        {isLoading && <div>Betöltés...</div>}
         {error && <div className="text-danger">Hiba: {error}</div>}
           <h1>Havi bevétel</h1>
           <>Statisztika éve: 

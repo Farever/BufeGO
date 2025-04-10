@@ -75,7 +75,6 @@ function BestSellingProducts({ bufeId }) {
   {
     return (
       <>
-        {isLoading && <div>Betöltés...</div>}
         {error && <div className="text-danger">Hiba: {error}</div>}
     
         <select style={{ maxWidth: 300, margin: 'auto' }} onChange={fetchProducts} ref={selectedyear}>

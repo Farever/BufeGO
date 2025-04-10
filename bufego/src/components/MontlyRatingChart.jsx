@@ -81,7 +81,6 @@ function MonthlyRatingChart({ bufeId }) {
       {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>
         <Card.Body>
-          {isLoading && <div>Betöltés...</div>}
           {error && <div className="text-danger">Hiba: {error}</div>}
           <h1>Havi értékelések</h1>
           <>Statisztika éve:
