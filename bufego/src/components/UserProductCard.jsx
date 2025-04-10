@@ -1,26 +1,29 @@
 import { Button, Card } from "react-bootstrap";
+import '../styles/UserProduct.css'; // új stílusfájl
 
-export default function UserProductCard({nev, img, ar,isAvaliable, action})
-{
+export default function UserProductCard({ nev, img, ar, isAvaliable, action }) {
     return (
-        <>
-        <Card role="button" className="w-20 h-100 col-sm-6 col-md-4 col-lg-3" onClick={action} style={{minHeight : 100, margin: 15}}>
-            <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${img}`} alt={nev} title={nev} />
+        <Card 
+            role="button" 
+            className="user-product-card" 
+            onClick={action}
+        >
+            <Card.Img 
+                className="product-image" 
+                src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,f_auto,q_auto/${img}`} 
+                alt={nev} 
+                title={nev} 
+            />
             <Card.Body>
-              <Card.Title>{nev}</Card.Title>
-              <Card.Text>
-                {ar} Ft
-              </Card.Text>
+                <Card.Title>{nev}</Card.Title>
+                <Card.Text>{ar} Ft</Card.Text>
             </Card.Body>
-            {
-              isAvaliable == '1'? (<></>) : (<Card.Footer><Button type="button" variant="secondary" disabled>Nem elérhető</Button></Card.Footer>)
-            }
-            {/*
-            <Card.Footer>{
-              isAvaliable == '1'? (<></>) : (<Button type="button" variant="secondary" disabled>Nem elérhető</Button>)
-              }</Card.Footer>
-            */}
+
+            {isAvaliable !== '1' && (
+                <Card.Footer>
+                    <Button type="button" variant="secondary" disabled>Nem elérhető</Button>
+                </Card.Footer>
+            )}
         </Card>
-        </>
-    )
+    );
 }
