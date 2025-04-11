@@ -86,6 +86,10 @@ function OrdersPage() {
   };
 
   const handleSubmitRating = async () => {
+    if(rating == 0){
+      alert("Az értékelés megadása kötelező!");
+      return;
+    }
     try {
       let resp = await axios.post('./api/index.php/rating', {
         "user_id": selectedOrder.user_id,

@@ -63,7 +63,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
             if (response.status == 200) {
                 KosarTorol();
                 alert("Rendelését leadtuk!");
-                setProducts([]);
+                setProducts("Nincsenek találatok!");
             }
         }
         catch (error) {

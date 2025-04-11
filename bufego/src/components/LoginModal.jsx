@@ -6,39 +6,42 @@ import axios from "axios";
 import '../styles/LoginModal.css';
 import { AuthContext } from '../Contexts';
 
-const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
+const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginState, setLoginState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loginFailureMessage, setLoginFailureMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [validationError, setValidationError] = useState({});
   const navigate = useNavigate();
-  const {setUser} = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
-  const navAfterLogin = (userProfile) =>
-  {
-    if(userProfile.is_admin == 1)
-    {
+  const navAfterLogin = (userProfile) => {
+    if (userProfile.is_admin == 1) {
       navigate("/admin");
+    } else {
+      navigate("/home");
     }
-    else
-    {
-        navigate("/home");
-    }
+  };
+
+  const clearMessages = () => {
+      setError(null);
+      setLoginFailureMessage(null);
+      setSuccessMessage(null);
+      setValidationError({});
   }
 
   const validateForm = () => {
     const errors = {};
+    clearMessages();
 
-    // Email validáció
     if (!email) {
       errors.email = 'Az email megadása kötelező.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       errors.email = 'Érvénytelen email-cím.';
     }
 
-    // Jelszó validáció
     if (!password) {
       errors.password = 'A jelszó megadása kötelező.';
     }
@@ -49,37 +52,51 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
 
   const fetchLogin = async () => {
     setIsLoading(true);
-    setError(null);
+
     try {
       const response = await axios.get(`./api/index.php/bejelentkezes?email=${email}`, { withCredentials: true });
-      console.log(response.data.valasz)
-      if (sha512(password) === response.data.valasz[0].passcode) {
-        setLoginState(true);
-        alert('Sikeres bejelentkezés!');
-        let data = await fetch("./api/index.php/sessdata", {
-          credentials : "include"
-        })
-        let user = (await data.json())["valasz"];
-        setUser(user);
-        navAfterLogin(user);
-        console.log(user);
+      console.log(response.data.valasz);
+
+      if (response.data.valasz && response.data.valasz.length > 0 && sha512(password) === response.data.valasz[0].passcode) {
+        setSuccessMessage('Sikeres bejelentkezés! Átirányítás...');
+
+            try {
+                let data = await fetch("./api/index.php/sessdata", {
+                  credentials: "include"
+                });
+                let user = (await data.json())["valasz"];
+                setUser(user);
+                navAfterLogin(user);
+            } catch (sessionError) {
+                console.error("Hiba a session adatok lekérésekor:", sessionError);
+                setError('Hiba történt a felhasználói adatok lekérésekor.');
+                setSuccessMessage(null);
+                setIsLoading(false);
+            }
+
       } else {
-        alert('Sikertelen bejelentkezés! Próbálja újra!');
+        setLoginFailureMessage('Hibás email cím vagy jelszó!');
+        setIsLoading(false);
       }
     } catch (err) {
       console.log(err);
       setError('Hiba történt a bejelentkezés során. Kérjük, próbálja újra később.');
-    } finally {
       setIsLoading(false);
     }
   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    if (validationError.email) {
+        setValidationError(prev => ({...prev, email: null}));
+    }
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+     if (validationError.password) {
+        setValidationError(prev => ({...prev, password: null}));
+    }
   };
 
   const handleSubmit = (event) => {
@@ -89,14 +106,23 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
     }
   };
 
+    const handleClose = () => {
+        clearMessages();
+        setEmail('');
+        setPassword('');
+        onClose();
+    }
+
   return (
-    <Modal show={isOpen} onHide={onClose} centered>
+    <Modal show={isOpen} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Bejelentkezés</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           {error && <Alert variant="danger">{error}</Alert>}
+          {loginFailureMessage && <Alert variant="danger">{loginFailureMessage}</Alert>}
+          {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email</Form.Label>
@@ -106,6 +132,7 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
               value={email}
               onChange={handleEmailChange}
               isInvalid={!!validationError.email}
+              aria-describedby="emailHelpBlock"
             />
             <Form.Control.Feedback type="invalid">
               {validationError.email}
@@ -126,12 +153,14 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword}) => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Button type="submit" className="sign-in-button" disabled={isLoading}>
+          <Button type="submit" className="sign-in-button w-100" disabled={isLoading}>
             {isLoading ? 'Bejelentkezés...' : 'Bejelentkezés'}
           </Button>
 
-          <div className="modal-links">
-            <a href='#' onClick={onForgottenPassword}>Elfelejtetted a jelszavad?</a>
+          <div className="modal-links mt-3 text-center"> {/* Jobb elrendezés */}
+            <a href='#' onClick={(e) => { e.preventDefault(); handleClose(); onForgottenPassword(); }}>
+                Elfelejtetted a jelszavad?
+            </a>
           </div>
         </Form>
       </Modal.Body>

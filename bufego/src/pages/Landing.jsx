@@ -9,6 +9,7 @@ import '../styles/landing.css';
 import axios from 'axios';
 import PasswordModal from '../components/passwordChange';
 import { AuthContext } from '../Contexts';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = ({ setLoggedinUser }) => {
     const [schoolsData, setSchoolsData] = useState([]);
@@ -16,6 +17,17 @@ const Landing = ({ setLoggedinUser }) => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
     const { userData } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (Object.keys(userData).length > 0) {
+            if (userData.is_admin == 1) {
+                navigate("/admin");
+            } else {
+                navigate("/home");
+            }
+        }
+    }, [])
 
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
@@ -84,11 +96,11 @@ const Landing = ({ setLoggedinUser }) => {
 
             <Row className="hero">
                 <Col xs={12} md={6} className="hero-content">
-                    <h1>Nagy a sor a büfénél?</h1>
+                    <h1 className='title'>Nagy a sor a büfénél?</h1>
                     <p>Nézd meg a te sulidban ott vagyunk-e már</p>
                 </Col>
                 <Col xs={12} md={6} className="hero-image text-center">
-                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup_lhxmbu" alt="Coffee cup" className="img-fluid" />
+                    <img src="https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/coffe-cup" alt="Coffee cup" className="img-fluid" />
                 </Col>
             </Row>
 

@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Admin from './pages/Admin';
 import NoPage from "./pages/NoPage";
 import AdminRoute from "./AdminRoute";
+import LoginRoute from "./LoginRoute";
 import { AdminProvider, AuthContext, AuthProvider } from "./Contexts";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,7 +23,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Settings from "./pages/Settings";
 import { useNavigate } from 'react-router-dom'
-import LoginRoute from "./LoginRoute";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);

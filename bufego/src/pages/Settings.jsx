@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../Contexts';
 
 
+
 export default function Settings() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
@@ -25,10 +26,11 @@ export default function Settings() {
         try {
             let resp = await fetch('./api/index.php/kijelentkezes', { credentials: "include" });
             if (resp.ok) {
+                navigate('/');
                 sessionStorage.removeItem("userData");
                 sessionStorage.removeItem("adminBufe");
                 setUser({});
-                window.location.href = "/#/";
+                setBufe(null);
             }
         } catch (error) {
             console.error("Hiba az iskolák lekérésekor:", error);
@@ -168,9 +170,9 @@ export default function Settings() {
                 if (addressRes.status === 200 && userDataRes.status === 200) {
                     setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
                     setUser({
-                        "user_id" : userData.user_id,
-                        "is_admin" : userData.is_admin,
-                        "school_id" : school
+                        "user_id": userData.user_id,
+                        "is_admin": userData.is_admin,
+                        "school_id": school
                     })
                 } else {
                     throw new Error('Hiba történt a mentés során.');
@@ -179,7 +181,12 @@ export default function Settings() {
                 setErrors(prevErrors => ({ ...prevErrors, submit: error.message }));
             } finally {
                 setIsLoading(false);
-                navigate(-1);
+                setTimeout(
+                    () => {
+                        navigate(-1);
+                    }, 500
+                )
+
             }
         }
     };
@@ -192,7 +199,7 @@ export default function Settings() {
 
             if (resp.status === 200) {
                 setDeactivationSuccess(true);
-                Kijelentkezes();
+                setTimeout(() => { Kijelentkezes(); }, 1000)
             } else {
                 throw new Error("Hiba történt a fiók inaktiválása során.");
             }
@@ -231,6 +238,7 @@ export default function Settings() {
                     {deactivationSuccess && (
                         <div className="alert alert-info">
                             A fiók sikeresen inaktiválva lett.
+                            Kijelentkezés...
                         </div>
                     )}
 
@@ -304,18 +312,18 @@ export default function Settings() {
                             {errors.school && <div className="text-danger">{errors.school}</div>}
                         </div>
 
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary mx-3">
                             Mentés
                         </button>
 
-                        <button type="button" className="btn btn-warning" onClick={handleCancle}>
+                        <button type="button" className="btn btn-warning mx-3" onClick={handleCancle}>
                             Mégse
                         </button>
                     </form>
 
                     <button
                         onClick={handleDeactivateAccount}
-                        className="btn btn-danger mt-3"
+                        className="btn btn-danger m-3"
                     >
                         Fiók inaktiválása
                     </button>

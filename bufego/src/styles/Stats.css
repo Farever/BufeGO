@@ -1,23 +1,126 @@
-.chart{
-    background-color: #f5b761 !important;
-    color: black !important;
-    border: #f5b761 !important;
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-bottom: 20px;
+/* Általános kártyastílus */
+.card {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    background-color: #ffffff !important;
+    color: #333 !important;
+    border: none !important;
+    padding: 16px;
+    transition: transform 0.2s ease;
 }
 
-.rating{
-    background-color: #f5b761 !important;
-    color: black !important;
-    border: #f5b761 !important;
-    width: 25%;
-    margin: auto;
-    margin-bottom: 20px;
+.card:hover {
+    transform: scale(1.01);
 }
 
-.product-card{
-    background-color: #f5b761 !important;
-    color: black !important;
-    border: #f5b761 !important;
+/* Külön stílus a chartokhoz, ha el akarod különíteni */
+.chart {
+    margin: 20px 10px;
+}
+
+/* Jelenlegi értékelés és forgalmas idő kártyák */
+.rating {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Termékkártya stílus */
+.product-card {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    background-color: #ffffff !important;
+    color: #333 !important;
+    border: none !important;
+    transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.02);
+}
+
+/* Termékek rácsos elrendezése */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Select elemek stílusa */
+select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+    display: block;
+    max-width: 300px;
+    font-size: 1rem;
+}
+
+/* Címek */
+h1 {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    color: #222;
+    font-weight: bold;
+    text-align: center;
+}
+
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-left: 5px solid #f5b761;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.01);
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.product-details {
+    padding: 1rem;
+}
+
+.product-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.product-info {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-actions button {
+    min-width: 90px;
+}
+
+
+/* Responsive fixek */
+@media (max-width: 768px) {
+    .rating {
+        width: 90%;
+    }
+
+    .card {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
 }

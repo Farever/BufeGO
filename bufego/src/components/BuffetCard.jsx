@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
+import "../styles/BuffetCard.css"
 
 const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
   const [rating, setRating] = useState(0);
@@ -52,31 +53,53 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
   };
 
   return (
-    <Card className="buffet-card">
-      <Card.Img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,w_300,h_300,f_auto,q_auto/${buffet.image}`} />
-      <Card.Body>
-        <Card.Title>
-          {buffet.name} - {buffet.school}
-        </Card.Title>
-        <Card.Text>{buffet.description}</Card.Text>
-        <Card.Text>
-          {buffet.zip_code}, {buffet.city}, {buffet.address}
-        </Card.Text>
-        <Card.Text>{buffet.phone}</Card.Text>
+    <Card className="buffet-card shadow-sm rounded-4 overflow-hidden mb-4" style={{ maxWidth: '400px' }}>
+  <Card.Img
+    variant="top"
+    src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,w_400,h_200,f_auto,q_auto/${buffet.image}`}
+    alt={buffet.name}
+    className="object-fit-cover"
+    style={{ height: '200px' }}
+  />
 
-        {/* Értékelés megjelenítése */}
-        <Card.Text>
-          Értékelés: <Rating name="read-only" value={rating} precision={0.5} readOnly /> ({rating}/5)
-        </Card.Text>
-        {isLoading && <p>Loading ratings...</p>}
-        {error && <p>Error: {error}</p>}
+  <Card.Body className="px-4 py-3">
+    <Card.Title className="fs-5 fw-semibold">
+      {buffet.name} – {buffet.school}
+    </Card.Title>
 
-        <Button variant="primary" onClick={handleClick} className="button mx-3">
-          Kiválasztás
+    <Card.Text className="text-muted small mb-1">{buffet.description}</Card.Text>
+
+    <Card.Text className="mb-1">
+      <i className="bi bi-geo-alt text-primary me-1"></i>
+      <small>{buffet.zip_code}, {buffet.city}, {buffet.address}</small>
+    </Card.Text>
+
+    <Card.Text className="mb-2">
+      <i className="bi bi-telephone text-success me-1"></i>
+      <small>{buffet.phone}</small>
+    </Card.Text>
+
+    <div className="d-flex align-items-center mb-3">
+      <Rating name="read-only" value={rating} precision={0.5} readOnly />
+      <span className="ms-2 text-muted small">({rating}/5)</span>
+    </div>
+
+    {isLoading && <p className="text-secondary small">Értékelés betöltése...</p>}
+    {error && <p className="text-danger small">Hiba: {error}</p>}
+
+    <div className="d-flex justify-content-between">
+      <Button variant="outline-primary" size="sm" onClick={handleClick}>
+        Kiválasztás
+      </Button>
+      {isOnAdminPage && (
+        <Button variant="outline-secondary" size="sm" onClick={onModClick}>
+          Módosítás
         </Button>
-        { isOnAdminPage ? <Button variant="secondary" onClick={onModClick} className="button mx-3">Modósítás</Button> : null}
-      </Card.Body>
-    </Card>
+      )}
+    </div>
+  </Card.Body>
+</Card>
+
   );
 };
 

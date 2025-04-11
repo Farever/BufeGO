@@ -53,6 +53,8 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'currentrating' => handleCurrentRating($method, $getData),
         'getmonthlyrating' => handleGetMonthlyRating($method, $getData),
         'peak_time' => handlePeakTime($method, $getData),
+        'eveklekerorders' => handleEvLekerOrders($method, $getData),
+        'eveklekerratings' => handleEvLekerRatings($method, $getData),
         'kategoriak' => handleKategoriak($method, $getData),
         'kategoriamodositas' => handleKategoriaModositas($method, $bodyData),
         'kategoriafeltoltes' => handleKategoriaFeltoltes($method, $bodyData),
@@ -130,36 +132,31 @@ function handleLegjobbanFogyo(string $method, array $getData): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (empty($getData["year"]) || empty($getData["month"]) || empty($getData["place_id"])) {
+    if (empty($getData["year"]) || empty($getData["place_id"])) {
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    // Biztonságosabb paraméterkezelés a SQL injection elkerülése érdekében
     $year = intval($getData["year"]);
-    $month = intval($getData["month"]);
     $placeId = intval($getData["place_id"]);
 
-    // SQL injection elleni védelem + pontosabb lekérdezés a legtöbbet eladott termékre
     $query = "SELECT products.*, SUM(orderedproducts.quantity) AS 'vasarolt_mennyiseg'
               FROM orderedproducts
               INNER JOIN orders ON orderedproducts.order_id = orders.id
               INNER JOIN products ON orderedproducts.product_id = products.id
               WHERE YEAR(orders.orderd_at) = ?
-              AND MONTH(orders.orderd_at) = ?
               AND orders.place_id = ?
               GROUP BY orderedproducts.product_id
               ORDER BY vasarolt_mennyiseg DESC
               LIMIT 3";
 
-    $params = [$year, $month, $placeId,];
+    $params = [$year, $placeId,];
 
-    $response = lekeres($query, "ssi", $params);
+    $response = lekeres($query, "si", $params);
 
-    // Ha nincs találat, üres tömböt adjunk vissza
     if (empty($response)) {
         return ['valasz' => []];
     }
-    // Tömbbe csomagolás, ha a lekeres függvény nem tömböt ad vissza, hanem egyetlen sort.
+
     if (!is_array($response)) {
         $response = [$response];
     }
@@ -197,7 +194,7 @@ function handleGetMonthlyRating(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " AND YEAR(ratings.date) = " . $getData["year"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date) ORDER BY ratings.date");
+    $response = lekeres("SELECT MONTH(ratings.date) as 'honap', AVG(ratings.rating) as 'atlagrating' FROM ratings WHERE ratings.place_id = " . $getData["place_id"] . " AND YEAR(ratings.date) = " . $getData["year"] . " GROUP BY YEAR(ratings.date), MONTH(ratings.date), ratings.date ORDER BY ratings.date");
     return ['valasz' => $response];
 }
 
@@ -214,7 +211,35 @@ function handlePeakTime(string $method, array $getData): ?array
         return ['valasz' => 'Hiányos bemenet', 'status' => 400];
     }
 
-    $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM orders WHERE orders.place_id=" . $getData["place_id"] . " GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC");
+    $response = lekeres("SELECT HOUR(orderd_at) as 'ora', SUM(id) as 'rendeles_szam' FROM orders WHERE orders.place_id=" . $getData["place_id"] . " GROUP BY HOUR(orderd_at) ORDER BY rendeles_szam DESC LIMIT 1");
+    return ['valasz' => $response];
+}
+
+function handleEvLekerOrders(string $method, array $getData): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData["place_id"])) {
+        return ['valasz' => 'Hiányos bemenet', 'status' => 400];
+    }
+
+    $response = lekeres("SELECT DISTINCT YEAR(orders.orderd_at) as 'ev' FROM orders WHERE orders.place_id = {$getData['place_id']};");
+    return ['valasz' => $response];
+}
+
+function handleEvLekerRatings(string $method, array $getData): ?array
+{
+    if ($method !== "GET") {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    if (empty($getData["place_id"])) {
+        return ['valasz' => 'Hiányos bemenet', 'status' => 400];
+    }
+
+    $response = lekeres("SELECT DISTINCT YEAR(ratings.date) as 'ev' FROM ratings WHERE ratings.place_id = {$getData['place_id']};");
     return ['valasz' => $response];
 }
 
@@ -307,9 +332,12 @@ function handleBufeModositas(string $method)
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $imgName = str_replace(' ', '_', $_POST["name"]);
+    $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone']);
 
-    $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone'], $imgName);
+    $imgName = str_replace(' ', '_', $_POST['name']);
+    $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
+    $imgName = preg_replace('/  */', '-', $imgName);
+    $prev_imgName = lekeres("SELECT image FROM places WHERE `id` = '{$_POST['id']}' LIMIT 1");
 
     if (isset($_FILES["img"])) {
         $file = $_FILES['img'];
@@ -321,6 +349,16 @@ function handleBufeModositas(string $method)
 
         if($valasz == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
+        }
+    }else
+    {
+        try {
+            (new UploadApi())->rename($prev_imgName[0]["image"], $imgName);
+            if($valasz == "Sikertelen művelet!"){
+                return ['valasz' => "Sikeres átnevezés!"];
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 
@@ -341,7 +379,10 @@ function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
     }
 
     if(isset($_FILES["image"])){
-        $imgName = str_replace(' ', '_', $bodyData["bufeName"]);
+        $imgName = str_replace(' ', '_', $_POST['name']);
+        $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
+        $imgName = preg_replace('/  */', '-', $imgName);
+
         $file = $_FILES['image'];
         (new UploadApi())->upload($file["tmp_name"], [
             'public_id' => $imgName,
@@ -386,7 +427,7 @@ function handleBejelentkezes($method, $data): ?array
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner, school_id FROM `users` WHERE `email` = '{$data['email']}'";
+    $sql = "SELECT `id`,`passcode`, `name`, is_place_owner, school_id FROM `users` WHERE `email` = '{$data['email']}' AND isActive = 1";
     $userData = lekeres($sql);
 
     if (is_array($userData)) {
@@ -702,23 +743,27 @@ function handleTermekFelv(string $method): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
 
     $availability = $_POST['is_avaliable'] ? 1 : 0;
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
 
     if (isset($_FILES["img"])) {
+        $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
+        $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
+        $imgName = preg_replace('/  */', '-', $imgName);
         $file = $_FILES['img'];
         (new UploadApi())->upload($file["tmp_name"], [
             'public_id' => $imgName,
             'quality_analysis' => true,
             'colors' => true
         ]);
-
+        $response = valtoztatas("INSERT INTO products( place_id,category_id,image, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
         if($response == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
+    }else{
+        $response = valtoztatas("INSERT INTO products( place_id,category_id, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
     }
+
 
     return ['valasz' => $response];
 }
@@ -754,6 +799,9 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
     }
         
     $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
+    $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
+    $imgName = preg_replace('/  */', '-', $imgName);
+    $prev_imgName = lekeres("SELECT image FROM products WHERE `id` = '{$_POST['id']}' LIMIT 1");
 
     $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE `id` = '{$_POST['id']}' && `deleted` = '0'");
 
@@ -769,6 +817,11 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
     }
+    else
+    {
+        (new UploadApi())->rename($prev_imgName[0]["image"], $imgName);
+    }
+    
 
     return ['valasz' => $response];
 }
@@ -1019,8 +1072,11 @@ function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, 
 function bufeModositas($bufeId, $bufeName, $desc, $phone, $imgName = null, $payment = false, $avaliable = false)
 {
     $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`image`=?,`payment_on_collect_enabled`=?,`is_avaliable`=? WHERE `id` = ?";
+    if($imgName == null){
+        $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`payment_on_collect_enabled`=?,`is_avaliable`=? WHERE `id` = ?";
+    }
 
-    $bufe = valtoztatas($query, "ssssiii", [$bufeName, $desc, $phone, $imgName, $payment, $avaliable, $bufeId]);
+    $bufe = valtoztatas($query, "sssiii", [$bufeName, $desc, $phone, $payment, $avaliable, $bufeId]);
 
     return $bufe;
 }

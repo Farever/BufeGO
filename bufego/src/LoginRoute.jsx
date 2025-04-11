@@ -6,7 +6,6 @@ const LoginRoute = ({children }) => {
   const {userData} = useContext(AuthContext);
 
   if (Object.keys(userData).length === 0) {
-    alert("Jelentkezz be!");
     return <Navigate to="/" replace />;
   }
 
