@@ -788,6 +788,7 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
     $imgName = $_POST["place_id"]."_product_".str_replace(' ', '_', $_POST["name"]);
     $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
     $imgName = preg_replace('/  */', '-', $imgName);
+    $prev_imgName = lekeres("SELECT image FROM products WHERE `id` = '{$_POST['id']}' LIMIT 1");
 
     $response = valtoztatas("UPDATE products SET category_id={$_POST['category_id']},image='{$imgName}',name='{$_POST['name']}',description='{$_POST['description']}',allergens='{$_POST['allergens']}',is_avaliable={$_POST['is_avaliable']},price= {$_POST['price']} WHERE `id` = '{$_POST['id']}' && `deleted` = '0'");
 
@@ -803,6 +804,11 @@ function handleTermekValt(string $method, ?array $bodyData): ?array
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
     }
+    else
+    {
+        (new UploadApi())->rename($prev_imgName[0]["image"], $imgName);
+    }
+    
 
     return ['valasz' => $response];
 }

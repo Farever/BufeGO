@@ -78,7 +78,6 @@ export default function UserBufe({isCartShown, cartSet }) {
             });
 
             if (response.status === 200) {
-                alert("Sikeres kosárba tétel!");
                 setFrissits(true);
                 setModalShown(false);
             }
