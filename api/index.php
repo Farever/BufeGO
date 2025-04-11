@@ -332,11 +332,12 @@ function handleBufeModositas(string $method)
         return ['valasz' => 'Hiányzó adatok!', 'status' => 400];
     }
 
-    $imgName = str_replace(' ', '_', $_POST["name"]);
+    $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone']);
+
+    $imgName = str_replace(' ', '_', $_POST['name']);
     $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
     $imgName = preg_replace('/  */', '-', $imgName);
-
-    $valasz = bufeModositas($_POST['id'], $_POST['name'], $_POST['desc'], $_POST['phone'], $imgName);
+    $prev_imgName = lekeres("SELECT image FROM places WHERE `id` = '{$_POST['id']}' LIMIT 1");
 
     if (isset($_FILES["img"])) {
         $file = $_FILES['img'];
@@ -348,6 +349,16 @@ function handleBufeModositas(string $method)
 
         if($valasz == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
+        }
+    }else
+    {
+        try {
+            (new UploadApi())->rename($prev_imgName[0]["image"], $imgName);
+            if($valasz == "Sikertelen művelet!"){
+                return ['valasz' => "Sikeres átnevezés!"];
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 
@@ -368,7 +379,7 @@ function handleBufeFeltoltes(string $method, ?array $bodyData): ?array
     }
 
     if(isset($_FILES["image"])){
-        $imgName = str_replace(' ', '_', $bodyData["bufeName"]);
+        $imgName = str_replace(' ', '_', $_POST['name']);
         $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
         $imgName = preg_replace('/  */', '-', $imgName);
 
@@ -732,25 +743,27 @@ function handleTermekFelv(string $method): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
-    $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
-    $imgName = preg_replace('/  */', '-', $imgName);
 
     $availability = $_POST['is_avaliable'] ? 1 : 0;
-    $response = valtoztatas("INSERT INTO products( place_id,category_id, image, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
 
     if (isset($_FILES["img"])) {
+        $imgName = $_POST["place"]."_product_".str_replace(' ', '_', $_POST["name"]);
+        $imgName = preg_replace('/[^A-Za-z0-9. - _]/', '', $imgName);
+        $imgName = preg_replace('/  */', '-', $imgName);
         $file = $_FILES['img'];
         (new UploadApi())->upload($file["tmp_name"], [
             'public_id' => $imgName,
             'quality_analysis' => true,
             'colors' => true
         ]);
-
+        $response = valtoztatas("INSERT INTO products( place_id,category_id,image, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$imgName}','{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
         if($response == "Sikertelen művelet!"){
             return ['valasz' => "Kép feltöltése sikeres!"];
         }
+    }else{
+        $response = valtoztatas("INSERT INTO products( place_id,category_id, name, description, allergens, is_avaliable, price, deleted) VALUES ({$_POST['place']},{$_POST['category']},'{$_POST['name']}','{$_POST['description']}','{$_POST['allergens']}',{$availability},{$_POST['price']}, 0)");
     }
+
 
     return ['valasz' => $response];
 }
@@ -1059,8 +1072,11 @@ function bufeAdatokFeltoles($adminUserId, $bufeName, $desc, $phone, $addressId, 
 function bufeModositas($bufeId, $bufeName, $desc, $phone, $imgName = null, $payment = false, $avaliable = false)
 {
     $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`image`=?,`payment_on_collect_enabled`=?,`is_avaliable`=? WHERE `id` = ?";
+    if($imgName == null){
+        $query = "UPDATE `places` SET `name`=?,`description`=?,`phone`=?,`payment_on_collect_enabled`=?,`is_avaliable`=? WHERE `id` = ?";
+    }
 
-    $bufe = valtoztatas($query, "ssssiii", [$bufeName, $desc, $phone, $imgName, $payment, $avaliable, $bufeId]);
+    $bufe = valtoztatas($query, "sssiii", [$bufeName, $desc, $phone, $payment, $avaliable, $bufeId]);
 
     return $bufe;
 }
