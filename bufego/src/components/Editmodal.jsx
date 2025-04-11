@@ -5,7 +5,6 @@ import ActionButton from "./ActionButton";
 
 function Editmodal({show, handleClose, product})
 {
-    console.log(product);
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -44,13 +43,19 @@ function Editmodal({show, handleClose, product})
         }
       };
 
+      //Kiszedi az üzenetet, ha bezárjuk a modalt
+      useEffect(() => {
+        if (!show) {
+            setUploadStatus("");
+            setResponseMessage("");
+        }
+    }, [show])
+
       const handleImageChange = (e) => {
         setSelectedImage(e.target.files[0]);
       };
 
       const editProduct = async() => {
-        console.log(category.current.value)
-        
         const formData = new FormData();
         formData.append('id', product.id);
         formData.append('category_id', category.current.value);
@@ -75,17 +80,19 @@ function Editmodal({show, handleClose, product})
             }
         });
 
-        if(response.ok)
+        if(response.data.valasz == "Sikeres művelet!")
         {
+            handleClose();
+            /*
             setUploadStatus("success")
             setResponseMessage("Sikeres adatmódosítás");
+            */
         }
         else
         {
             setUploadStatus("danger");
             setResponseMessage(response.data.valasz);
         }
-        
     }
 
     useEffect(() => {

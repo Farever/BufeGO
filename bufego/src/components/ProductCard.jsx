@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Card } from "react-bootstrap";
+import { Modal, Button, Card, Alert } from "react-bootstrap";
 import ActionButton from "./ActionButton";
 import axios from 'axios';
 import '../styles/Stats.css'; // itt van a design
@@ -34,7 +34,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
   const getKategoria = async () => {
     const response = await axios.get(`http://localhost:8000/kategorianev?id=${product.category_id}`);
     const data = response.data.valasz[0].categroy_name;
-    setProductCategory(data);
+    setproduct_category(data);
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
         <Card.Title className="product-name">{product.name}</Card.Title>
         <Card.Text className="product-info">Ár: {product.price} Ft</Card.Text>
         <Card.Text className="product-info">
-          Állapot: {product.is_avaliable === 1 ? "Elérhető" : "Nem elérhető"}
+          Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}
         </Card.Text>
         <Card.Text className="product-info">Kategória: {product_category}</Card.Text>
 
