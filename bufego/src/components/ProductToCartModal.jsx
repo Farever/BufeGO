@@ -13,6 +13,11 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
     }, [product]); // Az effect újra lefut, ha a product változik
 
     function getQuantity(event) {
+
+        if(event.target.value > 99)
+        {
+            event.target.value = 99;
+        }
         setQuantity(event.target.value);
         if (product) {
             setPrice(event.target.value * product.price);
