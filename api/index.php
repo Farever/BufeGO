@@ -90,6 +90,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
+        'kosarmod' => handleKosarTargyModosit($method, $bodyData),
         'kosartargytorles' => handleKosarTargyTorles($method, $bodyData),
         'kosartorles' => handleKosarTorles($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
@@ -928,6 +929,22 @@ function handleKosarba(string $method, ?array $bodyData): ?array
         $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
     }
     return ['valasz' => $response];
+}
+
+function handleKosarTargyModosit(string $method, ?array $bodyData): ?array
+{
+    if($method !== "POST")
+    {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+    
+    if(empty($bodyData['id']) || empty($bodyData["quantity"]))
+    {
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("UPDATE `cart` SET `quantity` = {$bodyData["quantity"]}  WHERE cart.id = {$bodyData['id']}");
+    return ["valasz" => $response];
 }
 
 

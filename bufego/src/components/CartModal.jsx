@@ -88,7 +88,7 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
     }
     if (products != "Nincsenek találatok!") {
         return (
-            <Modal show={isShown} onHide={onClose}>
+            <Modal show={isShown} onHide={onClose} size="lg">
                 <Modal.Header>
                     <p>Büfé kosara</p>
                 </Modal.Header>

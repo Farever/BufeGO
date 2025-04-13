@@ -1,8 +1,48 @@
+import { useEffect, useState} from "react";
 import { Row,Card, CardBody, Button } from "react-bootstrap";
 
 export default function CartCard({product, frissit})
 {
+    const [newQuantity, setNewQuantity] = useState(0)
 
+    useEffect(()=>{
+        document.getElementById("modosit").disabled = true;
+    }, [])
+
+
+    const frissitQuantity = (event) =>
+    {
+        if(event.target.value > 99)
+        {
+            event.target.value = 99;
+        }
+        setNewQuantity(event.target.value);
+        document.getElementById("modosit").disabled = false;
+    }   
+
+    const modQuantity = async () => {
+        try
+        {            
+            const response = await fetch("http://localhost:8000/kosarmod", {
+                method :"POST",
+                headers:
+                {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({"id": product.cid, "quantity" : newQuantity})
+            })
+
+            if(response.ok)
+            {
+                frissit();
+                document.getElementById("modosit").disabled = true;
+            }
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
+    }
 
     const deletAlert = () =>
     {
@@ -40,11 +80,14 @@ export default function CartCard({product, frissit})
     return(
         <Card>
             <CardBody>
-                <Row>
+                <Row style={{height : "30%"}}>
                     <p className="col-3">{product.name}</p>
-                    <p className="col-3">{product.quantity} db</p>
+                    <input type="number" variant="primary" max={99} className="col-1 hagyjadBeken" defaultValue={product.quantity} onChange={frissitQuantity}/><p className="col-2">db</p>
+                    <Button variant="primary" id="modosit" className="col-3" onClick={modQuantity}>Mentés</Button>
                     <p className="col-3">{product.price * product.quantity} Ft</p>
-                    <Button className="col-3" variant="danger" onClick={deletAlert}>X</Button>
+                </Row>
+                <Row>
+                    <Button variant="danger" onClick={deletAlert}>X</Button>
                 </Row>
             </CardBody>
         </Card>
