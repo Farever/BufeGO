@@ -862,7 +862,17 @@ function handleKosarba(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    $check = lekeres("SELECT * FROM `cart` WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']} AND cart.product_id = {$bodyData['product_id']}");
+    if(is_array($check))
+    {
+        $newQuantity = (int)$check[0]["quantity"] + (int)$bodyData["quantity"];
+        var_dump($newQuantity);
+        $response = valtoztatas("UPDATE `cart` SET `quantity` = {$newQuantity}  WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']} AND cart.product_id = {$bodyData['product_id']}");
+    }
+    else
+    {
+        $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    }
     return ['valasz' => $response];
 }
 
