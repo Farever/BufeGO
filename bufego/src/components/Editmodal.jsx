@@ -83,10 +83,6 @@ function Editmodal({show, handleClose, product})
         if(response.data.valasz == "Sikeres művelet!" || response.data.valasz == "Kép feltöltése sikeres!")
         {
             handleClose();
-            /*
-            setUploadStatus("success")
-            setResponseMessage("Sikeres adatmódosítás");
-            */
         }
         else
         {

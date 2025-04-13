@@ -68,8 +68,7 @@ const ProductUploadForm = () => {
         })
         let data = await response.json();
         if (response.ok) {
-            setUploadStatus("success")
-            setResponseMessage("Sikeres adatfelvétel");
+            handleClose();
         }
         else {
             setUploadStatus("danger");
@@ -90,6 +89,14 @@ const ProductUploadForm = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
+    useEffect(() => {
+        if (!show) {
+            setUploadStatus("");
+            setResponseMessage("");
+        }
+    }, [show])
 
     return (
         <>

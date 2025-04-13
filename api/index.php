@@ -738,9 +738,11 @@ function handleTermekFelv(string $method): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($_POST["place"]) || !isset($_POST["category"]) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price'])) {
+    if (!isset($_POST["place"]) || !isset($_POST["category"]) || !empty($_POST['name']) || !empty($_POST['description']) || !empty($_POST['allergens']) || !empty($_POST['price'])) {
+        /*
         var_dump($_POST);
         var_dump($_FILES);
+        */
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
