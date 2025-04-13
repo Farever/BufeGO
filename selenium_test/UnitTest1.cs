@@ -26,12 +26,10 @@ namespace BufeGO_Frontend_Teszt
             var password_field = driver.FindElement(By.Id("password"));
 
             email_field.SendKeys("admin1@bufego.com");
-            password_field.SendKeys("adminasdasd");
+            password_field.SendKeys("asdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
-            Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
             Thread.Sleep(500);
             Assert.AreEqual("http://localhost:5173/admin", driver.Url);
 
@@ -56,8 +54,6 @@ namespace BufeGO_Frontend_Teszt
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
             Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
-            Thread.Sleep(500);
             Assert.AreEqual("http://localhost:5173/home", driver.Url);
 
             driver.Quit();
@@ -75,7 +71,6 @@ namespace BufeGO_Frontend_Teszt
             driver = new ChromeDriver();
 
             driver.Navigate().GoToUrl("http://localhost:5173");
-            //driver.Manage().Window.Size = new Size(1200, 800);
             driver.Manage().Window.Maximize();
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -84,12 +79,10 @@ namespace BufeGO_Frontend_Teszt
             var password_field = driver.FindElement(By.Id("password"));
 
             email_field.SendKeys("admin1@bufego.com");
-            password_field.SendKeys("adminasdasd");
+            password_field.SendKeys("asdasd");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
-            Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
             Thread.Sleep(500);
             driver.FindElements(By.XPath("//button[contains(text(),'Kiválasztás')]"))[0].Click();
         }
@@ -134,15 +127,8 @@ namespace BufeGO_Frontend_Teszt
         public void RendelesGeneralva()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin/orders");
-            /*
-            WebDriverWait driverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            driverWait.Until(drv => drv.Url.Contains("admin/orders"));
-            */
-
-            //TODO: Kell majd for ciklus át az egészen + valamiért a bekérés nem jó
-            //driverWait.Until(drv => drv.FindElement(By.ClassName("modal-body")));
             Thread.Sleep(500);
-            driver.FindElement(By.XPath("//div[contains(@class,'order-actions')]/button[contains(text(),'Részletek')]")).Click();
+            driver.FindElement(By.XPath("//button[contains(text(),'Részletek')]")).Click();
 
 
             var modal = driver.FindElements(By.ClassName("modal-body"));
@@ -167,6 +153,8 @@ namespace BufeGO_Frontend_Teszt
             Assert.IsTrue(statusNumber >= 0, "Státusz egy nem negatív szám");
             Assert.IsTrue(totalAmount > 0, "A teljes összeg nagyobb mint 0");
             Assert.IsTrue(orderDate > DateTime.MinValue, "Valid a rendelés dátuma");
+
+            driver.Quit();
         }
 
         [TestMethod]
@@ -191,15 +179,14 @@ namespace BufeGO_Frontend_Teszt
 
             var container = driver.FindElement(By.ClassName("products-grid"));
             var cards = container.FindElements(By.XPath("./div"));
-            cards[0].FindElement(By.XPath("./div/div/button[contains(@class,'btn-danger')]")).Click();
+            cards[0].FindElement(By.XPath("./div/div/button[contains(@class,'btn-outline-danger')]")).Click();
 
             Thread.Sleep(500);
             var modal_body = driver.FindElement(By.ClassName("modal-body"));
             modal_body.FindElement(By.XPath("./button[contains(@class,'accept-button')]")).Click();
             Thread.Sleep(500);
-            IAlert alert = driver.SwitchTo().Alert();
 
-            Assert.IsTrue(alert.Text == "Sikeres törlés");
+            Assert.IsTrue(driver.FindElement(By.ClassName("alert")).Text == "Sikeres törlés");
 
             driver.Quit();
         }
@@ -208,18 +195,21 @@ namespace BufeGO_Frontend_Teszt
         public void UjKategoria()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin/categories");
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
+
+            var grid = driver.FindElement(By.ClassName("categories-grid"));
+            int originalcount = grid.FindElements(By.XPath("./div")).Count();
 
             var addbutton = driver.FindElement(By.XPath("//button[contains(text(),'Új kategória létrehozása')]"));
             addbutton.Click();
 
-            var helyinput = driver.FindElement(By.Id("helyInput"));
+            var helyinput = driver.FindElement(By.Id("HelyInput"));
             helyinput.SendKeys("1");
             driver.FindElement(By.XPath("//button[contains(text(),'Mentés')]")).Click();
             Thread.Sleep(500);
-            IAlert alert = driver.SwitchTo().Alert();
+            int newcount = grid.FindElements(By.XPath("./div")).Count();
 
-            Assert.IsTrue(Convert.ToInt32(alert.Text) > 0);
+            Assert.IsTrue(newcount > originalcount);
 
             driver.Quit();
         }
@@ -249,7 +239,6 @@ namespace BufeGO_Frontend_Teszt
         {
             driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:5173");
-            //driver.Manage().Window.Size = new Size(1200, 800);
             driver.Manage().Window.Maximize();
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
@@ -264,8 +253,6 @@ namespace BufeGO_Frontend_Teszt
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
-            Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
             Thread.Sleep(500);
         }
 
@@ -321,8 +308,6 @@ namespace BufeGO_Frontend_Teszt
             var modalfooter = driver.FindElement(By.ClassName("modal-footer"));
             modalfooter.FindElement(By.XPath("./button[contains(text(),'Kosárba')]")).Click();
             Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
-            Thread.Sleep(500);
 
             driver.FindElement(By.Id("cart_nav")).Click();
 
@@ -332,7 +317,7 @@ namespace BufeGO_Frontend_Teszt
 
             Assert.IsTrue(products.Count > 0, "Felveszi a termékeket a kosárba");
 
-            //driver.Quit();
+            driver.Quit();
         }
 
         [TestMethod]
@@ -351,7 +336,6 @@ namespace BufeGO_Frontend_Teszt
             var modalfooter = driver.FindElement(By.ClassName("modal-footer"));
             modalfooter.FindElement(By.XPath("./button[contains(text(),'Kosárba')]")).Click();
             Thread.Sleep(500);
-            driver.SwitchTo().Alert().Accept();
 
             driver.FindElement(By.Id("cart_nav")).Click();
 
