@@ -20,7 +20,6 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
 
     useEffect(() => {
         if (isShown) {
-            console.log(userData)
             getCart();
         }
     }, [isShown])

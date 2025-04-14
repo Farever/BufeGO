@@ -46,7 +46,7 @@ const Footer = () => {
                             </Nav.Item>
                         </Nav>
                     </Col>
-
+                    {/*
                     <Col md={5} className="offset-md-1 mb-3">
                         <Form>
                             <h5>Iratkozz fel hírlevelünkre</h5>
@@ -62,6 +62,7 @@ const Footer = () => {
                             </div>
                         </Form>
                     </Col>
+                    */}
                 </Row>
 
                 <div className="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">

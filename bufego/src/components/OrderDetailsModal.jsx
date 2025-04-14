@@ -63,22 +63,18 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
   };
 
   const handleAccept = (orderId) => {
-    console.log('Elfogadva:', orderId);
     handleStatusChange(orderId, 2);
   };
 
   const handleReject = (orderId) => {
-    console.log('Elutasítva:', orderId);
     handleStatusChange(orderId, 0);
   };
 
   const handleDone = (orderId) => {
-    console.log('Kész:', orderId);
     handleStatusChange(orderId, 3);
   };
 
   const handleToConsumer = (orderId) => {
-    console.log("Kiadva: ", orderId);
     handleStatusChange(orderId, 4);
   }
 
