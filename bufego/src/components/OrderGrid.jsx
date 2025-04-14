@@ -1,6 +1,5 @@
 import OrderCard from "./OrderCard";
 const OrderGrid = ({ orders, status, onDetails }) => {
-    console.log(status)
     const filtered = orders.filter(order => status.includes(order.status));
   
     if (filtered.length === 0) {

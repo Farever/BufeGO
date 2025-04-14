@@ -15,9 +15,6 @@ const Reviews = () => {
       try {
         let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + adminBufe.id);
         let data = await resp.json();
-    
-        console.log(data);
-    
         // Ellenőrizzük, hogy a `valasz` létezik és tömb-e
         if (Array.isArray(data.valasz)) {
           setReviews(data.valasz);
