@@ -117,7 +117,6 @@ const RegisterModal = ({ isOpen, onClose }) => {
       const newAddId = addressResponse.data.valasz;
       setAddId(newAddId);
 
-      console.log("Hgr")
       const registerResponse = await axios.put(
         "./api/index.php/felhasznaloregisztracio",
         {
@@ -135,6 +134,22 @@ const RegisterModal = ({ isOpen, onClose }) => {
         setSuccessMessage("Sikeres regisztráció!");
         setError(null);
         handleClose();
+
+        var templateParams = {
+          name: lastName + " " + firstName,
+          email: email,
+          link: 'http://localhost:8000/emailmegerosites?email=' + email,
+        };
+
+        emailjs.send('service_wnwawhk', 'template_3gys6bf', templateParams).then(
+          (response) => {
+            console.log('SUCCESS!', response.status, response.text);
+          },
+          (error) => {
+            console.log('FAILED...', error);
+          },
+        );
+
       } else {
         setSuccessMessage("");
         setError(registerResponse.data.valasz || "Hiba a regisztráció során!");

@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../Contexts';
-
+import { AdminBufeContext, AuthContext } from '../Contexts';
 
 
 export default function Settings() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
     const [addressID, setAddressId] = useState(null);
+    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [city, setCity] = useState('');
@@ -21,6 +21,7 @@ export default function Settings() {
     const [successMessage, setSuccessMessage] = useState('');
     const [deactivationSuccess, setDeactivationSuccess] = useState(false);
     const { userData, setUser } = useContext(AuthContext);
+    const { adminBufe, setBufe } = useContext(AdminBufeContext);
 
     const Kijelentkezes = async () => {
         try {
@@ -77,6 +78,7 @@ export default function Settings() {
                 const userData = data.valasz[0];
                 const addressData = addressResp.data.valasz[0];
                 setName(userData?.name || '');
+                setEmail(userData?.email);
                 setZipCode(addressData.zip_code);
                 setCity(addressData.city);
                 setAddressLine(addressData.address);
@@ -192,6 +194,15 @@ export default function Settings() {
     };
 
     const handleDeactivateAccount = async () => {
+
+        const isConfirmed = window.confirm(
+            "Biztosan inaktiválni szeretnéd a fiókodat?\nEz a művelet nem vonható vissza."
+        );
+
+        if (!isConfirmed) {
+            return;
+        }
+
         setIsLoading(true);
         setErrors({});
         try {
@@ -200,11 +211,24 @@ export default function Settings() {
             if (resp.status === 200) {
                 setDeactivationSuccess(true);
                 setTimeout(() => { Kijelentkezes(); }, 1000)
+                var templateParams = {
+                    email: email,
+                  };
+          
+                  emailjs.send('service_wnwawhk', 'template_krdl0q4', templateParams).then(
+                    (response) => {
+                      console.log('SUCCESS!', response.status, response.text);
+                    },
+                    (error) => {
+                      console.log('FAILED...', error);
+                    },
+                  );
             } else {
                 throw new Error("Hiba történt a fiók inaktiválása során.");
             }
         } catch (error) {
             setErrors(prevErrors => ({ ...prevErrors, deactivation: error.message }));
+            setDeactivationSuccess(false);
         } finally {
             setIsLoading(false);
         }

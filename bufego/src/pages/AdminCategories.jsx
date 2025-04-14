@@ -62,7 +62,6 @@ const Categories = () => {
   }
 
   const updateCategory = async (id, nev, hely) => {
-    console.log(hely);
     try
     {
       let response = axios.post("./api/index.php/kategoriamodositas", {

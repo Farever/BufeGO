@@ -26,6 +26,14 @@
     font-weight: bold;
   }
   
+  .hagyjadBeken{
+    width: inherit !important;
+    padding: inherit !important;
+    margin-bottom: inherit !important;
+    border: inherit !important;
+    border-radius: inherit !important;
+  }
+
   .modal-content input {
     width: 93%;
     padding: 10px;

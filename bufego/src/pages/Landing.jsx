@@ -111,8 +111,8 @@ const Landing = ({ setLoggedinUser }) => {
                 <Row>
                     {schoolsData?.map((school, index) => {
                         return (
-                            <Col lxs={12} sm={6} md={4} lg={3}>
-                                <SchoolCard key={'schoolsCard' + index} schoolName={school.name} />
+                            <Col lxs={12} sm={6} md={4} lg={3} key={school.name}>
+                                <SchoolCard schoolName={school.name} />
                             </Col>
                         )
                     })}
@@ -124,7 +124,7 @@ const Landing = ({ setLoggedinUser }) => {
                     <h2>Esetleg büféd van?</h2>
                     <div className="cta-box">
                         <p>Szolgálj ki még több embert és csatlakozz hozzánk partnerként</p>
-                        <a href="#" className="cta-button">Jelentkezz most</a>
+                        <a href="#"><button className="btn cta-button" disabled>Jelentkezz most</button></a>
                     </div>
                 </Col>
             </Row>

@@ -21,7 +21,6 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
       body: JSON.stringify({ id: parseInt(product.id) })
     });
     if (!response.ok) {
-      console.log(response);
       setDeleteStatus("success");
       setResponseMessage("Hiba a törlés során")
     }
@@ -45,7 +44,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
     <Card className={`product-card ${forStat ? "stat-mode" : ""}`}>
       <Card.Img
         variant="top"
-        src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`}
+        src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,f_auto,q_auto/${product.image}`}
         alt={product.name}
         className="product-image"
       />
@@ -56,6 +55,9 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
           Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}
         </Card.Text>
         <Card.Text className="product-info">Kategória: {product_category}</Card.Text>
+        {forStat && (
+          <Card.Text className="product-info">Eladott mennyiség: {product.vasarolt_mennyiseg}</Card.Text>
+        )}
 
         {!forStat && (
           <div className="product-actions d-flex justify-content-center gap-2 mt-3">

@@ -76,7 +76,7 @@ function MonthlyRatingChart({ bufeId }) {
   }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
-    <div className="col-sm-12 col-md-6">
+    <div className="col-sm-12 col-md-12 col-lg-6">
 
       {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>

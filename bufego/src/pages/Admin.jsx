@@ -59,7 +59,6 @@ const Admin = () => {
 
   const handleModClick = (buffetId) => {
     setSelectedBuffet(buffets.find(buffet => buffet.id == buffetId));
-    console.log(selectedBuffet);
     setIsDetailsModalOpen(true);
   };
 

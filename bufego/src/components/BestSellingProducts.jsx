@@ -27,7 +27,6 @@ function BestSellingProducts({ bufeId }) {
     setError(null);
     if(selectedyear.current.value != 0 && selectedyear.current.value != undefined)
     {
-      console.log(selectedyear.current.value)
       try {
         const response = await axios.get('./api/index.php/legjobbanfogyo', {
           params: {

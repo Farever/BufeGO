@@ -27,7 +27,7 @@ const ProductUploadForm = () => {
 
             // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
             if (Array.isArray(response.data.valasz)) {
-                setCategories(response.data.valasz);
+                setCategories(response.data.valasz.filter(x => x.deleted == 0));
             } else {
                 setCategories([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
             }
@@ -50,7 +50,6 @@ const ProductUploadForm = () => {
     }, [refreshInterval]);
 
     const uploadProduct = async () => {
-        console.log(category.current.value)
         const formData = new FormData();
         formData.append('place', place_id);
         formData.append('category', category.current.value);
@@ -68,8 +67,7 @@ const ProductUploadForm = () => {
         })
         let data = await response.json();
         if (response.ok) {
-            setUploadStatus("success")
-            setResponseMessage("Sikeres adatfelvétel");
+            handleClose();
         }
         else {
             setUploadStatus("danger");
@@ -90,6 +88,14 @@ const ProductUploadForm = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
+    useEffect(() => {
+        if (!show) {
+            setUploadStatus("");
+            setResponseMessage("");
+        }
+    }, [show])
 
     return (
         <>

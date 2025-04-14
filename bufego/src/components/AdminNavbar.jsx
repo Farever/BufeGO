@@ -82,7 +82,6 @@ const AdminNavbar = () => {
         const ujBufeId = event.target.value;
         setBufeId(ujBufeId);
         const kivalasztottBufe = buffets.find(x => x.id == ujBufeId);
-        console.log(kivalasztottBufe);
         setBufe(kivalasztottBufe);
         window.location.reload();
     };

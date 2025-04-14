@@ -7,6 +7,7 @@ function Editmodal({show, handleClose, product})
 {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    let loading = false;
     const [error, setError] = useState(null);
 
     const [uploadstatus, setUploadStatus] = useState("");
@@ -25,7 +26,6 @@ function Editmodal({show, handleClose, product})
     const price = useRef(0);
 
     const fetchCategories = async () => {
-        setIsLoading(true);
         setError(null);
         try {
           const response = await axios.get('./api/index.php/kategoriak', {
@@ -34,12 +34,10 @@ function Editmodal({show, handleClose, product})
             },
           });
     
-          setCategories(response.data.valasz);
+          setCategories(response.data.valasz.filter(x => x.deleted == 0));
         } catch (err) {
           console.log(err);
           setError(err.message);
-        } finally {
-          setIsLoading(false);
         }
       };
 
@@ -56,6 +54,7 @@ function Editmodal({show, handleClose, product})
       };
 
       const editProduct = async() => {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('id', product.id);
         formData.append('category_id', category.current.value);
@@ -80,13 +79,10 @@ function Editmodal({show, handleClose, product})
             }
         });
 
+        setIsLoading(false);
         if(response.data.valasz == "Sikeres művelet!" || response.data.valasz == "Kép feltöltése sikeres!")
         {
             handleClose();
-            /*
-            setUploadStatus("success")
-            setResponseMessage("Sikeres adatmódosítás");
-            */
         }
         else
         {
@@ -165,6 +161,9 @@ function Editmodal({show, handleClose, product})
                                 <Form.Control type="number" ref={price} defaultValue={product.price}/>
                             </Form.Group>
                         </Form>
+                        {isLoading && (
+                            <p>Folyamatban...</p>
+                        )}
                         <Alert variant={uploadstatus}>{responseMessage}</Alert>
                         
                     </Modal.Body>

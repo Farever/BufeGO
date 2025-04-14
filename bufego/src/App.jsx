@@ -23,6 +23,11 @@ import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Settings from "./pages/Settings";
 import { useNavigate } from 'react-router-dom'
+import Aszf from "./pages/ASZF";
+import Impresszum from "./pages/Impresszum";
+import Gyik from "./pages/GYIK";
+import Kapcsolat from "./pages/Kapcsolat";
+import AdatkezelesiTajekoztato from "./pages/Adatkezeles";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -68,7 +73,12 @@ function App() {
                         <AdminReviews />
                       </AdminRoute>} />
                     <Route path="/settings" element={<Settings />} />
-                    <Route path="*" element={< NoPage />} />
+                    <Route path="/aszf" element={<Aszf/>}/>
+                  <Route path="/impressum" element={<Impresszum/>}/>
+                  <Route path="/adatkezelesi-tajekoztato" element={<AdatkezelesiTajekoztato/>}/>
+                  <Route path="/gyik" element={<Gyik/>}/>
+                  <Route path="/kapcsolat" element={<Kapcsolat/>}/>
+                  <Route path="*" element={< NoPage />} />
                   </Routes>
                 </div>
                 <Footer />

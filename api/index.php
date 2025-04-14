@@ -69,6 +69,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kijelentkezes' => handleKijelentkezes($method),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
+        'emailmegerosites' => handleEmailMegerosites($method, $getData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
         'felhasznaloinaktivalas' => handleFelhasznaloInaktivalas($method, $getData),
         'jelszovaltoztat' => handleJelszoValtoztat($method, $bodyData),
@@ -90,6 +91,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'sajatrendelesek' => handleUserRendelesek($method, $getData),
         'kosar' => handleKosar($method, $getData),
         'kosarba' => handleKosarba($method, $bodyData),
+        'kosarmod' => handleKosarTargyModosit($method, $bodyData),
         'kosartargytorles' => handleKosarTargyTorles($method, $bodyData),
         'kosartorles' => handleKosarTorles($method, $bodyData),
         'rating' => handleRating($method, $bodyData),
@@ -527,6 +529,14 @@ function handleFelhasznaloRegisztracio(string $method, ?array $bodyData): ?array
     return ['valasz' => felhasznaloAdatokFeltoltese($bodyData['email'], $bodyData['passcode'], $bodyData['name'], $bodyData['address_id'], $bodyData['phone'], $bodyData['school'], NULL, 0)];
 }
 
+function handleEmailMegerosites(string $method, ?array $getData) : ?array{
+    if($method !== "GET"){
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    return ["valasz" => felhasznaloEmailValidacio($getData["email"])];
+}
+
 /**
  * Kezeli a felhasználói adatok módosítását.
  */
@@ -737,9 +747,7 @@ function handleTermekFelv(string $method): ?array
         return ['valasz' => 'Hibás metódus', 'status' => 400];
     }
 
-    if (!isset($_POST["place"]) || !isset($_POST["category"]) || !isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['allergens']) || !isset($_POST['is_avaliable']) || !isset($_POST['price'])) {
-        var_dump($_POST);
-        var_dump($_FILES);
+    if (empty($_POST["place"]) || empty($_POST["category"]) || empty($_POST['name']) || empty($_POST['description']) || empty($_POST['allergens']) || empty($_POST['price'])) {
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
@@ -916,9 +924,36 @@ function handleKosarba(string $method, ?array $bodyData): ?array
         return ['valasz' => 'Hiányos adat', 'status' => 400];
     }
 
-    $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    $check = lekeres("SELECT * FROM `cart` WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']} AND cart.product_id = {$bodyData['product_id']}");
+    if(is_array($check))
+    {
+        $newQuantity = (int)$check[0]["quantity"] + (int)$bodyData["quantity"];
+        var_dump($newQuantity);
+        $response = valtoztatas("UPDATE `cart` SET `quantity` = {$newQuantity}  WHERE cart.user_id = {$bodyData['user_id']} AND cart.place_id = {$bodyData['place_id']} AND cart.product_id = {$bodyData['product_id']}");
+    }
+    else
+    {
+        $response = valtoztatas("INSERT INTO cart( user_id, place_id, quantity, product_id) VALUES ('{$bodyData["user_id"]}','{$bodyData["place_id"]}','{$bodyData["quantity"]}','{$bodyData["product_id"]}')");
+    }
     return ['valasz' => $response];
 }
+
+function handleKosarTargyModosit(string $method, ?array $bodyData): ?array
+{
+    if($method !== "POST")
+    {
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+    
+    if(empty($bodyData['id']) || empty($bodyData["quantity"]))
+    {
+        return ['valasz' => 'Hiányos adat', 'status' => 400];
+    }
+
+    $response = valtoztatas("UPDATE `cart` SET `quantity` = {$bodyData["quantity"]}  WHERE cart.id = {$bodyData['id']}");
+    return ["valasz" => $response];
+}
+
 
 function handleKosarTargyTorles(string $method, ?array $getData)
 {
@@ -1106,11 +1141,17 @@ function felhasznaloAdatokModositas($userId, $name, $school_id)
 
 function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin)
 {
-    $query = "INSERT INTO `users`(`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`) VALUES (NULL,'{$email}','{$passcode}','{$name}','{$address_id}','{$phone}','{$school_id}', CURRENT_TIMESTAMP,NULL,'{$pushNotificationKey}','{$isAdmmin}');";
+    $query = "INSERT INTO `users`(`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`, `isActive`) VALUES (NULL,'{$email}','{$passcode}','{$name}','{$address_id}','{$phone}','{$school_id}', CURRENT_TIMESTAMP,NULL,'{$pushNotificationKey}','{$isAdmmin}', 0);";
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
     return $felhasznalo;
+}
+
+function felhasznaloEmailValidacio($email){
+    $query = "UPDATE `users` SET `isActive`=1 WHERE `email` = ?";
+    header("Location: http://localhost:5173/"); /* TODO: Át kell majd a buildben írni*/
+    return valtoztatas($query, 'i', [$email]);
 }
 
 function jelszoValtoztatas($email, $passcode)
