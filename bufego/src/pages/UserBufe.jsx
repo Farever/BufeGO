@@ -97,7 +97,7 @@ export default function UserBufe({isCartShown, cartSet }) {
             {isLoading && <Loading />}
             {error && <div className="error-message">{error}</div>}
 
-            <Navbar>
+            <Navbar sticky="top" expand="lg" className="mb-3">
                 <Container>
                     <Navbar.Collapse>
                         <Nav className="me-auto">

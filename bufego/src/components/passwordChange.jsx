@@ -9,11 +9,28 @@ const PasswordModal = ({ isOpen, onClose }) => {
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVariant, setAlertVariant] = useState('');
     const [validationError, setValidationError] = useState({});
+
+    const clearAlert = () => {
+        setAlertMessage('');
+        setAlertVariant('');
+    };
+
+    const handleClose = () => {
+        clearAlert();
+        setValidationError({});
+        setEmail('');
+        setPassword1('');
+        setPassword2('');
+        onClose();
+    };
+
 
     const validateForm = () => {
         const errors = {};
+        clearAlert();
 
         // Email validáció
         if (!email) {
@@ -38,8 +55,8 @@ const PasswordModal = ({ isOpen, onClose }) => {
 
     const handleNewPassword = async () => {
         setIsLoading(true);
-        setError(null);
-        let message;
+        clearAlert();
+        let message = null;
         try {
             const response = await fetch(`http://localhost:8000/jelszovaltoztat`,
                 {
@@ -50,55 +67,74 @@ const PasswordModal = ({ isOpen, onClose }) => {
                     body: JSON.stringify({ "email": email, "passcode": sha512(password1) })
                 }
             );
-            message = await response.json();
-        } catch (err) {
-            setError('Hiba történt. Kérjük, próbálja újra később.');
-        } finally {
-            setIsLoading(false);
-            if(error != null){
-                alert(error);
-                return 0;
-            }
-            if (message.valasz == "Sikertelen művelet!") {
-                alert("Az új jelszavad nem egyezhet meg a mostanival!");
-            } else {
-                alert("Sikeres művelet!")
-                onClose();
-                setEmail('');
-                setPassword1('');
-                setPassword2('');
+
+            if (!response.ok) {
+                throw new Error(`HTTP hiba: ${response.status}`);
             }
 
+            message = await response.json();
+            if (message.valasz === "Sikertelen művelet!") {
+                setAlertMessage("Az új jelszavad nem egyezhet meg a mostanival!");
+                setAlertVariant('warning');
+            } else if (message.valasz === "Sikeres művelet!") {
+                setAlertMessage("Sikeres művelet!");
+                setAlertVariant('success');
+                setTimeout(() => {
+                    handleClose();
+                }, 1500);
+            } else {
+                setAlertMessage(message.valasz || 'Ismeretlen válasz a szervertől.');
+                setAlertVariant('info');
+            }
+
+        } catch (err) {
+            console.error("API hiba:", err);
+            setAlertMessage('Hiba történt a kapcsolat során. Kérjük, próbálja újra később.');
+            setAlertVariant('danger');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
+        if (validationError.email) setValidationError(prev => ({ ...prev, email: undefined }));
     };
 
     const handlePassword1Change = (event) => {
         setPassword1(event.target.value);
+        if (validationError.password) setValidationError(prev => ({ ...prev, password: undefined }));
     };
 
     const handlePassword2Change = (event) => {
         setPassword2(event.target.value);
+        if (validationError.password2) setValidationError(prev => ({ ...prev, password2: undefined }));
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        clearAlert();
         if (validateForm()) {
             handleNewPassword();
         }
     };
 
     return (
-        <Modal show={isOpen} onHide={onClose} centered>
+        <Modal show={isOpen} onHide={handleClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Jelszó változtatás</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    {error && <Alert variant="danger">{error}</Alert>}
+                    {alertMessage && (
+                        <Alert
+                            variant={alertVariant}
+                            onClose={clearAlert}
+                            dismissible
+                        >
+                            {alertMessage}
+                        </Alert>
+                    )}
 
                     <Form.Group className="mb-3" controlId="email">
                         <Form.Label>Email</Form.Label>

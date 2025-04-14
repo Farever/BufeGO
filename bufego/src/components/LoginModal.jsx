@@ -65,7 +65,9 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
                 });
                 let user = (await data.json())["valasz"];
                 setUser(user);
-                navAfterLogin(user);
+                setTimeout(() => {
+                  navAfterLogin(user);
+                }, 1500)
             } catch (sessionError) {
                 console.error("Hiba a session adatok lekérésekor:", sessionError);
                 setError('Hiba történt a felhasználói adatok lekérésekor.');
