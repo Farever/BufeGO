@@ -1,14 +1,10 @@
-import { useEffect, useState} from "react";
+import { useEffect, useRef, useState} from "react";
 import { Row,Card, CardBody, Button } from "react-bootstrap";
 
 export default function CartCard({product, frissit})
 {
     const [newQuantity, setNewQuantity] = useState(0)
-
-    useEffect(()=>{
-        document.getElementById("modosit").disabled = true;
-    }, [])
-
+    const [disabled, setDisabled ]= useState(true)
 
     const frissitQuantity = (event) =>
     {
@@ -17,7 +13,7 @@ export default function CartCard({product, frissit})
             event.target.value = 99;
         }
         setNewQuantity(event.target.value);
-        document.getElementById("modosit").disabled = false;
+        setDisabled(false);
     }   
 
     const modQuantity = async () => {
@@ -35,7 +31,7 @@ export default function CartCard({product, frissit})
             if(response.ok)
             {
                 frissit();
-                document.getElementById("modosit").disabled = true;
+                setDisabled(true);
             }
         }
         catch(error)
@@ -83,7 +79,7 @@ export default function CartCard({product, frissit})
                 <Row style={{height : "30%"}}>
                     <p className="col-3">{product.name}</p>
                     <input type="number" variant="primary" max={99} className="col-1 hagyjadBeken" defaultValue={product.quantity} onChange={frissitQuantity}/><p className="col-2">db</p>
-                    <Button variant="primary" id="modosit" className="col-3" onClick={modQuantity}>Mentés</Button>
+                    <Button variant="primary" id={product.id} className="col-3" onClick={modQuantity} disabled={disabled}>Mentés</Button>
                     <p className="col-3">{product.price * product.quantity} Ft</p>
                 </Row>
                 <Row>
