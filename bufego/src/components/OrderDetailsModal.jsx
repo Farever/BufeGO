@@ -16,9 +16,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order: initialOrder }) => {
 
   useEffect(() => {
     if (order) {
-      console.log(order.status);
       generateActionButtons(order.status);
-      console.log(actionButtons)
     }
   }, [order]);
 

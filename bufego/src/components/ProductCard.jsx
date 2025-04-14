@@ -21,7 +21,6 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
       body: JSON.stringify({ id: parseInt(product.id) })
     });
     if (!response.ok) {
-      console.log(response);
       setDeleteStatus("success");
       setResponseMessage("Hiba a törlés során")
     }

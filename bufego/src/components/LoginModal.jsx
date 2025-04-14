@@ -55,7 +55,6 @@ const LoginModal = ({ isOpen, onClose, onForgottenPassword }) => {
 
     try {
       const response = await axios.get(`http://localhost:8000/bejelentkezes?email=${email}`, { withCredentials: true });
-      console.log(response.data.valasz);
 
       if (response.data.valasz && response.data.valasz.length > 0 && sha512(password) === response.data.valasz[0].passcode) {
         setSuccessMessage('Sikeres bejelentkezés! Átirányítás...');

@@ -117,7 +117,6 @@ const RegisterModal = ({ isOpen, onClose }) => {
       const newAddId = addressResponse.data.valasz;
       setAddId(newAddId);
 
-      console.log("Hgr")
       const registerResponse = await axios.put(
         "http://localhost:8000/felhasznaloregisztracio",
         {
