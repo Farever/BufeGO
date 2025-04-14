@@ -147,7 +147,25 @@ INSERT INTO `logs` (`id`, `target_table`, `description`, `method`, `datetime`) V
 (16, 'categories', 'Módosított kategória: 3Név: SzendvicsekTörölt: 0', 'UPDATE', '2025-04-14 10:10:05'),
 (17, 'categories', 'Módosított kategória: 2Név: KávékTörölt: 1', 'UPDATE', '2025-04-14 10:11:32'),
 (18, 'categories', 'Módosított kategória: 2Név: KávékTörölt: 0', 'UPDATE', '2025-04-14 10:11:46'),
-(19, 'orders', 'Új rendelés: 11', 'INSERT', '2025-04-14 10:17:42');
+(19, 'orders', 'Új rendelés: 11', 'INSERT', '2025-04-14 10:17:42'),
+(20, 'orders', 'Új rendelés: 12', 'INSERT', '2025-04-14 20:36:52'),
+(21, 'orders', 'Új rendelés: 13', 'INSERT', '2025-04-14 20:36:59'),
+(22, 'orders', 'Új rendelés: 14', 'INSERT', '2025-04-14 20:37:07'),
+(23, 'orders', 'Új rendelés: 15', 'INSERT', '2025-04-14 20:39:56'),
+(24, 'orders', 'Új rendelés: 16', 'INSERT', '2025-04-14 20:40:03'),
+(25, 'orders', 'Új rendelés: 17', 'INSERT', '2025-04-14 20:40:10'),
+(26, 'orders', 'Új rendelés: 18', 'INSERT', '2025-04-14 20:41:14'),
+(27, 'orders', 'Új rendelés: 19', 'INSERT', '2025-04-14 20:41:22'),
+(28, 'orders', 'Új rendelés: 20', 'INSERT', '2025-04-14 20:45:00'),
+(29, 'orders', 'Új rendelés: 21', 'INSERT', '2025-04-14 20:53:33'),
+(30, 'orders', 'Új rendelés: 22', 'INSERT', '2025-04-14 20:53:37'),
+(31, 'orders', 'Új rendelés: 23', 'INSERT', '2025-04-14 20:53:43'),
+(32, 'orders', 'Új rendelés: 24', 'INSERT', '2025-04-14 20:53:49'),
+(33, 'ratings', 'ID: 2Rating: 3', 'INSERT', '2025-04-14 20:58:51'),
+(34, 'ratings', 'ID: 3Rating: 2', 'INSERT', '2025-04-14 21:13:42'),
+(35, 'ratings', 'ID: 4Rating: 3', 'INSERT', '2025-04-14 21:14:24'),
+(36, 'ratings', 'ID: 5Rating: 5', 'INSERT', '2025-04-14 21:15:00'),
+(37, 'ratings', 'ID: 6Rating: 4', 'INSERT', '2025-04-14 21:15:07');
 
 -- --------------------------------------------------------
 
@@ -174,7 +192,22 @@ INSERT INTO `orderedproducts` (`id`, `order_id`, `quantity`, `product_id`) VALUE
 (4, 3, 3, 1),
 (5, 4, 1, 2),
 (6, 5, 1, 1),
-(11, 11, 3, 5);
+(11, 11, 3, 5),
+(12, 12, 1, 5),
+(13, 13, 1, 3),
+(14, 14, 2, 2),
+(15, 15, 2, 6),
+(16, 15, 2, 4),
+(17, 16, 1, 1),
+(18, 17, 1, 5),
+(19, 18, 1, 3),
+(20, 19, 2, 1),
+(21, 19, 1, 5),
+(22, 20, 2, 1),
+(23, 21, 1, 2),
+(24, 22, 1, 1),
+(25, 23, 1, 3),
+(26, 24, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -200,12 +233,25 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `collected_at`, `expected_pickup_time`) VALUES
-(1, 1, 1, 5, 2500, 1, '2025-04-02 10:16:09', NULL, '2025-04-02 10:23:09'),
-(2, 1, 1, 4, 2000, 1, '2025-04-02 23:09:15', NULL, '2025-04-02 23:16:15'),
-(3, 1, 1, 2, 1500, 1, '2025-04-09 16:27:51', NULL, '2025-04-09 16:34:51'),
-(4, 1, 1, 2, 300, 1, '2025-04-10 15:28:36', NULL, '2025-04-10 15:35:36'),
-(5, 1, 1, 2, 500, 1, '2025-04-10 15:28:51', NULL, '2025-04-10 15:35:51'),
-(11, 2, 1, 1, 2250, 1, '2025-04-14 10:17:42', NULL, '2025-04-14 10:24:42');
+(1, 1, 1, 5, 2500, 1, '2025-01-02 10:16:09', NULL, '2025-01-02 10:23:09'),
+(2, 1, 1, 5, 2000, 1, '2025-02-02 23:09:15', NULL, '2025-02-02 23:16:15'),
+(3, 1, 1, 2, 1500, 1, '2025-03-09 16:27:51', NULL, '2025-03-09 16:34:51'),
+(4, 1, 1, 2, 3000, 1, '2024-01-10 15:28:36', NULL, '2024-01-10 15:35:36'),
+(5, 1, 1, 2, 500, 1, '2024-02-10 15:28:51', NULL, '2024-02-10 15:35:51'),
+(11, 2, 1, 2, 2250, 1, '2025-04-14 10:17:42', NULL, '2025-04-14 10:24:42'),
+(12, 4, 1, 4, 750, 1, '2024-05-14 20:36:52', NULL, '2024-05-14 20:43:52'),
+(13, 4, 1, 4, 650, 1, '2024-06-14 20:36:59', NULL, '2024-06-14 20:43:59'),
+(14, 4, 1, 4, 600, 1, '2024-07-14 20:37:07', NULL, '2024-07-14 20:44:07'),
+(15, 4, 1, 4, 1900, 1, '2024-08-14 20:39:56', NULL, '2024-08-14 20:46:56'),
+(16, 4, 1, 4, 500, 1, '2024-09-14 20:40:03', NULL, '2024-09-14 20:47:03'),
+(17, 4, 1, 5, 750, 1, '2024-10-14 20:40:10', NULL, '2024-10-14 20:47:10'),
+(18, 4, 1, 5, 650, 1, '2024-11-14 20:41:14', NULL, '2024-11-14 20:48:14'),
+(19, 4, 1, 4, 1750, 1, '2024-12-14 20:41:22', NULL, '2024-12-14 20:48:22'),
+(20, 4, 1, 4, 1000, 1, '2024-03-14 20:45:00', NULL, '2024-03-14 20:52:00'),
+(21, 4, 1, 1, 300, 1, '2025-04-14 20:53:33', NULL, '2025-04-14 21:00:33'),
+(22, 4, 1, 1, 500, 1, '2025-04-14 20:53:37', NULL, '2025-04-14 21:00:37'),
+(23, 4, 1, 5, 650, 1, '2025-04-14 20:53:43', NULL, '2025-04-14 21:00:43'),
+(24, 4, 1, 5, 450, 1, '2025-04-14 20:53:49', NULL, '2025-04-14 21:00:49');
 
 --
 -- Eseményindítók `orders`
@@ -301,7 +347,12 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`id`, `user_id`, `place_id`, `order_id`, `rating`, `comment`, `date`, `status`) VALUES
-(1, 1, 1, 1, 5, '', '2025-04-02', 1);
+(1, 1, 1, 1, 5, '', '2025-04-02', 1),
+(2, 1, 1, 2, 3, '', '2025-03-11', 1),
+(3, 4, 1, 18, 2, '', '2024-12-10', 1),
+(4, 4, 1, 23, 3, '', '2024-11-14', 1),
+(5, 4, 1, 17, 5, '', '2025-01-14', 1),
+(6, 4, 1, 24, 4, '', '2025-02-14', 1);
 
 --
 -- Eseményindítók `ratings`
@@ -464,7 +515,7 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT a táblához `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT a táblához `categories`
@@ -476,19 +527,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT a táblához `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT a táblához `orderedproducts`
 --
 ALTER TABLE `orderedproducts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT a táblához `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT a táblához `places`
@@ -506,7 +557,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT a táblához `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT a táblához `schools`
