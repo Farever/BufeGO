@@ -66,7 +66,7 @@ export default function UserBufe({isCartShown, cartSet }) {
         };
         fetchCategories();
         fetchProduct();
-    }, []); // BufoId is a dependency
+    }, [modalShown]); // BufoId is a dependency
 
     const AddToCart = async (q, pid) => {
         try {

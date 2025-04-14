@@ -87,10 +87,7 @@ const Landing = ({ setLoggedinUser }) => {
                     <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
                         <AuthButton type="login" onClick={handleLoginClick} />
                         <AuthButton type="register" onClick={handleRegisterClick} />
-                    </Col> :
-                    <Col xs={12} md={6} className="auth-buttons d-flex justify-content-end">
-                        <Button variant='primary' onClick={handleToHome}>Tovább a főoldalra</Button>
-                    </Col>
+                    </Col> : null
                 }
             </Row>
 

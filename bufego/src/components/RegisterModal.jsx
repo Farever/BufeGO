@@ -138,7 +138,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
         var templateParams = {
           name: lastName + " " + firstName,
           email: email,
-          link: 'http://localhost:8000/emailmegerosites?email=' + email,
+          link: 'http://localhost/api/index.php/emailmegerosites?email=' + email,
         };
 
         emailjs.send('service_wnwawhk', 'template_3gys6bf', templateParams).then(

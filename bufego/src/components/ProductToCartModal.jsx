@@ -5,6 +5,9 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
     const [price, setPrice] = useState(0);
     const [quantity, setQuantity] = useState(1);
 
+    useEffect(() => {
+        setQuantity(1);
+    }, [isOpen])
     // Az useEffect biztosítja, hogy ne történjen meg a beállítás, ha a product még nem elérhető
     useEffect(() => {
         if (product) {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useContext } from "react"
-import { Button, Modal } from "react-bootstrap"
+import { Button, Modal, Alert } from "react-bootstrap"
 import CartCard from "./CartCard"
 import axios from "axios"
 import { AuthContext } from '../Contexts';
@@ -7,7 +7,9 @@ import { AuthContext } from '../Contexts';
 export default function CartModal({ bufeId, isShown, onClose, frissits, stopFrissit }) {
     const [products, setProducts] = useState([])
     const [vegosszeg, setVegosszeg] = useState(null);
-    const {userData} = useContext(AuthContext);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVariant, setAlertVariant] = useState('');
+    const { userData } = useContext(AuthContext);
     function formatHUF(number) {
         const formatter = new Intl.NumberFormat('hu-HU', {
             style: 'currency',
@@ -21,6 +23,8 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
     useEffect(() => {
         if (isShown) {
             getCart();
+            setAlertMessage('');
+            setAlertVariant('');
         }
     }, [isShown])
 
@@ -61,11 +65,14 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
 
             if (response.status == 200) {
                 KosarTorol();
-                alert("Rendelését leadtuk!");
+                setAlertMessage("Sikeres rendelés!");
+                setAlertVariant('success')
                 setProducts("Nincsenek találatok!");
             }
         }
         catch (error) {
+            setAlertMessage("Sikertelen rendelés!");
+            setAlertVariant('danger')
             console.log(error)
         }
     }
@@ -88,10 +95,20 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
     if (products != "Nincsenek találatok!") {
         return (
             <Modal show={isShown} onHide={onClose} size="lg">
-                <Modal.Header>
-                    <p>Büfé kosara</p>
+                <Modal.Header closeButton>
+                    <Modal.Title>Büfé kosara</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {alertMessage && (
+                        <Alert
+                            variant={alertVariant}
+                            onClose={() => { setAlertMessage(''); setAlertVariant('') }}
+                            className="mb-3"
+                            dismissible
+                        >
+                            {alertMessage}
+                        </Alert>
+                    )}
                     {
                         products.map((p, index) => (
                             <CartCard key={index + "termek"} product={p} frissit={getCart} />
@@ -112,13 +129,22 @@ export default function CartModal({ bufeId, isShown, onClose, frissits, stopFris
                     <p>Büfé kosara</p>
                 </Modal.Header>
                 <Modal.Body>
+                    {alertMessage && (
+                        <Alert
+                            variant='success'
+                            onClose={() => { setAlertMessage('') }}
+                            className="mb-3"
+                            dismissible
+                        >
+                            {alertMessage}
+                        </Alert>
+                    )}
                     {
                         <p>A kosara üres!</p>
                     }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" disabled>Rendel</Button>
-                    <p>Végösszeg: 0 Ft</p>
                 </Modal.Footer>
             </Modal>
         )

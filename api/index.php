@@ -1150,7 +1150,7 @@ function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $pho
 
 function felhasznaloEmailValidacio($email){
     $query = "UPDATE `users` SET `isActive`=1 WHERE `email` = ?";
-    header("Location: http://localhost:5173/"); /* TODO: Át kell majd a buildben írni*/
+    header("Location: http://localhost/");
     return valtoztatas($query, 'i', [$email]);
 }
 
