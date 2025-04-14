@@ -35,7 +35,7 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
                 <Modal.Title>{product.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`} alt={product.name} title={product.name} style={{maxWidth: '100%'}}></img>
+                <img src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,f_auto,q_auto/${product.image}`} alt={product.name} title={product.name} style={{maxWidth: '100%'}}></img>
                 <h2 style={{textAlign: "center"}}>{price} Ft</h2>
                 <Form>
                     <FormLabel>Mennyiség:</FormLabel>

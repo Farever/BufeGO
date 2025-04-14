@@ -34,7 +34,7 @@ function Editmodal({show, handleClose, product})
             },
           });
     
-          setCategories(response.data.valasz);
+          setCategories(response.data.valasz.filter(x => x.deleted == 0));
         } catch (err) {
           console.log(err);
           setError(err.message);

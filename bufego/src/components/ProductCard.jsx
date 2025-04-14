@@ -45,7 +45,7 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
     <Card className={`product-card ${forStat ? "stat-mode" : ""}`}>
       <Card.Img
         variant="top"
-        src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,h_150,w_150,f_auto,q_auto/${product.image}`}
+        src={`https://res.cloudinary.com/duerxasjk/image/upload/c_fill,f_auto,q_auto/${product.image}`}
         alt={product.name}
         className="product-image"
       />

@@ -27,7 +27,7 @@ const ProductUploadForm = () => {
 
             // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
             if (Array.isArray(response.data.valasz)) {
-                setCategories(response.data.valasz);
+                setCategories(response.data.valasz.filter(x => x.deleted == 0));
             } else {
                 setCategories([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
             }
