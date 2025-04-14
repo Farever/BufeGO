@@ -191,6 +191,15 @@ export default function Settings() {
     };
 
     const handleDeactivateAccount = async () => {
+
+        const isConfirmed = window.confirm(
+            "Biztosan inaktiválni szeretnéd a fiókodat?\nEz a művelet nem vonható vissza."
+        );
+
+        if (!isConfirmed) {
+            return;
+        }
+
         setIsLoading(true);
         setErrors({});
         try {
@@ -204,6 +213,7 @@ export default function Settings() {
             }
         } catch (error) {
             setErrors(prevErrors => ({ ...prevErrors, deactivation: error.message }));
+            setDeactivationSuccess(false);
         } finally {
             setIsLoading(false);
         }
