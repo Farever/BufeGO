@@ -77,7 +77,7 @@ function MonthlyIncomeChart({bufeId}) {
   }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
 
   return (
-    <div className="col-sm-12 col-md-6">
+    <div className="col-sm-12 col-md-12 col-lg-6">
       <Card className='chart'>
       <Card.Body>
         {error && <div className="text-danger">Hiba: {error}</div>}
