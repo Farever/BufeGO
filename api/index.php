@@ -69,6 +69,7 @@ function handleEndpoint(string $endpoint, string $method, ?array $bodyData, ?arr
         'kijelentkezes' => handleKijelentkezes($method),
         'felhasznaloadatok' => handleFelhasznaloAdatok($method, $getData),
         'felhasznaloregisztracio' => handleFelhasznaloRegisztracio($method, $bodyData),
+        'emailmegerosites' => handleEmailMegerosites($method, $getData),
         'felhasznaloadatmodositas' => handleFelhasznaloAdatmodositas($method, $bodyData),
         'felhasznaloinaktivalas' => handleFelhasznaloInaktivalas($method, $getData),
         'jelszovaltoztat' => handleJelszoValtoztat($method, $bodyData),
@@ -526,6 +527,14 @@ function handleFelhasznaloRegisztracio(string $method, ?array $bodyData): ?array
     }
 
     return ['valasz' => felhasznaloAdatokFeltoltese($bodyData['email'], $bodyData['passcode'], $bodyData['name'], $bodyData['address_id'], $bodyData['phone'], $bodyData['school'], NULL, 0)];
+}
+
+function handleEmailMegerosites(string $method, ?array $getData) : ?array{
+    if($method !== "GET"){
+        return ['valasz' => 'Hibás metódus', 'status' => 400];
+    }
+
+    return ["valasz" => felhasznaloEmailValidacio($getData["email"])];
 }
 
 /**
@@ -1132,11 +1141,17 @@ function felhasznaloAdatokModositas($userId, $name, $school_id)
 
 function felhasznaloAdatokFeltoltese($email, $passcode, $name, $address_id, $phone, $school_id, $pushNotificationKey, $isAdmmin)
 {
-    $query = "INSERT INTO `users`(`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`) VALUES (NULL,'{$email}','{$passcode}','{$name}','{$address_id}','{$phone}','{$school_id}', CURRENT_TIMESTAMP,NULL,'{$pushNotificationKey}','{$isAdmmin}');";
+    $query = "INSERT INTO `users`(`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`, `isActive`) VALUES (NULL,'{$email}','{$passcode}','{$name}','{$address_id}','{$phone}','{$school_id}', CURRENT_TIMESTAMP,NULL,'{$pushNotificationKey}','{$isAdmmin}', 0);";
 
     $felhasznalo = valtoztatas($query, 'bufego');
 
     return $felhasznalo;
+}
+
+function felhasznaloEmailValidacio($email){
+    $query = "UPDATE `users` SET `isActive`=1 WHERE `email` = ?";
+    header("Location: http://localhost:5173/"); /* TODO: Át kell majd a buildben írni*/
+    return valtoztatas($query, 'i', [$email]);
 }
 
 function jelszoValtoztatas($email, $passcode)
