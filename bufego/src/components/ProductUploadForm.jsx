@@ -50,7 +50,6 @@ const ProductUploadForm = () => {
     }, [refreshInterval]);
 
     const uploadProduct = async () => {
-        console.log(category.current.value)
         const formData = new FormData();
         formData.append('place', place_id);
         formData.append('category', category.current.value);

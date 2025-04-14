@@ -43,7 +43,6 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
   }, []);
 
   const handleClick = () => {
-    console.log(isOnAdminPage);
     if (isOnAdminPage) {
       setBufe();
       navigate('/admin/orders');
