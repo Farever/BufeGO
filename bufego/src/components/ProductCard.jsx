@@ -55,6 +55,9 @@ const ProductCard = ({ product, handleShow = null, forStat = false }) => {
           Állapot: {product.is_avaliable == 1 ? "Elérhető" : "Nem elérhető"}
         </Card.Text>
         <Card.Text className="product-info">Kategória: {product_category}</Card.Text>
+        {forStat && (
+          <Card.Text className="product-info">Eladott mennyiség: {product.vasarolt_mennyiseg}</Card.Text>
+        )}
 
         {!forStat && (
           <div className="product-actions d-flex justify-content-center gap-2 mt-3">
