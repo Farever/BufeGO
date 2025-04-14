@@ -6,6 +6,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 
 namespace BufeGO_Frontend_Teszt
@@ -215,6 +216,34 @@ namespace BufeGO_Frontend_Teszt
         }
 
         [TestMethod]
+        public void KategoriaModosit()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/admin/categories");
+            Thread.Sleep(2000);
+
+            var gombok = driver.FindElements(By.XPath("//button[contains(text(),'Szerkesztés')]"));
+            gombok[0].Click();
+
+            var nevinput = driver.FindElement(By.Id("NevInput"));
+            nevinput.Clear();
+            nevinput.SendKeys("Pékáru");
+            var helyinput = driver.FindElement(By.Id("HelyInput"));
+            helyinput.Clear();
+            helyinput.SendKeys((gombok.Count()+ 1).ToString());
+            Thread.Sleep(2000);
+
+            driver.FindElement(By.XPath("//button[contains(text(),'Mentés')]")).Click();
+            Thread.Sleep(500);
+            driver.SwitchTo().Alert().Accept();
+
+            var div = driver.FindElement(By.ClassName("categories-grid")).FindElements(By.XPath("./div"));
+
+            Assert.IsTrue(div.Last().Text.Contains("Pékáru"));
+            driver.Quit();
+        }
+
+
+        [TestMethod]
         public void ErtekelesTeszt()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/admin/reviews");
@@ -351,5 +380,8 @@ namespace BufeGO_Frontend_Teszt
 
             driver.Quit();
         }
+
     }
+
+
 }
