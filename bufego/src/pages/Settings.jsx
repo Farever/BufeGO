@@ -27,11 +27,7 @@ export default function Settings() {
         try {
             let resp = await fetch('./api/index.php/kijelentkezes', { credentials: "include" });
             if (resp.ok) {
-                navigate('/');
-                sessionStorage.removeItem("userData");
-                sessionStorage.removeItem("adminBufe");
-                setUser({});
-                setBufe(null);
+                navigate("/logout");
             }
         } catch (error) {
             console.error("Hiba az iskolák lekérésekor:", error);

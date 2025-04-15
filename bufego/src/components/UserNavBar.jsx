@@ -45,9 +45,7 @@ function Navigation({ cartClickAction }) {
             let resp = await fetch('./api/index.php/kijelentkezes', { credentials: "include" });
 
             if (resp.ok) {
-                sessionStorage.removeItem("userData");
-                setUser({});
-                navigate("/");
+                navigate("/logout");
             }
         } catch (error) {
             console.error("Hiba az iskolák lekérésekor:", error);
