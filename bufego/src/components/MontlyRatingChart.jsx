@@ -17,7 +17,7 @@ function MonthlyRatingChart({ bufeId }) {
   const [error, setError] = useState(null);
   const [years, setYears] = useState([]);
   const selectedyear = useRef(0);
-  const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  const refreshInterval = 5000;
 
   useEffect(() => {
     if (years?.length > 0 && selectedyear.current.value == 0) {
@@ -37,11 +37,11 @@ function MonthlyRatingChart({ bufeId }) {
         });
 
         const formattedRatings = response.data.valasz.map(item => ({
-          honap: Number(item.honap),       // Convert 'honap' to a number
-          atlagrating: Number(item.atlagrating)  // Convert 'atlagrating' to a number
+          honap: Number(item.honap),
+          atlagrating: Number(item.atlagrating)
         }));
 
-        setRatings(formattedRatings);  // Update state with the formatted data
+        setRatings(formattedRatings);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -67,18 +67,16 @@ function MonthlyRatingChart({ bufeId }) {
   };
 
   useEffect(() => {
-    fetchRatings(); // Az első lekérdezés a komponens mountolásakor
+    fetchRatings();
     fetchYears();
 
-    const intervalId = setInterval(() => { fetchRatings(); fetchYears() }, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(() => { fetchRatings(); fetchYears() }, refreshInterval);
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className="col-sm-12 col-md-12 col-lg-6">
-
-      {/*<ApiTest returnData={setTextData}/>*/}
       <Card className='chart'>
         <Card.Body>
           {error && <div className="text-danger">Hiba: {error}</div>}

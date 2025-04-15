@@ -27,13 +27,12 @@ const Categories = () => {
       });
   
       if (response.status === 200) {
-        const data = response.data.valasz; // Nincs szükség `await`-re
+        const data = response.data.valasz;
   
-        // Ellenőrizzük, hogy `data` egy tömb-e
         if (Array.isArray(data)) {
           setCategories(data);
         } else {
-          setCategories([]); // Ha nem tömb, akkor üres tömb
+          setCategories([]);
         }
       } else {
         setError("Hiba történt az adatok lekérése közben.");
@@ -41,7 +40,7 @@ const Categories = () => {
     } catch (error) {
       console.error(error);
       setError("Hiba történt az adatok betöltése közben.");
-      setCategories([]); // Hiba esetén is üres tömb
+      setCategories([]);
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +92,6 @@ const Categories = () => {
       let data = (await response).data;
       fetchData();
       setModalShown(false);
-      //location.reload();
     }
     catch(error)
     {

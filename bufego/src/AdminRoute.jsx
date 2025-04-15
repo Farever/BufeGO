@@ -7,18 +7,17 @@ const AdminRoute = ({requireBuffet, children }) => {
   const {adminBufe} = useContext(AdminBufeContext)
 
   if (!userData) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/forbidden" replace />;
   }
 
   if (userData.is_admin != 1) {
-    return <Navigate to="/" replace />; //Vagy egy "Nincs jogosultságod" oldalra
+    return <Navigate to="/forbidden" replace />;
   }
 
   if(requireBuffet && adminBufe == null){
-      return <Navigate to="/admin" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
-  // Ha minden rendben, rendereljük a gyerek elemeket
   return children;
 };
 
