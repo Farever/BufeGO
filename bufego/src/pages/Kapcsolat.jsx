@@ -41,9 +41,9 @@ export default function Kapcsolat() {
 
             <div>
                 <h5>Elérhetőségek</h5>
-                <p><strong>Email:</strong> info@bufego.hu</p>
+                <p><strong>Email:</strong> info.bufego@gmail.com</p>
                 <p><strong>Telefonszám:</strong> +36 30 123 4567</p>
-                <p><strong>Cím:</strong> 1234 Budapest, Iskolai utca 10.</p>
+                <p><strong>Cím:</strong> 8200 Veszprém, Iskola utca 4.</p>
             </div>
         </Container>
     );

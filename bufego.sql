@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Ápr 02. 13:57
+-- Létrehozás ideje: 2025. Ápr 14. 11:44
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -29,6 +29,7 @@ USE `bufego`;
 -- Tábla szerkezet ehhez a táblához `addresses`
 --
 
+DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses` (
   `id` int(11) NOT NULL,
   `zip_code` varchar(255) DEFAULT NULL,
@@ -46,7 +47,10 @@ INSERT INTO `addresses` (`id`, `zip_code`, `city`, `address`) VALUES
 (3, '8200', 'Veszprém', 'Március 15. utca'),
 (4, '8184', 'Balatonfűzfő', 'József Attila utca 12.'),
 (5, '8191', 'Hajmáskér', 'Kossuth Lajos utca 8.'),
-(6, '8225', 'Szentkirályszabadja', 'Petőfi Sándor utca 2.');
+(6, '8225', 'Szentkirályszabadja', 'Petőfi Sándor utca 2.'),
+(7, '8200', 'Veszprém', 'Kis utca 3'),
+(8, '1252', 'ffaefaef', 'fafaef'),
+(9, '1234', 'agfaef', 'afaefaef');
 
 -- --------------------------------------------------------
 
@@ -54,6 +58,7 @@ INSERT INTO `addresses` (`id`, `zip_code`, `city`, `address`) VALUES
 -- Tábla szerkezet ehhez a táblához `cart`
 --
 
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -67,7 +72,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `place_id`, `quantity`, `product_id`) VALUES
-(2, 1, 1, 3, 1);
+(12, 1, 1, 4, 1),
+(13, 1, 1, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -75,6 +81,7 @@ INSERT INTO `cart` (`id`, `user_id`, `place_id`, `quantity`, `product_id`) VALUE
 -- Tábla szerkezet ehhez a táblához `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `place_id` int(11) DEFAULT NULL,
@@ -95,6 +102,7 @@ INSERT INTO `categories` (`id`, `place_id`, `categroy_name`, `deleted`, `categor
 --
 -- Eseményindítók `categories`
 --
+DROP TRIGGER IF EXISTS `CategoryUpdate`;
 DELIMITER $$
 CREATE TRIGGER `CategoryUpdate` AFTER UPDATE ON `categories` FOR EACH ROW INSERT INTO `logs` (`target_table`, `description`, `method`, `datetime`)
 VALUES ('categories', CONCAT('Módosított kategória: ', NEW.id, 'Név: ', NEW.categroy_name, 'Törölt: ', NEW.deleted), 'UPDATE', NOW())
@@ -107,6 +115,7 @@ DELIMITER ;
 -- Tábla szerkezet ehhez a táblához `logs`
 --
 
+DROP TABLE IF EXISTS `logs`;
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
   `target_table` text NOT NULL,
@@ -123,7 +132,40 @@ INSERT INTO `logs` (`id`, `target_table`, `description`, `method`, `datetime`) V
 (1, 'categories', 'Módosított kategória: 2Név: KávékTörölt: 0', 'UPDATE', '2025-04-02 10:15:14'),
 (2, 'categories', 'Módosított kategória: 3Név: SzendvicsekTörölt: 0', 'UPDATE', '2025-04-02 10:15:28'),
 (3, 'orders', 'Új rendelés: 1', 'INSERT', '2025-04-02 10:16:09'),
-(4, 'ratings', 'ID: 1Rating: 5', 'INSERT', '2025-04-02 10:34:58');
+(4, 'ratings', 'ID: 1Rating: 5', 'INSERT', '2025-04-02 10:34:58'),
+(5, 'orders', 'Új rendelés: 2', 'INSERT', '2025-04-02 23:09:15'),
+(6, 'orders', 'Új rendelés: 3', 'INSERT', '2025-04-09 16:27:51'),
+(7, 'orders', 'Új rendelés: 4', 'INSERT', '2025-04-10 15:28:36'),
+(8, 'orders', 'Új rendelés: 5', 'INSERT', '2025-04-10 15:28:51'),
+(9, 'orders', 'Új rendelés: 6', 'INSERT', '2025-04-10 15:28:52'),
+(10, 'categories', 'Módosított kategória: 4Név: Új kategóriaTörölt: 1', 'UPDATE', '2025-04-10 22:47:23'),
+(11, 'orders', 'Új rendelés: 7', 'INSERT', '2025-04-10 22:52:12'),
+(12, 'orders', 'Új rendelés: 8', 'INSERT', '2025-04-10 22:52:58'),
+(13, 'orders', 'Új rendelés: 9', 'INSERT', '2025-04-10 22:54:45'),
+(14, 'orders', 'Új rendelés: 10', 'INSERT', '2025-04-10 22:55:31'),
+(15, 'categories', 'Módosított kategória: 3Név: SzendvicsekTörölt: 1', 'UPDATE', '2025-04-14 10:09:51'),
+(16, 'categories', 'Módosított kategória: 3Név: SzendvicsekTörölt: 0', 'UPDATE', '2025-04-14 10:10:05'),
+(17, 'categories', 'Módosított kategória: 2Név: KávékTörölt: 1', 'UPDATE', '2025-04-14 10:11:32'),
+(18, 'categories', 'Módosított kategória: 2Név: KávékTörölt: 0', 'UPDATE', '2025-04-14 10:11:46'),
+(19, 'orders', 'Új rendelés: 11', 'INSERT', '2025-04-14 10:17:42'),
+(20, 'orders', 'Új rendelés: 12', 'INSERT', '2025-04-14 20:36:52'),
+(21, 'orders', 'Új rendelés: 13', 'INSERT', '2025-04-14 20:36:59'),
+(22, 'orders', 'Új rendelés: 14', 'INSERT', '2025-04-14 20:37:07'),
+(23, 'orders', 'Új rendelés: 15', 'INSERT', '2025-04-14 20:39:56'),
+(24, 'orders', 'Új rendelés: 16', 'INSERT', '2025-04-14 20:40:03'),
+(25, 'orders', 'Új rendelés: 17', 'INSERT', '2025-04-14 20:40:10'),
+(26, 'orders', 'Új rendelés: 18', 'INSERT', '2025-04-14 20:41:14'),
+(27, 'orders', 'Új rendelés: 19', 'INSERT', '2025-04-14 20:41:22'),
+(28, 'orders', 'Új rendelés: 20', 'INSERT', '2025-04-14 20:45:00'),
+(29, 'orders', 'Új rendelés: 21', 'INSERT', '2025-04-14 20:53:33'),
+(30, 'orders', 'Új rendelés: 22', 'INSERT', '2025-04-14 20:53:37'),
+(31, 'orders', 'Új rendelés: 23', 'INSERT', '2025-04-14 20:53:43'),
+(32, 'orders', 'Új rendelés: 24', 'INSERT', '2025-04-14 20:53:49'),
+(33, 'ratings', 'ID: 2Rating: 3', 'INSERT', '2025-04-14 20:58:51'),
+(34, 'ratings', 'ID: 3Rating: 2', 'INSERT', '2025-04-14 21:13:42'),
+(35, 'ratings', 'ID: 4Rating: 3', 'INSERT', '2025-04-14 21:14:24'),
+(36, 'ratings', 'ID: 5Rating: 5', 'INSERT', '2025-04-14 21:15:00'),
+(37, 'ratings', 'ID: 6Rating: 4', 'INSERT', '2025-04-14 21:15:07');
 
 -- --------------------------------------------------------
 
@@ -131,6 +173,7 @@ INSERT INTO `logs` (`id`, `target_table`, `description`, `method`, `datetime`) V
 -- Tábla szerkezet ehhez a táblához `orderedproducts`
 --
 
+DROP TABLE IF EXISTS `orderedproducts`;
 CREATE TABLE `orderedproducts` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
@@ -143,7 +186,28 @@ CREATE TABLE `orderedproducts` (
 --
 
 INSERT INTO `orderedproducts` (`id`, `order_id`, `quantity`, `product_id`) VALUES
-(1, 1, 5, 1);
+(1, 1, 5, 1),
+(2, 2, 3, 1),
+(3, 2, 1, 1),
+(4, 3, 3, 1),
+(5, 4, 1, 2),
+(6, 5, 1, 1),
+(11, 11, 3, 5),
+(12, 12, 1, 5),
+(13, 13, 1, 3),
+(14, 14, 2, 2),
+(15, 15, 2, 6),
+(16, 15, 2, 4),
+(17, 16, 1, 1),
+(18, 17, 1, 5),
+(19, 18, 1, 3),
+(20, 19, 2, 1),
+(21, 19, 1, 5),
+(22, 20, 2, 1),
+(23, 21, 1, 2),
+(24, 22, 1, 1),
+(25, 23, 1, 3),
+(26, 24, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -151,6 +215,7 @@ INSERT INTO `orderedproducts` (`id`, `order_id`, `quantity`, `product_id`) VALUE
 -- Tábla szerkezet ehhez a táblához `orders`
 --
 
+DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -168,11 +233,30 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `place_id`, `status`, `price`, `payment_method`, `orderd_at`, `collected_at`, `expected_pickup_time`) VALUES
-(1, 1, 1, 5, 2500, 1, '2025-04-02 10:16:09', NULL, '2025-04-02 10:23:09');
+(1, 1, 1, 5, 2500, 1, '2025-01-02 10:16:09', NULL, '2025-01-02 10:23:09'),
+(2, 1, 1, 5, 2000, 1, '2025-02-02 23:09:15', NULL, '2025-02-02 23:16:15'),
+(3, 1, 1, 2, 1500, 1, '2025-03-09 16:27:51', NULL, '2025-03-09 16:34:51'),
+(4, 1, 1, 2, 3000, 1, '2024-01-10 15:28:36', NULL, '2024-01-10 15:35:36'),
+(5, 1, 1, 2, 500, 1, '2024-02-10 15:28:51', NULL, '2024-02-10 15:35:51'),
+(11, 2, 1, 2, 2250, 1, '2025-04-14 10:17:42', NULL, '2025-04-14 10:24:42'),
+(12, 4, 1, 4, 750, 1, '2024-05-14 20:36:52', NULL, '2024-05-14 20:43:52'),
+(13, 4, 1, 4, 650, 1, '2024-06-14 20:36:59', NULL, '2024-06-14 20:43:59'),
+(14, 4, 1, 4, 600, 1, '2024-07-14 20:37:07', NULL, '2024-07-14 20:44:07'),
+(15, 4, 1, 4, 1900, 1, '2024-08-14 20:39:56', NULL, '2024-08-14 20:46:56'),
+(16, 4, 1, 4, 500, 1, '2024-09-14 20:40:03', NULL, '2024-09-14 20:47:03'),
+(17, 4, 1, 5, 750, 1, '2024-10-14 20:40:10', NULL, '2024-10-14 20:47:10'),
+(18, 4, 1, 5, 650, 1, '2024-11-14 20:41:14', NULL, '2024-11-14 20:48:14'),
+(19, 4, 1, 4, 1750, 1, '2024-12-14 20:41:22', NULL, '2024-12-14 20:48:22'),
+(20, 4, 1, 4, 1000, 1, '2024-03-14 20:45:00', NULL, '2024-03-14 20:52:00'),
+(21, 4, 1, 1, 300, 1, '2025-04-14 20:53:33', NULL, '2025-04-14 21:00:33'),
+(22, 4, 1, 1, 500, 1, '2025-04-14 20:53:37', NULL, '2025-04-14 21:00:37'),
+(23, 4, 1, 5, 650, 1, '2025-04-14 20:53:43', NULL, '2025-04-14 21:00:43'),
+(24, 4, 1, 5, 450, 1, '2025-04-14 20:53:49', NULL, '2025-04-14 21:00:49');
 
 --
 -- Eseményindítók `orders`
 --
+DROP TRIGGER IF EXISTS `NewOrderLog`;
 DELIMITER $$
 CREATE TRIGGER `NewOrderLog` AFTER INSERT ON `orders` FOR EACH ROW INSERT INTO `logs` (`target_table`, `description`, `method`, `datetime`)
 VALUES ('orders', CONCAT('Új rendelés: ', NEW.id), 'INSERT', NOW())
@@ -185,6 +269,7 @@ DELIMITER ;
 -- Tábla szerkezet ehhez a táblához `places`
 --
 
+DROP TABLE IF EXISTS `places`;
 CREATE TABLE `places` (
   `id` int(11) NOT NULL,
   `admin_user_id` int(11) DEFAULT NULL,
@@ -203,8 +288,8 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `admin_user_id`, `name`, `description`, `phone`, `address_id`, `school_id`, `image`, `payment_on_collect_enabled`, `is_avaliable`) VALUES
-(1, 5, 'Ipari Büfé', 'Az Ipari Technikum iskolai büféje, széles választékkal.', '+36201118899', 1, 1, 'Ipari_Büfé', 0, 0),
-(2, 6, 'Vetési Büfé', 'Friss pékáruk és üdítők a gimnázium diákjainak.', '+36202223344', 2, 2, 'Vetési_Büfé', 0, 0),
+(1, 5, 'Ipari Büfé', 'Az Ipari Technikum iskolai büféje, széles választékkal.', '+36201118899', 1, 1, 'Ipari_Bf', 0, 0),
+(2, 6, 'Vetési Büfé', 'Friss pékáruk és üdítők a gimnázium diákjainak.', '+36202223344', 2, 2, 'bufe_2', 0, 0),
 (3, 5, 'VeneSnack', 'Kávékülönlegességek és szendvicsek a hallgatóknak.', '+36203334455', 3, 3, 'VeneSnack', 0, 0);
 
 -- --------------------------------------------------------
@@ -213,6 +298,7 @@ INSERT INTO `places` (`id`, `admin_user_id`, `name`, `description`, `phone`, `ad
 -- Tábla szerkezet ehhez a táblához `products`
 --
 
+DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `place_id` int(11) DEFAULT NULL,
@@ -231,9 +317,12 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `place_id`, `category_id`, `image`, `name`, `description`, `allergens`, `is_avaliable`, `price`, `deleted`) VALUES
-(1, 1, 1, '1_product_Kakaós_csiga', 'Kakaós csiga', 'Friss kakaós csiga', 'g', 1, 500, 0),
+(1, 1, 1, '1_product_Kakas_csiga', 'Kakaós csiga', 'Friss kakaós csiga', 'g', 1, 500, 0),
 (2, 1, 2, '1_product_Esspresso', 'Esspresso', 'Frissen őrölt kávéból', '', 1, 300, 0),
-(3, 1, 3, '1_product_Sonkás_szendvics', 'Sonkás szendvics', '', '', 1, 650, 0);
+(3, 1, 3, '1_product_Sonkás_szendvics', 'Sonkás szendvics', '', '', 1, 650, 0),
+(4, 1, 1, '1_product_Sajtos_pogcsa', 'Sajtos pogácsa', 'Friss ropogós sajtos pogácsa', 'g', 1, 450, 0),
+(5, 1, 1, '1_product_Pizza_szelet', 'Pizza szelet', '', 'g', 1, 750, 0),
+(6, 1, 2, '1_product_Cappuccino', 'Cappuccino', 'Kávé', 'tej', 1, 500, 0);
 
 -- --------------------------------------------------------
 
@@ -241,6 +330,7 @@ INSERT INTO `products` (`id`, `place_id`, `category_id`, `image`, `name`, `descr
 -- Tábla szerkezet ehhez a táblához `ratings`
 --
 
+DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE `ratings` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -257,11 +347,17 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`id`, `user_id`, `place_id`, `order_id`, `rating`, `comment`, `date`, `status`) VALUES
-(1, 1, 1, 1, 5, '', '2025-04-02', 1);
+(1, 1, 1, 1, 5, '', '2025-04-02', 1),
+(2, 1, 1, 2, 3, '', '2025-03-11', 1),
+(3, 4, 1, 18, 2, '', '2024-12-10', 1),
+(4, 4, 1, 23, 3, '', '2024-11-14', 1),
+(5, 4, 1, 17, 5, '', '2025-01-14', 1),
+(6, 4, 1, 24, 4, '', '2025-02-14', 1);
 
 --
 -- Eseményindítók `ratings`
 --
+DROP TRIGGER IF EXISTS `RatingsLog`;
 DELIMITER $$
 CREATE TRIGGER `RatingsLog` AFTER INSERT ON `ratings` FOR EACH ROW INSERT INTO `logs` (`target_table`, `description`, `method`, `datetime`)
 VALUES ('ratings', CONCAT('ID: ', NEW.id, 'Rating: ', NEW.rating), 'INSERT', NOW())
@@ -274,6 +370,7 @@ DELIMITER ;
 -- Tábla szerkezet ehhez a táblához `schools`
 --
 
+DROP TABLE IF EXISTS `schools`;
 CREATE TABLE `schools` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL
@@ -295,6 +392,7 @@ INSERT INTO `schools` (`id`, `name`) VALUES
 -- Tábla szerkezet ehhez a táblához `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -315,12 +413,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `passcode`, `name`, `address_id`, `phone`, `school_id`, `registered_on`, `last_login`, `push_notification_key`, `is_place_owner`, `isActive`) VALUES
-(1, 'peter.kovacs@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Kovács Péter', 1, '+36201234567', 2, '2024-03-15', NULL, NULL, 0, 1),
+(1, 'peter.kovacs@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Kovács Péter', 1, '+36201234567', 1, '2024-03-15', NULL, NULL, 0, 1),
 (2, 'anna.szabo@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Szabó Anna', 2, '+36209876543', 2, '2024-02-10', NULL, NULL, 0, 1),
 (3, 'mate.nagy@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Nagy Máté', 3, '+36201112233', 3, '2024-01-05', NULL, NULL, 0, 1),
 (4, 'eszter.toth@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Tóth Eszter', 4, '+36205556677', 1, '2023-12-20', NULL, NULL, 0, 1),
-(5, 'admin1@bufego.com', '8450eca01665516d9aeb5317764902b78495502637c96192c81b1683d32d691a0965cf037feca8b9ed9ee6fc6ab8f27fce8f77c4fd9b4a442a00fc317b8237e6', 'Admin Felhasználó 1', 5, '+36201118899', 1, '2023-11-25', NULL, NULL, 1, 1),
-(6, 'admin2@bufego.com', '8450eca01665516d9aeb5317764902b78495502637c96192c81b1683d32d691a0965cf037feca8b9ed9ee6fc6ab8f27fce8f77c4fd9b4a442a00fc317b8237e6', 'Admin Felhasználó 2', 6, '+36202223344', 2, '2023-11-30', NULL, NULL, 1, 1);
+(5, 'admin1@bufego.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Admin Felhasználó 1', 5, '+36201118899', 1, '2023-11-25', NULL, NULL, 1, 1),
+(6, 'admin2@bufego.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Admin Felhasználó 2', 6, '+36202223344', 2, '2023-11-30', NULL, NULL, 1, 1),
+(9, 'nagylajosdominik@gmail.com', 'aeae379a6e857728e44164267fdb7a0e27b205d757cc19899586c89dbb221930f1813d02ff93a661859bc17065eac4d6edf3c38a034e6283a84754d52917e5b0', 'Dominik Nagy', 9, '+36204561234', 1, '2025-04-14', NULL, '', 0, 1);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -410,37 +509,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT a táblához `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT a táblához `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT a táblához `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT a táblához `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT a táblához `orderedproducts`
 --
 ALTER TABLE `orderedproducts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT a táblához `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT a táblához `places`
@@ -452,13 +551,13 @@ ALTER TABLE `places`
 -- AUTO_INCREMENT a táblához `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT a táblához `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT a táblához `schools`
@@ -470,7 +569,7 @@ ALTER TABLE `schools`
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Megkötések a kiírt táblákhoz

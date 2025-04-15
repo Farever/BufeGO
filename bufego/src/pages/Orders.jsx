@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Card, Button, Modal, Table } from 'react-bootstrap';
 import axios from 'axios';
 import OrderBadge from '../components/OrderBadge';
@@ -14,14 +14,13 @@ function OrdersPage() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [rating, setRating] = useState(0); // Alapértelmezett érték 0-ra állítva
   const [comment, setComment] = useState("");
-  const { userData } = useContext(AuthContext);
-  const userId = userData.user_id; // Példa felhasználói ID - cseréld le a tényleges felhasználói azonosítóra
+  const {userData} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(`./api/index.php/sajatrendelesek`, {
-          params: { "userId": userId },
+          params: { "userId": userData.user_id },
         });
     
         const orders = response.data?.valasz?.rendelesek;
@@ -40,7 +39,7 @@ function OrdersPage() {
     
 
     fetchOrders();
-  }, [userId]); // Újra lekérjük a rendeléseket, ha a userId megváltozik
+  }, [userData.user_id]); // Újra lekérjük a rendeléseket, ha a userId megváltozik
 
   const handleShowDetails = (order) => {
     setSelectedOrder(order);

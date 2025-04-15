@@ -229,16 +229,17 @@ namespace BufeGO_Frontend_Teszt
             nevinput.SendKeys("Pékáru");
             var helyinput = driver.FindElement(By.Id("HelyInput"));
             helyinput.Clear();
-            helyinput.SendKeys((gombok.Count()+ 1).ToString());
+            helyinput.SendKeys((gombok.Count() + 1).ToString());
             Thread.Sleep(2000);
 
             driver.FindElement(By.XPath("//button[contains(text(),'Mentés')]")).Click();
             Thread.Sleep(500);
             driver.SwitchTo().Alert().Accept();
 
-            var div = driver.FindElement(By.ClassName("categories-grid")).FindElements(By.XPath("./div"));
 
-            Assert.IsTrue(div.Last().Text.Contains("Pékáru"));
+            Thread.Sleep(500);
+            var div = driver.FindElement(By.ClassName("categories-grid")).FindElements(By.XPath("./div"));
+            Assert.IsTrue(div[div.Count() -1].Text.Contains("Pékáru"));
             driver.Quit();
         }
 

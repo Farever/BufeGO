@@ -11,13 +11,13 @@ export default function Impresszum() {
             <p><strong>Kapcsolat:</strong><br />
                 VSZC Ipari Technikum<br />
                 8200 Veszprém, Iskola utca 4.<br />
-                Email: info@bufego.hu (fiktív)<br />
+                Email: info.bufego@gmail.com<br />
                 Telefon: +36 20 111 8899 (fiktív)
             </p>
 
-            <p><strong>Felelős fejlesztő:</strong><br />
-            Név: [A te neved]<br />
-            Email: [a te e-mailed vagy dummy email]<br />
+            <p><strong>Felelős fejlesztők:</strong><br />
+            Név: Nagy Lajos Dominik, Simai Péter Zalán, Végh Dávid Patrik<br />
+            Email: info.bufego@gmail.com<br />
             Készült iskolai vizsgamunka keretében, nem hivatalos, kereskedelmi célra nem használható.</p>
 
             <p><strong>Weboldal célja:</strong><br />
