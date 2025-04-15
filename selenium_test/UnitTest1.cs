@@ -19,7 +19,7 @@ namespace BufeGO_Frontend_Teszt
         public void BejelentkezésTest_Tulaj()
         {
             IWebDriver driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html");
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -34,7 +34,7 @@ namespace BufeGO_Frontend_Teszt
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
             Thread.Sleep(2000);
-            Assert.AreEqual("http://localhost/dist/index.html#/admin", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin", driver.Url);
 
             driver.Quit();
         }
@@ -43,7 +43,7 @@ namespace BufeGO_Frontend_Teszt
         public void BejelentkezésTest_Felhasznalo()
         {
             IWebDriver driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html");
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -58,7 +58,7 @@ namespace BufeGO_Frontend_Teszt
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
             Thread.Sleep(2000);
-            Assert.AreEqual("http://localhost/dist/index.html#/home", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/home", driver.Url);
 
             driver.Quit();
         }
@@ -74,7 +74,7 @@ namespace BufeGO_Frontend_Teszt
         {
             driver = new ChromeDriver();
 
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html");
             driver.Manage().Window.Maximize();
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
@@ -101,35 +101,35 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void Navbar_Teszt()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin");
             Thread.Sleep(500);
 
             var orderLink = driver.FindElement(By.Id("nav-orders"));
 
             orderLink.Click();
-            Assert.AreEqual("http://localhost/dist/index.html#/admin/orders", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin/orders", driver.Url);
 
             var statisticsLink = driver.FindElement(By.Id("nav-stats"));
             statisticsLink.Click();
-            Assert.AreEqual("http://localhost/dist/index.html#/admin/statistics", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin/statistics", driver.Url);
 
             var productsLink = driver.FindElement(By.Id("nav-products"));
             productsLink.Click();
-            Assert.AreEqual("http://localhost/dist/index.html#/admin/products", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin/products", driver.Url);
 
             var categoriesLink = driver.FindElement(By.Id("nav-categories"));
             categoriesLink.Click();
-            Assert.AreEqual("http://localhost/dist/index.html#/admin/categories", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin/categories", driver.Url);
 
             var reviewsLink = driver.FindElement(By.Id("nav-reviews"));
             reviewsLink.Click();
-            Assert.AreEqual("http://localhost/dist/index.html#/admin/reviews", driver.Url);
+            Assert.AreEqual("http://localhost/bufego/index.html#/admin/reviews", driver.Url);
         }
 
         [TestMethod]
         public void RendelesGeneralva()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/orders");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/orders");
             Thread.Sleep(500);
             driver.FindElement(By.XPath("//button[contains(text(),'Részletek')]")).Click();
 
@@ -161,7 +161,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void ProductGeneralva()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/products");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/products");
             Thread.Sleep(500);
 
             var container = driver.FindElement(By.ClassName("products-grid"));
@@ -173,7 +173,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void ProductTorles()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/products");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/products");
             Thread.Sleep(500);
 
             var container = driver.FindElement(By.ClassName("products-grid"));
@@ -191,7 +191,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void UjKategoria()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/categories");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/categories");
             Thread.Sleep(2000);
 
             var grid = driver.FindElement(By.ClassName("categories-grid"));
@@ -212,7 +212,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void KategoriaModosit()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/categories");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/categories");
             Thread.Sleep(2000);
 
             var gombok = driver.FindElements(By.XPath("//button[contains(text(),'Szerkesztés')]"));
@@ -240,7 +240,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void ErtekelesTeszt()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/admin/reviews");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/admin/reviews");
             Thread.Sleep(500);
 
             var container = driver.FindElement(By.ClassName("reviews-grid"));
@@ -259,7 +259,7 @@ namespace BufeGO_Frontend_Teszt
         public void UserLogin()
         {
             driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html");
             driver.Manage().Window.Maximize();
 
             var loginbutton = driver.FindElement(By.ClassName("login"));
@@ -288,7 +288,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void Bufek_Lathatok()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/home");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/home");
 
             Thread.Sleep(500);
             var container = driver.FindElement(By.ClassName("row"));
@@ -300,7 +300,7 @@ namespace BufeGO_Frontend_Teszt
         [TestMethod]
         public void Bufe_Link()
         {
-            driver.Navigate().GoToUrl("http://localhost/dist/index.html#/home");
+            driver.Navigate().GoToUrl("http://localhost/bufego/index.html#/home");
 
             Thread.Sleep(500);
             var container = driver.FindElement(By.ClassName("row"));
@@ -308,7 +308,7 @@ namespace BufeGO_Frontend_Teszt
             var button = cards[0].FindElement(By.XPath("./div/div/div/button"));
             button.Click();
 
-            Assert.IsTrue(!driver.Url.Equals("http://localhost/dist/index.html#/home"), "A büfé kártyák gombjai átdobnak");
+            Assert.IsTrue(!driver.Url.Equals("http://localhost/bufego/index.html#/home"), "A büfé kártyák gombjai átdobnak");
         }
 
         [TestMethod]
