@@ -28,7 +28,6 @@ namespace BufeGO_Frontend_Teszt
             var password_field = driver.FindElement(By.Id("password"));
 
             email_field.SendKeys("admin1@bufego.com");
-            //password_field.SendKeys("asdasd");jelszo!
             password_field.SendKeys("jelszo!");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
@@ -52,7 +51,6 @@ namespace BufeGO_Frontend_Teszt
             var password_field = driver.FindElement(By.Id("password"));
 
             email_field.SendKeys("eszter.toth@gmail.com");
-            //password_field.SendKeys("asdasd");jelszo!
             password_field.SendKeys("jelszo!");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
@@ -83,7 +81,6 @@ namespace BufeGO_Frontend_Teszt
             var password_field = driver.FindElement(By.Id("password"));
 
             email_field.SendKeys("admin1@bufego.com");
-            //password_field.SendKeys("asdasd");jelszo!
             password_field.SendKeys("jelszo!");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
@@ -265,13 +262,11 @@ namespace BufeGO_Frontend_Teszt
             var loginbutton = driver.FindElement(By.ClassName("login"));
             loginbutton.Click();
 
-            // Print the first result title
             var email_field = driver.FindElement(By.Id("email"));
             var password_field = driver.FindElement(By.Id("password"));
 
-            email_field.SendKeys("peter.kovacs@gmail.com");
-            password_field.SendKeys("asdasd");
-            //password_field.SendKeys("jelszo!");
+            email_field.SendKeys("eszter.toth@gmail.com");
+            password_field.SendKeys("jelszo!");
 
             var sign_in_btn = driver.FindElement(By.ClassName("sign-in-button"));
             sign_in_btn.Click();
@@ -320,7 +315,6 @@ namespace BufeGO_Frontend_Teszt
             Thread.Sleep(500);
             var container = driver.FindElement(By.Id("categories_container"));
             var categorydiv = container.FindElements(By.XPath("./div"))[0];
-            //categorydiv.FindElement(By.XPath("./div/div")).Click();
             var category_products = categorydiv.FindElements(By.XPath("./div"));
             category_products[0].FindElement(By.XPath("./div")).Click();
             var modal = driver.FindElement(By.ClassName("modal-body"));
