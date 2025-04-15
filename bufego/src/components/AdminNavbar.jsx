@@ -92,7 +92,7 @@ const AdminNavbar = () => {
             <>
                 <Navbar bg="light" expand="lg" style={{ visibility: showNavbar ? 'visible' : 'hidden' }}>
                     <Container>
-                        <Navbar.Brand href="/#/admin">BüféGO</Navbar.Brand>
+                        <Navbar.Brand href="#/admin">BüféGO</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
@@ -100,19 +100,19 @@ const AdminNavbar = () => {
                                     adminBufe != null ? (
                                         <>
                                             <Nav.Item>
-                                                <Nav.Link href='/#/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
+                                                <Nav.Link href='#/admin/orders' id='nav-orders'>Rendelések</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href='/#/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
+                                                <Nav.Link href='#/admin/statistics' id='nav-stats'>Statisztika</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href='/#/admin/products' id='nav-products'>Termékek</Nav.Link>
+                                                <Nav.Link href='#/admin/products' id='nav-products'>Termékek</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href='/#/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
+                                                <Nav.Link href='#/admin/categories' id='nav-categories'>Kategóriák</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href="/#/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
+                                                <Nav.Link href="#/admin/reviews" id='nav-reviews'>Értékelések</Nav.Link>
                                             </Nav.Item>
                                         </>)
                                         : (null)}
