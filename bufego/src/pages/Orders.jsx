@@ -12,7 +12,7 @@ function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [rating, setRating] = useState(0); // Alapértelmezett érték 0-ra állítva
+  const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const {userData} = useContext(AuthContext);
 
@@ -25,21 +25,20 @@ function OrdersPage() {
     
         const orders = response.data?.valasz?.rendelesek;
     
-        // Ellenőrizzük, hogy `rendelesek` egy tömb-e
         if (Array.isArray(orders)) {
           setOrders(orders);
         } else {
-          setOrders([]); // Ha nem tömb, akkor üres tömb
+          setOrders([]);
         }
       } catch (error) {
         console.error("Hiba a rendelések lekérésekor:", error);
-        setOrders([]); // Hiba esetén is üres tömb
+        setOrders([]);
       }
     };
     
 
     fetchOrders();
-  }, [userData.user_id]); // Újra lekérjük a rendeléseket, ha a userId megváltozik
+  }, [userData.user_id]);
 
   const handleShowDetails = (order) => {
     setSelectedOrder(order);
@@ -58,8 +57,8 @@ function OrdersPage() {
 
   const handleCloseRatingModal = () => {
     setShowRatingModal(false);
-    setRating(0); // Reset rating when closing the modal
-    setComment(""); // Reset comment when closing the modal
+    setRating(0);
+    setComment("");
     setSelectedOrder(null);
     handleCloseModal();
   };
@@ -142,7 +141,7 @@ function OrdersPage() {
           {selectedOrder && (
             <div>
               <p>Étterem: {(selectedOrder != null) ? selectedOrder.place[0].name : null}</p>
-              <p><OrderBadge status={selectedOrder.status * 1} /></p>{/*(selectedOrder.status == 5) ? <><Rating name="read-only" value={rating} precision={0.5} readOnly /> ({rating}/5)</> : null*/}
+              <p><OrderBadge status={selectedOrder.status * 1} /></p>
               <p>Rendelve: {selectedOrder.orderd_at}</p>
               <h4>Termékek:</h4>
               <Table striped bordered hover>

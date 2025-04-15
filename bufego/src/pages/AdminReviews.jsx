@@ -15,16 +15,15 @@ const Reviews = () => {
       try {
         let resp = await fetch('http://localhost:8000/ertekelesek?placeId=' + adminBufe.id);
         let data = await resp.json();
-        // Ellenőrizzük, hogy a `valasz` létezik és tömb-e
         if (Array.isArray(data.valasz)) {
           setReviews(data.valasz);
         } else {
-          setReviews([]); // Ha nem tömb, üres tömböt állítunk be
+          setReviews([]);
         }
       } catch (error) {
         setError('Hiba történt az adatok betöltése közben.');
         console.log(error);
-        setReviews([]); // Hiba esetén is üres tömb
+        setReviews([]);
       } finally {
         setIsLoading(false);
       }

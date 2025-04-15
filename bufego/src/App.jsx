@@ -28,6 +28,7 @@ import Impresszum from "./pages/Impresszum";
 import Gyik from "./pages/GYIK";
 import Kapcsolat from "./pages/Kapcsolat";
 import AdatkezelesiTajekoztato from "./pages/Adatkezeles";
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -77,6 +78,7 @@ function App() {
                   <Route path="/adatkezelesi-tajekoztato" element={<AdatkezelesiTajekoztato/>}/>
                   <Route path="/gyik" element={<Gyik/>}/>
                   <Route path="/kapcsolat" element={<Kapcsolat/>}/>
+                  <Route path="/forbidden" element={<ForbiddenPage/>}/>
                   <Route path="*" element={< NoPage />} />
                 </Route>
               </Routes>

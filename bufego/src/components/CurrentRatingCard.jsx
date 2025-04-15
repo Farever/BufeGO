@@ -4,8 +4,6 @@ import Rating from '@mui/material/Rating';
 import { Card } from 'react-bootstrap';
 import "../styles/Stats.css"
 
-
-//propsba dobjam majd be a place id-t
 function CurrentRatingCard({ bufeId }) {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +20,7 @@ function CurrentRatingCard({ bufeId }) {
       });
 
       const formattedRatings = response.data.valasz.map(item => ({
-        current_rating: Number(item.current_rating),       // Convert 'honap' to a number
+        current_rating: Number(item.current_rating),
       }));
 
       setRating(formattedRatings[0].current_rating);

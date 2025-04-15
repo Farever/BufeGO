@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 import OrderBadge from './OrderBadge';
-import { BsClock } from 'react-icons/bs'; // opcionális Bootstrap ikonokhoz
+import { BsClock } from 'react-icons/bs';
 
 const OrderCard = ({ order, onAccept, onReject, onDetails }) => {
   return (

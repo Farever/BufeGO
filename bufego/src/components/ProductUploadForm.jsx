@@ -13,7 +13,7 @@ const ProductUploadForm = () => {
     const [uploadstatus, setUploadStatus] = useState("");
     const [responseMessage, setResponseMessage] = useState("");
 
-    const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+    const refreshInterval = 5000;
 
     const fetchCategories = async () => {
         setIsLoading(true);
@@ -24,17 +24,15 @@ const ProductUploadForm = () => {
                     bufeId: 1
                 },
             });
-
-            // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
             if (Array.isArray(response.data.valasz)) {
                 setCategories(response.data.valasz.filter(x => x.deleted == 0));
             } else {
-                setCategories([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
+                setCategories([]);
             }
         } catch (err) {
             console.log(err);
             setError(err.message);
-            setCategories([]); // Hiba esetén is állítsuk üres tömbre
+            setCategories([]);
         } finally {
             setIsLoading(false);
         }

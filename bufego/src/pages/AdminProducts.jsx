@@ -26,16 +26,14 @@ const Products = () => {
     try {
       const response = await fetch('http://localhost:8000/termekek?place_id=' + adminBufe.id);
       let data = await response.json();
-      
-      // Ellenőrizzük, hogy a válasz tartalmaz-e egy tömböt
       if (Array.isArray(data.valasz)) {
         setProducts(data.valasz);
       } else {
-        setProducts([]); // Ha nem tömb, állítsuk üres tömbre, hogy elkerüljük a hibát
+        setProducts([]);
       }
     } catch (err) {
       setError(err.message);
-      setProducts([]); // Hiba esetén is állítsuk üres tömbre
+      setProducts([]);
     } finally {
       setIsLoading(false);
     }
@@ -43,12 +41,12 @@ const Products = () => {
 
 
   useEffect(() => {
-    fetchProducts(); // Az első lekérdezés a komponens mountolásakor
+    fetchProducts();
 
-    const intervalId = setInterval(fetchProducts, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(fetchProducts, refreshInterval);
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [adminBufe]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+    return () => clearInterval(intervalId);
+  }, [adminBufe]);
 
   return (
     <div>
@@ -61,7 +59,7 @@ const Products = () => {
             <ProductCard key={product.id} product={product} handleShow={handleShow} />
           )) :  (<></>)}
       </div>
-      <Editmodal show={show} handleClose={handleClose} product={selected}></Editmodal> {/*A productcard-ba be kell tenni az editmodal-ban levő modal megnyitó függvényt */}
+      <Editmodal show={show} handleClose={handleClose} product={selected}></Editmodal>
       <ProductUploadForm></ProductUploadForm>
     </div>
   );

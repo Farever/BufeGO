@@ -54,7 +54,7 @@ const Admin = () => {
 
   const handleCloseDetailsModal = () => {
     setIsDetailsModalOpen(false);
-    setSelectedBuffet(null); // Csak a selectedBuffet-et állítjuk nullra
+    setSelectedBuffet(null);
   };
 
   const handleModClick = (buffetId) => {

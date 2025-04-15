@@ -28,7 +28,6 @@ const BuffetCard = ({ buffet, isOnAdminPage = false, onModClick,setBufe }) => {
           setRating(Math.round(formattedRatings[0].current_rating * 2) / 2);
         } else {
           console.warn("No rating data received from the API");
-          //Kezelheted itt a helyzetet, amikor nincs adat
           setRating(0);
         }
       } catch (err) {
