@@ -119,6 +119,23 @@ dist
 # TernJS port file
 .tern-port
 
+# Ignore build output directories
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore IDE directories
+.vs/
+.vscode/
+
+# Ignore NuGet packages
+packages/
+
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
