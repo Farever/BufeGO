@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
   const [buffet, setBuffet] = useState(initialBuffet);
-  const [selectedImage, setSelectedImage] = useState(null); // Új állapot a képhez
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     if (isOpen && initialBuffet) {
@@ -27,23 +27,22 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
 
   const handleSave = async () => {
     try {
-      const formData = new FormData(); // FormData objektum létrehozása
+      const formData = new FormData();
 
-      // Adatok hozzáadása a FormData-hoz
       formData.append('id', buffet.id);
       formData.append('name', buffet.name);
       formData.append('desc', buffet.description);
       formData.append('phone', buffet.phone);
 
       if (selectedImage) {
-        formData.append('img', selectedImage); // Kép hozzáadása a FormData-hoz
+        formData.append('img', selectedImage);
       } else if (buffet.cover_image) {
           formData.append('img', buffet.cover_image);
       }
 
       const response = await axios.post(`./api/index.php/bufemodositas`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data' // Fontos a képküldéshez
+          'Content-Type': 'multipart/form-data'
         }
       });
 
@@ -69,7 +68,6 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
         <Modal.Title>Büfé adatai</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/*TODO: FORM AZ ADATOK MODÓSÍTÁHOZ*/}
         <Form>
           <Form.Group controlId="formName">
             <Form.Label>Név</Form.Label>
@@ -109,10 +107,10 @@ const BuffetDetailsModal = ({ isOpen, onClose, buffet: initialBuffet }) => {
             <Form.Label>Borítókép</Form.Label>
             <Form.Control
               type="file"
-              accept="image/*" // Csak képeket fogad el
+              accept="image/*"
               onChange={handleImageChange}
             />
-             {buffet.cover_image && !selectedImage && ( // Megjeleníti a korábbi képet, ha van és nincs új kiválasztva
+             {buffet.cover_image && !selectedImage && (
                 <img
                 src={`https://res.cloudinary.com/duerxasjk/image/upload/f_auto,q_auto/${buffet.image}`}
                   alt="Korábbi borítókép"

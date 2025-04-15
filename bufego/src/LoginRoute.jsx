@@ -6,7 +6,7 @@ const LoginRoute = ({children }) => {
   const {userData} = useContext(AuthContext);
 
   if (Object.keys(userData).length === 0) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/forbidden" replace />;
   }
 
   return children;

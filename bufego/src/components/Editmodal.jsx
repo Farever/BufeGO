@@ -41,7 +41,6 @@ function Editmodal({show, handleClose, product})
         }
       };
 
-      //Kiszedi az üzenetet, ha bezárjuk a modalt
       useEffect(() => {
         if (!show) {
             setUploadStatus("");

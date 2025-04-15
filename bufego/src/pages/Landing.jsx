@@ -62,23 +62,21 @@ const Landing = ({ setLoggedinUser }) => {
         axios.get(`./api/index.php/iskolak`)
             .then(res => {
                 const data = res.data?.valasz;
-
-                // Ellenőrizzük, hogy `valasz` egy tömb-e
                 if (Array.isArray(data)) {
                     setSchoolsData(data);
                 } else {
-                    setSchoolsData([]); // Ha nem tömb, akkor üres tömb
+                    setSchoolsData([]);
                 }
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
-                setSchoolsData([]); // Hiba esetén is üres tömb
+                setSchoolsData([]);
             });
     }, []);
 
 
     return (
-        <Container> {/* Használjuk a Container komponenst */}
+        <Container>
             <Row className="header align-items-center">
                 <Col xs={12} md={6} className="logo">
                     BüféGO

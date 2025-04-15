@@ -16,7 +16,7 @@ const Orders = () => {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const refreshInterval = 5000; // Alapértelmezett frissítési idő 5 másodperc
+  const refreshInterval = 5000;
   const { adminBufe } = useContext(AdminBufeContext);
 
   const handleCloseDetailsModal = () => {
@@ -31,17 +31,15 @@ const Orders = () => {
       const response = await axios.get('./api/index.php/bufe_rendelesek', {
         params: { place_id: adminBufe.id }
       });
-
-      // Ellenőrizzük, hogy `valasz.rendelesek` létezik és tömb-e
       const orders = response.data?.valasz?.rendelesek;
       if (Array.isArray(orders)) {
         setOrders(orders);
       } else {
-        setOrders([]); // Ha nem tömb, akkor üres tömb
+        setOrders([]);
       }
     } catch (err) {
       setError(err.message);
-      setOrders([]); // Hiba esetén is üres tömb
+      setOrders([]);
     } finally {
       setIsLoading(false);
     }
@@ -50,9 +48,9 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
-    const intervalId = setInterval(fetchOrders, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(fetchOrders, refreshInterval);
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
+    return () => clearInterval(intervalId);
   }, [adminBufe.id]);
 
   const handleDetails = (orderId) => {

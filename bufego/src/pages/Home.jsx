@@ -22,16 +22,14 @@ const Home = () => {
         });
     
         const buffets = response.data?.valasz;
-    
-        // Ellenőrizzük, hogy `valasz` egy tömb-e
         if (Array.isArray(buffets)) {
           setBuffets(buffets);
         } else {
-          setBuffets([]); // Ha nem tömb, akkor üres tömb
+          setBuffets([]);
         }
       } catch (err) {
         setError(err.message);
-        setBuffets([]); // Hiba esetén is üres tömb
+        setBuffets([]);
       } finally {
         setIsLoading(false);
       }

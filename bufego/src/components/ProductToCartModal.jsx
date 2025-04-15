@@ -8,12 +8,11 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
     useEffect(() => {
         setQuantity(1);
     }, [isOpen])
-    // Az useEffect biztosítja, hogy ne történjen meg a beállítás, ha a product még nem elérhető
     useEffect(() => {
         if (product) {
             setPrice(product.price);
         }
-    }, [product]); // Az effect újra lefut, ha a product változik
+    }, [product]);
 
     function getQuantity(event) {
 
@@ -27,7 +26,6 @@ export default function ProductToCartModal({ product, addToCart, isOpen, onClose
         }
     }
 
-    // Ha nincs termék, ne renderelj semmit
     if (!product) {
         return null;
     }

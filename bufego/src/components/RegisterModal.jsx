@@ -27,21 +27,19 @@ const RegisterModal = ({ isOpen, onClose }) => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setSchool(""); // Visszaállítjuk az alapértelmezett "Válassz iskolát" opcióra
+    setSchool("");
     setAddress("");
     setZip("");
     setCity("");
     setPhone("");
-    setError(null); // Hibaüzenetet is töröljük
-    setSuccessMessage(null); // Sikerüzenetet is töröljük
-    setAddId(null); // Esetlegesen létrejött addId-t is töröljük
-    // Az isLoading valószínűleg magától resetelődik a finally blokkban,
-    // de biztos ami biztos alapon itt is lehetne: setIsLoading(false);
+    setError(null);
+    setSuccessMessage(null);
+    setAddId(null);
   };
 
   const handleClose = () => {
-    clearFormFields(); // Mezők ürítése
-    onClose(); // Eredeti bezáró logika (prop hívása)
+    clearFormFields();
+    onClose();
   };
 
   useEffect(() => {

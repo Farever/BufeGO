@@ -146,11 +146,11 @@ export default function Settings() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSuccessMessage(''); // Töröljük a korábbi sikeres üzenetet
-        setErrors({}); // Töröljük a korábbi hibákat
+        setSuccessMessage('');
+        setErrors({});
 
         if (validateForm()) {
-            setIsLoading(true); // Betöltésjelző bekapcsolása
+            setIsLoading(true);
 
             try {
                 // Cím módosítása
@@ -168,9 +168,8 @@ export default function Settings() {
                     "school": school
                 });
 
-                // Mindkét kérés sikeres volt?
                 if (addressRes.status === 200 && userDataRes.status === 200) {
-                    setSuccessMessage('Adatok sikeresen mentve!'); // Sikeres üzenet beállítása
+                    setSuccessMessage('Adatok sikeresen mentve!');
                     setUser({
                         "user_id": userData.user_id,
                         "is_admin": userData.is_admin,

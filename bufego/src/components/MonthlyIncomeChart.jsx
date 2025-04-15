@@ -68,13 +68,13 @@ function MonthlyIncomeChart({bufeId}) {
   };
 
   useEffect(() => {
-    fetchRatings(); // Az első lekérdezés a komponens mountolásakor
+    fetchRatings();
     fetchYears();
 
-    const intervalId = setInterval(()=>{fetchRatings(); fetchYears()}, refreshInterval); // Lekérdezés a beállított időközönként
+    const intervalId = setInterval(()=>{fetchRatings(); fetchYears()}, refreshInterval);
 
-    return () => clearInterval(intervalId); // Az intervallum törlése a komponens unmountolásakor
-  }, [refreshInterval]); // dependency arra az esetre ha megváltoztatnánk, de alapvetően az 5 mp marad
+    return () => clearInterval(intervalId);
+  }, [refreshInterval]);
 
   return (
     <div className="col-sm-12 col-md-12 col-lg-6">

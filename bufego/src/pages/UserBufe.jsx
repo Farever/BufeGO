@@ -13,7 +13,7 @@ export default function UserBufe({isCartShown, cartSet }) {
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    const [selectedProduct, setSeletdetProduct] = useState(null);  // Módosítva a kezdeti értéken
+    const [selectedProduct, setSeletdetProduct] = useState(null);
     const [modalShown, setModalShown] = useState(false);
     const [frissits, setFrissits] = useState(false);
     const { bufeId } = useParams();
@@ -66,7 +66,7 @@ export default function UserBufe({isCartShown, cartSet }) {
         };
         fetchCategories();
         fetchProduct();
-    }, [modalShown]); // BufoId is a dependency
+    }, []);
 
     const AddToCart = async (q, pid) => {
         try {
