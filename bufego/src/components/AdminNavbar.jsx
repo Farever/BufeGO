@@ -32,11 +32,7 @@ const AdminNavbar = () => {
             let resp = await fetch('http://localhost:8000/kijelentkezes', { credentials: "include" });
 
             if (resp.ok) {
-                sessionStorage.removeItem("userData");
-                sessionStorage.removeItem("adminBufe");
-                setUser({});
-                setBufe(null);
-                navigate("/");
+                navigate("/logout");
             }
 
         } catch (error) {

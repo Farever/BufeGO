@@ -29,6 +29,8 @@ import Gyik from "./pages/GYIK";
 import Kapcsolat from "./pages/Kapcsolat";
 import AdatkezelesiTajekoztato from "./pages/Adatkezeles";
 import ForbiddenPage from "./pages/ForbiddenPage";
+import Rolunk from "./pages/Rolunk";
+import Logout from "./pages/Logout";
 
 function App() {
   const [isCartOpen, setCartOpen] = useState(false);
@@ -78,7 +80,9 @@ function App() {
                   <Route path="/adatkezelesi-tajekoztato" element={<AdatkezelesiTajekoztato/>}/>
                   <Route path="/gyik" element={<Gyik/>}/>
                   <Route path="/kapcsolat" element={<Kapcsolat/>}/>
+                  <Route path="/rolunk" element={<Rolunk/>}/>
                   <Route path="/forbidden" element={<ForbiddenPage/>}/>
+                  <Route path="/logout" element={<Logout/>}/>
                   <Route path="*" element={< NoPage />} />
                 </Route>
               </Routes>
