@@ -9,6 +9,7 @@ import { AuthContext } from '../Contexts';
 function Navigation({ cartClickAction }) {
     const [iskolak, setIskolak] = useState([]);
     const location = useLocation();
+    const navigate = useNavigate();
     const ShowNavbar = location.pathname.startsWith('/home');
     const ShowSchoolSelect = !location.pathname.startsWith('/home/bufe');
     const { userData, setUser } = useContext(AuthContext);
